@@ -1,0 +1,12 @@
+<h2>Import Simulation Data</h2>
+<%#= form_tag importing_simulation_data_path, multipart: true do %>
+    <%#= select_tag :simulation_id, options_from_collection_for_select(Simulation.all, "id", "name") %>
+    <%#= file_field_tag :file %>
+    <%#= submit_tag "Import" %>
+<%# end %>
+
+<%= form_for @simulation_data, :url => importing_simulation_data_path, :html => { :multipart => true } do |form| %>
+    <%= form.select(:simulation_id, Simulation.all.collect {|u| [u.name, u.id]}, :prompt => 'Select Simulation') %>
+    <%= form.file_field :excel_file %>
+    <%= form.submit %>
+<% end %>

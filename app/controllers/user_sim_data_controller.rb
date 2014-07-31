@@ -24,15 +24,24 @@ class UserSimDataController < ApplicationController
   # POST /user_sim_data
   # POST /user_sim_data.json
   def create
-    @user_sim_datum = UserSimDatum.new(user_sim_datum_params)
+    #render :json => params[:user_sim_datum][:simulation_id]
+    #return
+    #@user_sim_datum = UserSimDatum.new(user_sim_datum_params)
+    #render :json => @user_sim_datum
+    #return
+    #@user_sim_datum.save!
 
+    @new_user_sim_datum = UserSimDatum.create!(:user_id=>params[:user_sim_datum][:user_id], :simulation_id=>params[:user_sim_datum][:simulation_id], :simulation_datum_id=>params[:user_sim_datum][:simulation_datum_id], :no_of_slots=>params[:user_sim_datum][:no_of_slots])
+    @new_user_sim_datum.save!
+    #render :json => @new_user_sim_datum
+    #return
     respond_to do |format|
-      if @user_sim_datum.save
-        format.html { redirect_to @user_sim_datum, notice: 'User sim datum was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @user_sim_datum }
+      if @new_user_sim_datum.save
+        format.html { redirect_to '/', notice: 'User sim datum was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @new_user_sim_datum }
       else
         format.html { render action: 'new' }
-        format.json { render json: @user_sim_datum.errors, status: :unprocessable_entity }
+        format.json { render json: @new_user_sim_datum.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -61,6 +70,14 @@ class UserSimDataController < ApplicationController
     end
   end
 
+  def play_simulation
+    @simulation = Simulation.find(params[:simulation_id])
+    @simulation_data = @simulation.simulation_datums
+    @user_sim_datum = UserSimDatum.new
+    #render :json => @simulation_data
+    #return
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user_sim_datum
@@ -69,6 +86,6 @@ class UserSimDataController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_sim_datum_params
-      params.require(:user_sim_datum).permit(:user_id)
+      params.require(:user_sim_datum).permit(:user_id, :simulation_id, :simulation_datum_id, :no_of_slots)
     end
 end

@@ -1,11 +1,11 @@
 <h1>Listing simulations</h1>
 
-<table>
+<table border="1">
   <thead>
     <tr>
       <th>Name</th>
-      <th></th>
-      <th></th>
+      <th>Play</th>
+      <th>Download</th>
       <!--<th></th>-->
     </tr>
   </thead>
@@ -16,11 +16,11 @@
         <td><%= simulation.name %></td>
         <td>
           <%#= link_to 'Show', simulation %>
-          <%= link_to 'Play', simulation %>
+          <%= link_to 'Play', play_simulation_path(simulation.id) %>
         </td>
         <td>
           <%#= link_to 'Edit', edit_simulation_path(simulation) %>
-          <%= link_to 'Download', "#" %>
+          <%= link_to 'Download', simulation.excel_file.url %>
         </td>
         <!--<td>-->
           <!--<%#= link_to 'Destroy', simulation, method: :delete, data: { confirm: 'Are you sure?' } %>-->

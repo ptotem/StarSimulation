@@ -13,4 +13,8 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require jquery.ui.all
+//= require autocomplete-rails
+//= require chosen-jquery
+//= require scaffold
 //= require_tree .

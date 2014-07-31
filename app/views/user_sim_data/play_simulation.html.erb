@@ -16,10 +16,7 @@
 
     <br>
     <label>Select Programme</label>
-    <%#= select_tag "programme_name", options_from_collection_for_select(@simulation_data, "id", "programme_name"), prompt: "Select Programme" %>
-    <%#= f.select :simulation_id, @simulation_data.map{ |c| [c.programme_name, c.id] } %><br />
-    <%#= f.select :simulation_id, options_for_select(@simulation_data.map{ |c| [c.programme_name, c.id] }) %>
-    <%= f.select :simulation_datum_id, options_for_select(@simulation_data.map{ |c| [c.programme_name, c.id] }) %>
+    <%= f.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select' } %>
 
     <%= f.label :no_of_slots %>:
     <%= f.text_field :no_of_slots %><br />
@@ -27,4 +24,6 @@
     <div class="actions">
       <%= f.submit "Submit" %>
     </div>
+
+
 <% end %>

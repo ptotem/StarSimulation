@@ -1,4 +1,5 @@
 class UserSimDataController < ApplicationController
+  autocomplete :simulation_datum, :programme_name, :full => true
   before_action :set_user_sim_datum, only: [:show, :edit, :update, :destroy]
 
   # GET /user_sim_data
@@ -24,24 +25,15 @@ class UserSimDataController < ApplicationController
   # POST /user_sim_data
   # POST /user_sim_data.json
   def create
-    #render :json => params[:user_sim_datum][:simulation_id]
-    #return
-    #@user_sim_datum = UserSimDatum.new(user_sim_datum_params)
-    #render :json => @user_sim_datum
-    #return
-    #@user_sim_datum.save!
+    @user_sim_datum = UserSimDatum.new(user_sim_datum_params)
 
-    @new_user_sim_datum = UserSimDatum.create!(:user_id=>params[:user_sim_datum][:user_id], :simulation_id=>params[:user_sim_datum][:simulation_id], :simulation_datum_id=>params[:user_sim_datum][:simulation_datum_id], :no_of_slots=>params[:user_sim_datum][:no_of_slots])
-    @new_user_sim_datum.save!
-    #render :json => @new_user_sim_datum
-    #return
     respond_to do |format|
-      if @new_user_sim_datum.save
+      if @user_sim_datum.save
         format.html { redirect_to '/', notice: 'User sim datum was successfully created.' }
         format.json { render action: 'show', status: :created, location: @new_user_sim_datum }
       else
         format.html { render action: 'new' }
-        format.json { render json: @new_user_sim_datum.errors, status: :unprocessable_entity }
+        format.json { render json: @user_sim_datum.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -72,10 +64,8 @@ class UserSimDataController < ApplicationController
 
   def play_simulation
     @simulation = Simulation.find(params[:simulation_id])
-    @simulation_data = @simulation.simulation_datums
     @user_sim_datum = UserSimDatum.new
-    #render :json => @simulation_data
-    #return
+    @simulation_data = @simulation.simulation_datums
   end
 
   private

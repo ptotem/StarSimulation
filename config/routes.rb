@@ -1,5 +1,9 @@
 StarMediaSim::Application.routes.draw do
-  resources :user_sim_data
+  #resources :user_sim_data
+  resources :user_sim_data do
+    #get :autocomplete_brand_name, :on => :collection
+    get :autocomplete_simulation_datum_programme_name, :on => :collection
+  end
 
   resources :simulation_data
 

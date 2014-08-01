@@ -66,6 +66,7 @@ class UserSimDataController < ApplicationController
 
   def play_simulation
     @simulation = Simulation.find(params[:simulation_id])
+    #@simulation.user_sim_datums.build
     @user_sim_datum = UserSimDatum.new
     @simulation_data = @simulation.simulation_datums
   end

@@ -18,4 +18,5 @@
 //= require autocomplete-rails
 //= require chosen-jquery
 //= require scaffold
+//= require bootstrap.min
 //= require_tree .

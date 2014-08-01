@@ -6,4 +6,7 @@ class User < ActiveRecord::Base
 
   has_many :user_sim_datums
 
+  has_many :simulation_user_datas
+  has_many :simulations, :through => :simulation_user_datas
+
 end

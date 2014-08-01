@@ -1,3 +1,12 @@
+<h1> <%= @simulation.name %> </h1>
+
+<% if !@simulation.excel_file.blank? %>
+    <%= link_to 'Download', @simulation.excel_file.url %>
+<% else %>
+    File not available
+<% end %>
+
+
 <%= form_for(@user_sim_datum) do |f| %>
     <% if @user_sim_datum.errors.any? %>
         <div id="error_explanation">
@@ -17,6 +26,7 @@
     <br>
     <label>Select Programme</label>
     <%= f.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select' } %>
+
 
     <%= f.label :no_of_slots %>:
     <%= f.text_field :no_of_slots %><br />

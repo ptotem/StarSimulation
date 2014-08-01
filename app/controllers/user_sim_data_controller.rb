@@ -26,6 +26,8 @@ class UserSimDataController < ApplicationController
   # POST /user_sim_data.json
   def create
     @user_sim_datum = UserSimDatum.new(user_sim_datum_params)
+    #render :json => params
+    #return
 
     respond_to do |format|
       if @user_sim_datum.save

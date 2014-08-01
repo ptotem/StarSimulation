@@ -34,6 +34,7 @@ gem 'jquery-ui-rails'
 gem 'rails4-autocomplete'
 gem 'gon'
 gem 'chosen-rails'
+gem 'jquery-turbolinks'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'

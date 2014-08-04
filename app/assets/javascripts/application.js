@@ -19,4 +19,5 @@
 //= require chosen-jquery
 //= require scaffold
 //= require bootstrap.min
+//= require jquery_nested_form
 //= require_tree .

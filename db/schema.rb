@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140801120728) do
+ActiveRecord::Schema.define(version: 20140804090910) do
 
   create_table "simulation_data", force: true do |t|
     t.datetime "created_at"
@@ -26,6 +26,7 @@ ActiveRecord::Schema.define(version: 20140801120728) do
     t.string   "programme_name"
     t.integer  "duration"
     t.float    "tvr"
+    t.integer  "cost_per_slot"
   end
 
   create_table "simulation_user_data", force: true do |t|

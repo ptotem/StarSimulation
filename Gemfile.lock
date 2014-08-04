@@ -204,6 +204,7 @@ DEPENDENCIES
   jquery-turbolinks
   jquery-ui-rails
   mysql2
+  nested_form
   paperclip (~> 4.1)
   rails (= 4.0.0)
   rails4-autocomplete

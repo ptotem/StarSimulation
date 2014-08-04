@@ -9,4 +9,12 @@ class User < ActiveRecord::Base
   has_many :simulation_user_datas
   has_many :simulations, :through => :simulation_user_datas
 
+
+  def set_budget
+    sim_user_data = self.simulation_user_datas.build
+    sim_user_data.budget = 100
+    sim_user_data.save!
+    self.save!
+  end
+
 end

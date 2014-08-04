@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-sm-6 col-md-4 col-md-offset-4">
+  <!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4">-->
+
+    <div class="account-wall">
+      <h3 class="form_heading">User Login</h3>
+      <hr class="line_style">
+
+      <!--<form class="form-signin">-->
+        <!--<input type="text" class="form-control" placeholder="Email" required autofocus>-->
+        <!--<input type="password" class="form-control" placeholder="Password" required>-->
+        <!--<button class="btn btn-lg  btn-block button_style" type="submit">Sign in</button>-->
+      <!--</form>-->
+      <!--<div class="text-style">Forget password??</div>-->
+
+      <!--<h2>Sign in</h2>-->
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html=>{:class=>"form-signin"}) do |f| %>
+      <!--<div>-->
+      <%#= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true, :placeholder=>"Email", :class=>"form-control", :required => true %>
+      <!--</div>-->
+
+      <!--<div>-->
+      <%#= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: "off", :placeholder=>"Password", :class=>"form-control", :required => true %>
+      <!--</div>-->
+
+      <%# if devise_mapping.rememberable? -%>
+          <!--<div>-->
+            <%#= f.check_box :remember_me %>
+            <%#= f.label :remember_me %>
+          <!--</div>-->
+      <%# end -%>
+
+      <!--<div>-->
+        <%= f.submit "Sign in", :class=>"btn btn-lg  btn-block button_style" %>
+      <!--</div>-->
+
+      <% end %>
+
+      <%#= render "devise/shared/links" %>
+
+
+
+    </div>
+
+
+  </div>
+</div>

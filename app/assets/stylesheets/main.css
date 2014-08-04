@@ -7,12 +7,21 @@ body {
     margin: 0 auto;
     font-size: 12px;
     overflow: hidden;
-    color: #333;
-    background-color: #fff;
+    /*color: #333;*/
     font-family: verdana, arial, helvetica, sans-serif;
-    line-height: 18px;
+    /*line-height: 18px;*/
+    padding-top: 70px;
+    background:url('/assets/app_bg.jpg');
+    /*background-size: 100% 100%;*/
+    background-repeat:no-repeat;
+    /*width:100%;*/
+    /*height:100%;*/
+
 }
 
+.container{
+    width: 100% !important;
+}
 
 #notice {
     color: green;
@@ -86,3 +95,86 @@ img {
 }
 
 /* navbar styling - ends */
+
+
+/* anagha css starts */
+
+@font-face {
+    font-family: OpenSans;
+    src: url(OpenSans-Light.ttf);
+}
+
+.account-wall
+{
+    margin-top: 18%;
+    padding: 10px;
+    background-color: #969696;
+    border:1px solid #969696;
+    border-radius:25px;
+}
+
+.form_heading
+{
+    text-align:center;
+    /*font:15px;*/
+    font-family: OpenSans;
+    font-weight:bold;
+    color:white;
+}
+
+.line_style
+{
+    width:70%;
+    /*align:center;*/
+    -webkit-box-shadow: 0px 5px 8px 0px rgba(255, 255, 255, 0.75);
+    -moz-box-shadow:    0px 5px 8px 0px rgba(255, 255, 255, 0.75);
+    box-shadow:         0px 5px 8px 0px rgba(255, 255, 255, 0.75);
+}
+
+.form-signin
+{
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-signin .form-control
+{
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.form-signin input[type="text"], input[type="email"]
+{
+    margin-bottom: -1px;
+    border:1px;
+    border-radius:7px;
+    background-color: rgba(199,197,197,0.5);
+}
+
+.form-signin input[type="password"]
+{
+    margin-bottom: 10px;
+    margin-top:2%;
+    border:1px;
+    border-radius:7px;
+    background-color: rgba(199,197,197,0.5);
+
+}
+
+.button_style {
+    background: linear-gradient(to bottom, #45484d 0%, #000000 100%) !important;
+    color: white !important;
+    margin-top: 5%;
+}
+
+.button_style:hover {
+    color: white !important;
+    background: linear-gradient(to bottom, #45484d 0%, #000000 100%) !important;
+}
+/* anagha css ends */

@@ -9,26 +9,38 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-fixed-top" role="navigation">
-      <div class="container-fluid">
-        <a href="#"><img src="/assets/toplogo.png" class="logo"></a>
-        <% if user_signed_in? %>
-            <%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
-        <% end %>
-      </div><!-- /.container-fluid -->
-    </nav>
+    <!--<nav class="navbar navbar-fixed-top" role="navigation">-->
+      <!--<div class="container-fluid">-->
+        <!--<a href="#"><img src="/assets/toplogo.png" class="logo"></a>-->
+        <!--<%# if user_signed_in? %>-->
+            <!--<%#= link_to "Sign out", destroy_user_session_path, :method => :delete %>-->
+        <!--<%# end %>-->
+      <!--</div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
+    <!--</nav>-->
 
-
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <%= yield %>
+    <div class="navbar navbar-fixed-top header" role="navigation">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#"> <img src="/assets/toplogo.png" class="logo"></a>
         </div>
       </div>
     </div>
 
-
-
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row row_style">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-lg-offset-10">
+              <% if user_signed_in? %>
+                  <%= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn btn-lg button_style", :style => "font-size: 1.4em; margin-top: 5%;" %>
+              <% end %>
+              <%#= link_to 'Download',  @simulation.excel_file.url, :class=>"btn btn-lg button_style", :style => "font-size: 1.4em; margin-top: 5%; padding: 8%;" %>
+            </div>
+          </div>
+            <%= yield %>
+        </div>
+      </div>
+    </div>
 
 </body>
 </html>

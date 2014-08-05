@@ -1,28 +1,106 @@
-Budget :- <span id="user_budget"> <%= @simulation_user_data.budget %> </span>
+<div class="row">
+  <div class="col-sm-6 col-md-5">
+    <div class="button_box_program">
+      <!--<button class="btn btn-lg  btn-block button_style" type="submit">Download</button>-->
 
-<%= nested_form_for @simulation do |f| %>
+
+      <div class="row">
+        <div class="col-sm-6 col-md-5">
+          <!--<button class="btn btn-lg button_style" type="submit">Download</button>-->
+          <% if @simulation.excel_file.blank? %>
+              <%= link_to 'Download',  "#", :class=>"btn btn-lg button_style", :style => "font-size: 1.4em; margin-top: 5%; padding: 8%;" %>
+          <% else %>
+              <%= link_to 'Download',  @simulation.excel_file.url, :class=>"btn btn-lg button_style", :style => "font-size: 1.4em; margin-top: 5%; padding: 8%;" %>
+          <% end %>
+        </div>
+        <div class="col-sm-6 col-md-5 " style="margin-top:3%;color: white;">
+          <h5>Download Excel</h5>
+        </div>
+        <div class="col-sm-6 col-md-2 " style="text-align: center; font-weight: bold; color: white; left: 487px; position: absolute; top: 0; background-color: #969696; height: 100px; width: 30%;  border: 1px none; border-radius: 7px">
+          <h4 style="font-weight: bold;"> Budget </h4>
+          <span id="user_budget"> <%= @simulation_user_data.budget %> </span>
+        </div>
+      </div>
+
+    </div>
 
 
-    <%= f.fields_for :user_sim_datums do |user_sim_data| %>
+    <div class="row">
+      <div class="col-sm-6 col-md-5">
+        <h4 class="program_text">Select Program</h4>
+      </div>
+      <div class="col-sm-6 col-md-4 col-md-offset-2">
+        <h4 class="program_text">No of Slots</h4>
+      </div>
 
-        <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
+    </div>
 
-        <label>Select Programme</label>
+    <div class="program-wall">
+      <div class="row">
+        <%= nested_form_for @simulation do |f| %>
+            <%= f.fields_for :user_sim_datums do |user_sim_data| %>
+                <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
+                <div class="col-sm-7 col-md-8 ">
+                  <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
+                </div>
+                <div class="col-sm-3 col-md-2 ">
+                  <!--<input type="text" class="form-control" required autofocus>-->
+                  <%= user_sim_data.text_field :no_of_slots, {class: 'form-control', :onkeyup=>"calculate_budget(event, $(this))", :onfocus=>"get_my_dropdown_val($(this))"} %>
+                </div>
+                <div class="col-sm-1 col-md-2 ">
+                  <span class="glyphicon glyphicon-trash icon_style"></span>
+                </div>
+                <%#= user_sim_data.link_to_remove "Remove this task" %>
+            <% end %>
+
+            <!--<div class="row">-->
+              <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+                <!--<div class="row">-->
+                  <!--<button class="btn btn-lg  button_style" type="submit" style="width:30%; margin-top:359px; ">Add</button>-->
+                  <%= f.link_to_add "Add a task", :user_sim_datums, :class=>"btn btn-lg button_style", :style=>"width: 30%; font-size: 1.4em; position: absolute;  bottom: 12%; right: -30%;" %>
+                <!--</div>-->
+
+                <!--<div class="row">-->
+                  <!--<button class="btn btn-lg  button_style " type="submit" style="width:30%">Submit</button>-->
+                  <%= f.submit "Submit", :class => "btn btn-lg button_style", :style=>"width: 30%; font-size: 1.4em; position: absolute; bottom: 0; right: -30%;" %>
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+
+        <% end %>
+      </div>
+    </div>
+
+
+  </div>
+
+</div>
+
+<!--Budget :- <span id="user_budget"> <%#= @simulation_user_data.budget %> </span>-->
+
+<%#= nested_form_for @simulation do |f| %>
+
+
+    <%#= f.fields_for :user_sim_datums do |user_sim_data| %>
+
+        <%#= user_sim_data.hidden_field :user_id, :value => current_user.id %>
+
+        <!--<label>Select Programme</label>-->
         <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select'} %>
-        <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select' , :onchange => 'get_cost($(this))' }%>
+        <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select' , :onchange => 'get_cost($(this))' }%>
 
-        <%= f.label :no_of_slots %>:
-        <%= user_sim_data.text_field :no_of_slots, {:onkeyup=>"calculate_budget($(this))", :onfocus=>"get_my_dropdown_val($(this))"} %>
+        <%#= f.label :no_of_slots %>
+        <%#= user_sim_data.text_field :no_of_slots, {:onkeyup=>"calculate_budget($(this))", :onfocus=>"get_my_dropdown_val($(this))"} %>
         <%#= user_sim_data.text_field :no_of_slots, {:onfocus=>"get_my_dropdown_val($(this))"} %>
 
         <%#= @simulation_data.map { |u| "#{u.cost_per_slot}" }%>
 
-        <%= user_sim_data.link_to_remove "Remove this task" %>
-    <% end %>
-    <p><%= f.link_to_add "Add a task", :user_sim_datums %></p>
+        <%#= user_sim_data.link_to_remove "Remove this task" %>
+    <%# end %>
+    <!--<p><%#= f.link_to_add "Add a task", :user_sim_datums %></p>-->
 
-    <%= f.submit "Submit", :class => "btn" %>
-<% end %>
+    <%#= f.submit "Submit", :class => "btn" %>
+<%# end %>
 
 <script>
     var user_budget_manipulated, user_budget_real;
@@ -79,44 +157,110 @@ Budget :- <span id="user_budget"> <%= @simulation_user_data.budget %> </span>
           success: function (data) {
               console.log(data[0].cost_per_slot);
               cost_per_slot = data[0].cost_per_slot;
-              console.log("cost_per_slot :- " + cost_per_slot)
+              console.log("ajax result, cost_per_slot :- " + cost_per_slot)
           }
       })
   }
 
-  function calculate_budget(this_obj){
-
+  function calculate_budget(event, this_obj){
+//      console.log("----- in calculate_budget -----");
       var this_val = $(this_obj).val();
-      console.log("this_val :- " + this_val);
-      console.log("user_budget_manipulated :- " + user_budget_manipulated);
-      console.log("cost_per_slot :- " + cost_per_slot);
+//      console.log("this_val :- " + this_val);
+//      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+//      console.log("cost_per_slot :- " + cost_per_slot);
 
-      if (event.keyCode == 8 || event.keyCode == 46) {
-          if (this_val==""){
-              console.log("blank");
-              user_budget_manipulated = user_budget_real;
+      //console.log("event.keyCode :- " + event.keyCode);
+      //console.clear();
+
+      var total_slots = 0;
+      var this_slot, this_select, total_cost = 0, total_thing = 0;
+      $('form.edit_simulation').find('.fields').each(function(index, ele) {
+          this_slot = $(ele).find("input.form-control[type=text]").val();
+          this_select = $(ele).find(".chosen-select");
+          //console.log($(this_select));
+
+
+          if (this_slot!="") {
+              get_cost($(this_select));
+              //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
+              total_thing = total_thing + (this_slot*cost_per_slot);
+              //total_cost = total_cost + cost_per_slot;
+              //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+              //console.log("this_slot :- " + this_slot);
+              //total_slots = parseInt(total_slots) + parseInt(this_slot);
           }
           else{
-              console.log("backspace or delete :- " + this_val);
-              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
-          }
-      }
-      else{
-          user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
-      }
-      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+              this_slot = 0;
 
+          }
+
+      });
+
+      console.log("total_thing :- " + total_thing);
+
+      user_budget_manipulated = user_budget_real - (total_thing);
       $("#user_budget").text(user_budget_manipulated);
+
+      //console.log("total_cost :- " + total_cost);
+//      console.log("total_slots :- " + total_slots);
+
+      //working code starts from here
+//      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+//
+//      if ( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) ) {
+//          console.log("allow");
+//          user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+//      }
+//      else{
+//          console.log("don't allow");
+//          if (event.keyCode == 8 || event.keyCode == 46) {
+//              if (this_val==""){
+//              console.log("blank");
+//              user_budget_manipulated = user_budget_real;
+//          }
+//          else{
+//              console.log("backspace or delete :- " + this_val);
+//              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+//          }
+//          }
+//      }
+//      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+      //$("#user_budget").text(user_budget_manipulated);
+      //working code ends here
+
+      //user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
+
+//      if (event.keyCode == 8 || event.keyCode == 46) {
+//          if (this_val==""){
+//              console.log("blank");
+//              user_budget_manipulated = user_budget_real;
+//          }
+//          else{
+//              console.log("backspace or delete :- " + this_val);
+//              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+//          }
+//      }
+//      else{
+//          user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
+//      }
+
+
+//      $("#user_budget").text(user_budget_manipulated);
 
   }
 
   function get_my_dropdown_val(this_obj){
-      var this_dropdown_val = $(this_obj).parent().find('.chosen-select option:selected').val();
-      console.log("this_dropdown_val :- " + this_dropdown_val)
+      //console.log($(this_obj).parents(".fields").attr("class"));
+      var this_dropdown_val = $(this_obj).parents(".fields").find('.chosen-select option:selected').val();
+      //console.log("this_dropdown_val :- " + this_dropdown_val);
+      get_cost($(this_obj).parents(".fields").find('.chosen-select'));
   }
 
   $('form').on('nested:fieldAdded', function(event) {
       $(event.target).find('.chosen-select').chosen();
+      $(event.target).find('.chosen-select option').eq(0).attr('selected', 'selected');
+      get_cost($(event.target).find('.chosen-select'));
+      //$('#chosen-select option').eq(index).attr('selected', 'selected');
   });
 
 </script>

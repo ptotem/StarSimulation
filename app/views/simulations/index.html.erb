@@ -1,37 +1,29 @@
-<h1>Listing simulations</h1>
+<div class="row">
+  <div class="col-sm-6 col-md-4">
+    <h3 class="list_heading text-left">Listing simulations</h3>
+    <div class="listing-wall">
+      <% @simulations.each do |simulation| %>
+          <div id="<%= simulation.id %>" class="listing_box listing_box_1"><%= simulation.name %></div>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-4">
+    <%= link_to 'Play', "#", :id=>"play_btn", :class=>"btn btn-lg button_style button_box" %>
+  </div>
+</div>
 
 
-<table border="1">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Play</th>
-      <!--<th>Download</th>-->
-      <!--<th></th>-->
-    </tr>
-  </thead>
+<script>
+    $(function () {
+        var sim_id;
+        $(".listing_box").click(function () {
+            sim_id = $(this).attr("id");
+            $("#play_btn").attr("href", "/play_sim/"+sim_id);
+            $(".listing-wall").find(".listing_box").each(function() {
+                $(this).removeClass("listing_box_2").addClass("listing_box_1");
+            });
+            $(this).removeClass("listing_box_1").addClass("listing_box_2");
+        });
 
-  <tbody>
-    <% @simulations.each do |simulation| %>
-      <tr>
-        <td><%= simulation.name %></td>
-        <td>
-          <%#= link_to 'Show', simulation %>
-          <%#= link_to 'Play', play_simulation_path(simulation.id) %>
-          <%= link_to 'Play', play_sim_path(simulation.id) %>
-        </td>
-        <!--<td>-->
-          <%#= link_to 'Edit', edit_simulation_path(simulation) %>
-          <%#= link_to 'Download', simulation.excel_file.url %>
-        <!--</td>-->
-        <!--<td>-->
-          <!--<%#= link_to 'Destroy', simulation, method: :delete, data: { confirm: 'Are you sure?' } %>-->
-        <!--</td>-->
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%#= link_to 'New Simulation', new_simulation_path %>
+    });
+</script>

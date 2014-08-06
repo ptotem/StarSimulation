@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140804090910) do
+ActiveRecord::Schema.define(version: 20140806082450) do
 
   create_table "simulation_data", force: true do |t|
     t.datetime "created_at"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 20140804090910) do
     t.integer  "budget"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "budget_available"
   end
 
   create_table "simulations", force: true do |t|
@@ -54,6 +55,7 @@ ActiveRecord::Schema.define(version: 20140804090910) do
     t.integer  "simulation_id"
     t.integer  "simulation_datum_id"
     t.integer  "no_of_slots"
+    t.integer  "budget_available"
   end
 
   create_table "users", force: true do |t|

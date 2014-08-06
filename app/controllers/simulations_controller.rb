@@ -41,17 +41,47 @@ class SimulationsController < ApplicationController
   # PATCH/PUT /simulations/1.json
   def update
     #render :json => params
-    #render :json => simulation_params
     #return
-    respond_to do |format|
-      if @simulation.update(simulation_params)
-        format.html { redirect_to @simulation, notice: 'Simulation was successfully updated.' }
-        format.json { head :no_content }
+    @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
+
+    #if params[:sim_user_data_budget_available].to_i < 0
+    #  flash[:notice] = "Your budget can't be less than 0."
+    #  redirect_to "/play_sim/#{params[:id]}"
+    #else
+
+      @usd.user_id = current_user.id
+      @usd.save
+
+    #render :text => @usd.budget_available
+    #return
+      #@simulation.check_user_budget(current_user)
+      #render :text => @simulation.errors["base"][0]
+      #return
+      if !@usd.errors.blank?
+        flash[:notice] = @usd.errors["base"][0]
+          redirect_to "/play_sim/#{params[:id]}"
       else
-        format.html { render action: 'edit' }
-        format.json { render json: @simulation.errors, status: :unprocessable_entity }
+        respond_to do |format|
+          if @simulation.update(simulation_params)
+            #format.html { redirect_to "/play_sim/#{params[:id]}", notice: 'Nilesh' }
+            format.html { redirect_to "/" }
+            format.json { head :no_content }
+          else
+            format.html { render action: 'edit' }
+            format.json { render json: @simulation.errors, status: :unprocessable_entity }
+          end
+        end
       end
-    end
+
+
+    #end
+
+
+
+    #render :json => params[:sim_user_data_budget_available]
+    #render :json => params[:sim_user_data_budget_available]
+    #return
+
   end
 
   # DELETE /simulations/1
@@ -67,7 +97,10 @@ class SimulationsController < ApplicationController
   def play_sim
     @simulation = Simulation.find(params[:simulation_id])
     @simulation_data = @simulation.simulation_datums
-    @simulation_user_data = current_user.simulation_user_datas.first
+    @simulation_user_data = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
+    @usd = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
+    #render :json => @simulation_user_data
+    #return
 
     #render :json => @simulation
     #return

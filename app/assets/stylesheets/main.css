@@ -242,25 +242,50 @@ a:hover {
     padding: 10px;
     background-color: #969696;
     border:1px solid #969696;
-    border-radius:25px;
+    border-radius:12px;
     min-height: 330px;
+    height: 330px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .listing_box
 {
-    width:92%;
-    margin:4%;
-    padding:3%;
+    /*width:92%;*/
+    /*margin:4%;*/
+    /*padding:3%;*/
+    /*border:1px solid #969696;*/
+    /*border-radius:10px;*/
+    /*color: white;*/
+    /*cursor: pointer;*/
+    /*font-size: 14px;*/
+
+    /*width:60%;*/
+    /*margin:2%;*/
+    /*margin-bottom: 1%;*/
+    /*padding:1%;*/
+    /*color: white;*/
+
+    color: white;
+    font-size: 1.2em;
+    margin-bottom: 2%;
+    padding: 2%;
+    width: 70%;
+    cursor: pointer;
     border:1px solid #969696;
     border-radius:10px;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
+}
+
+.listing_box:hover{
+    background-color: black;
 }
 
 .listing_box_1
 {
+    /*background-color: rgba(199,197,197,0.5);*/
+
     background-color: rgba(199,197,197,0.5);
+
 }
 
 .listing_box_2
@@ -357,4 +382,44 @@ a:hover {
     background-color: rgba(199,197,197, 0.5);
 
 }
+
+/*listing_new page starts*/
+
+.logout_button
+{
+    background:linear-gradient(to bottom, #45484d 0%,#000000 100%) !important;
+    color:white !important;
+    float:right;
+    width: 12%;
+    margin-top: 2%;
+}
+
+.listing_text
+{
+    color:white;
+    font-size: 1em;
+}
+
+.white{
+    color: white;
+}
+
+#instruction_text{
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1.4em;
+}
+
+.listing_button
+{
+    background:linear-gradient(to bottom, #45484d 0%,#000000 100%) !important;
+    color:white !important;
+    /*float:right;*/
+    /*width: 24%;*/
+    width: 100%;
+    margin-top: 3%;
+    font-weight: bold;
+}
+/*listing_new page ends*/
+
 /* anagha css ends */

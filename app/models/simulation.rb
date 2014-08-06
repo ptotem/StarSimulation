@@ -19,6 +19,7 @@ class Simulation < ActiveRecord::Base
   #accepts_nested_attributes_for :simulation_user_datas, :allow_destroy => true
   has_many :users, :through => :simulation_user_datas
 
+
   #class Courses < ActiveRecord::Base
   #  has_many :courses_years
   #  has_many :years, :through => :courses_years
@@ -33,5 +34,33 @@ class Simulation < ActiveRecord::Base
   #  belongs_to :course
   #  belongs_to :year
   #end
+
+  after_create :set_user_budget
+  #before_save :check_all_users_budget
+
+  def set_user_budget
+    User.all.each do |user|
+      user.simulation_user_datas.build(:simulation_id => self.id, :budget=>1000, :budget_available=>1000)
+      user.save!
+    end
+  end
+
+  def check_user_budget(user)
+    puts "----user #{user}"
+    puts user.simulation_user_datas.where(:simulation_id => self.id).first.budget_available
+
+    if user.simulation_user_datas.where(:simulation_id => self.id).first.budget_available < 0
+      puts "in if"
+      #errors.add_to_base("At least one form of contact must be entered: phone or email" )
+      #self.errors.add(:simulation_id, "can not be nil")
+      self.errors.add(:base, "Budget can't be 0 or less than 0.")
+      #self.errors[:base] << "Msg"
+      puts "errors #{self.errors}"
+    #else
+    #  user.save!
+    end
+
+
+  end
 
 end

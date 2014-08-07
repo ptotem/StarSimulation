@@ -48,30 +48,48 @@ class SimulationsController < ApplicationController
     #  flash[:notice] = "Your budget can't be less than 0."
     #  redirect_to "/play_sim/#{params[:id]}"
     #else
+    #render :json=> @usd
+    #return
+      @usd.budget_available = params[:sim_user_data_budget_available]
+      #@usd.save!
+    err = ""
+    if @usd.save
+      #render :json => @usd.id
+      if @simulation.update(simulation_params)
+        redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
+      end
+    else
+      @usd.errors.each do |attr_name, message|
+        err = message
+      end
+      #render :json => @usd.errors["budget_available"][0]
+      #return
+      flash[:notice] = @usd.errors["budget_available"][0]
+      redirect_to "/play_sim/#{params[:id]}"
+    end
+    #render :json => err
+    #return
 
-      @usd.user_id = current_user.id
-      @usd.save
-
-    #render :text => @usd.budget_available
+    #render :json => @usd.errors
     #return
       #@simulation.check_user_budget(current_user)
       #render :text => @simulation.errors["base"][0]
       #return
-      if !@usd.errors.blank?
-        flash[:notice] = @usd.errors["base"][0]
-          redirect_to "/play_sim/#{params[:id]}"
-      else
-        respond_to do |format|
-          if @simulation.update(simulation_params)
-            #format.html { redirect_to "/play_sim/#{params[:id]}", notice: 'Nilesh' }
-            format.html { redirect_to "/" }
-            format.json { head :no_content }
-          else
-            format.html { render action: 'edit' }
-            format.json { render json: @simulation.errors, status: :unprocessable_entity }
-          end
-        end
-      end
+      #if !@usd.errors.blank?
+      #  flash[:notice] = @usd.errors["base"][0]
+      #    redirect_to "/play_sim/#{params[:id]}"
+      #else
+      #  respond_to do |format|
+      #    if @simulation.update(simulation_params)
+      #      format.html { redirect_to "/play_sim/#{params[:id]}", notice: '' }
+      #      #format.html { redirect_to "/" }
+      #      format.json { head :no_content }
+      #    else
+      #      format.html { render action: 'edit' }
+      #      format.json { render json: @simulation.errors, status: :unprocessable_entity }
+      #    end
+      #  end
+      #end
 
 
     #end

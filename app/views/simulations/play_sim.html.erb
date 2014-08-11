@@ -1,94 +1,94 @@
 <div class="container">
-    <div class="row">
-      <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-        <h3 class="white" style="font-weight: bold"><%= @simulation.name %></h3>
+  <div class="row">
+    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+      <h3 class="white" style="font-weight: bold"><%= @simulation.name %></h3>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
+      <div class="budget_div">
+        <div class="row">
+          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <h3 id="user_budget_header" class="top-bottom-nil-margin">Budget</h3>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
+            <h3 id="user_budget" class="top-bottom-nil-margin"> <%= @simulation_user_data.budget_available %> </h3>
+          </div>
+        </div>
       </div>
-      <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
-        <div class="budget_div">
-          <div class="row">
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-              <h3 id="user_budget_header" class="top-bottom-nil-margin">Budget</h3>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
-              <h3 id="user_budget" class="top-bottom-nil-margin"> <%= @simulation_user_data.budget_available %> </h3>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 5%">
+    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+      <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <h3 class="white" style="font-weight: bold">Instruction</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <p class="white" id="instruction_text">A star is a massive, luminous sphere of plasma held together by its own gravity. The nearest star to Earth is the Sun, which is the source of most of the planet's energy.A star is a massive, luminous sphere of plasma held together by its own gravity. The nearest star to Earth is the Sun, which is the source of most of the planet's energy.</p>
+        </div>
+      </div>
+      <div class="row" style="padding-top: 30%">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <% if @simulation.excel_file.blank? %>
+              <%= link_to 'Download Excel',  "#", :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
+          <% else %>
+              <%= link_to 'Download Excel',  @simulation.excel_file.url, :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
+      <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h4>Select Program</h4></div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h4 style="text-align: center">No. of Slots</h4></div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+          <%# if !flash[:notice].blank? %>
+          <%# if flash[:notice].include?("sign")!=false %>
+          <div style="color: red; text-align: center;"><%= flash[:notice] %></div>
+          <%# end %>
+          <%# end %>
+          <div class="program-wall">
+            <div class="row">
+              <%= nested_form_for @simulation do |f| %>
+                  <% if @simulation.errors.any? %>
+                      <div id="error_explanation">
+                        <h2><%= pluralize(@simulation.errors.count, "error") %> prohibited this article from being saved:</h2>
+
+                        <ul>
+                          <% @simulation.errors.full_messages.each do |msg| %>
+                              <li><%= msg %></li>
+                          <% end %>
+                        </ul>
+                      </div>
+                  <% end %>
+                  <%= hidden_field_tag 'sim_user_data_budget_available', @simulation_user_data.budget_available %>
+                  <%= f.fields_for :user_sim_datums do |user_sim_data| %>
+
+                      <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
+                      <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="margin-left: 3%">
+                        <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
+                      </div>
+                      <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <%= user_sim_data.text_field :no_of_slots, {class: 'form-control', :onkeyup=>"calculate_budget(event, $(this))", :value=>0} %>
+                      </div>
+                      <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                        <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em; left:0; top:5px;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
+                      </div>
+                  <% end %>
+
+                  <%= f.link_to_add "Add", :user_sim_datums, :class=>"btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; left: 15px; font-size: 1.4em;" %>
+                  <%= f.submit "Submit", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" %>
+              <% end %>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-    <div class="row" style="padding-top: 5%">
-      <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-        <div class="row">
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <h3 class="white" style="font-weight: bold">Instruction</h3>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <p class="white" id="instruction_text">A star is a massive, luminous sphere of plasma held together by its own gravity. The nearest star to Earth is the Sun, which is the source of most of the planet's energy.A star is a massive, luminous sphere of plasma held together by its own gravity. The nearest star to Earth is the Sun, which is the source of most of the planet's energy.</p>
-          </div>
-        </div>
-        <div class="row" style="padding-top: 30%">
-          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <% if @simulation.excel_file.blank? %>
-                <%= link_to 'Download Excel',  "#", :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
-            <% else %>
-                <%= link_to 'Download Excel',  @simulation.excel_file.url, :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
-            <% end %>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
-        <div class="row">
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h4>Select Program</h4></div>
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"><h4 style="text-align: center">No. of Slots</h4></div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-            <%# if !flash[:notice].blank? %>
-                <%# if flash[:notice].include?("sign")!=false %>
-                    <div style="color: red; text-align: center;"><%= flash[:notice] %></div>
-                <%# end %>
-            <%# end %>
-            <div class="program-wall">
-              <div class="row">
-                <%= nested_form_for @simulation do |f| %>
-                    <% if @simulation.errors.any? %>
-                        <div id="error_explanation">
-                          <h2><%= pluralize(@simulation.errors.count, "error") %> prohibited this article from being saved:</h2>
-
-                          <ul>
-                            <% @simulation.errors.full_messages.each do |msg| %>
-                                <li><%= msg %></li>
-                            <% end %>
-                          </ul>
-                        </div>
-                    <% end %>
-                    <%= hidden_field_tag 'sim_user_data_budget_available', @simulation_user_data.budget_available %>
-                    <%= f.fields_for :user_sim_datums do |user_sim_data| %>
-
-                        <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
-                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="margin-left: 3%">
-                          <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
-                        </div>
-                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                          <%= user_sim_data.text_field :no_of_slots, {class: 'form-control', :onkeyup=>"calculate_budget(event, $(this))"} %>
-                        </div>
-                        <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                          <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em; left:0; top:5px;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
-                        </div>
-                    <% end %>
-
-                    <%= f.link_to_add "Add", :user_sim_datums, :class=>"btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; left: 15px; font-size: 1.4em;" %>
-                    <%= f.submit "Submit", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" %>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  </div>
 </div>
 
 
@@ -120,10 +120,11 @@
 <%# end %>
 
 <script>
-    var user_budget_manipulated, user_budget_real;
+    var user_budget_manipulated, user_budget_real, user_budget_manipulated_keep_for_dd_change;
     var simulation_id = <%= @simulation.id %>
     var cost_per_slot;
     var total_thing = 0;
+    var this_dropdown_val=0;
     $(function(){
 
         //user_budget = $("#user_budget").text();
@@ -183,15 +184,47 @@
     }
 
     function get_this_select_text_and_update_budget(this_select, this_text){
-        var this_select_val, this_text_val;
+        var this_select_val, this_text_val, cal_b;
         this_select_val = $(this_select).val();
         this_text_val = $(this_text).val();
+
         console.log("in get_this_select_text_and_update_budget");
         console.log("this_select val :- " + this_select_val);
         console.log("this_text val :- " + this_text_val);
         console.log("cost_per_slot :- " + cost_per_slot);
-        if (this_select_val!="") {
+        if (this_text_val!="") {
             console.log("check here");
+            console.log("this_dropdown_val :- " + this_dropdown_val);
+            console.log("user_budget_manipulated :- " + user_budget_manipulated);
+
+            console.log("--- this_select_val :- " + this_select_val);
+            console.log("--- this_dropdown_val :- " + this_dropdown_val);
+            if (this_select_val!=this_dropdown_val){
+                cal_b = this_text_val*cost_per_slot;
+                console.log("cal_b :- " + cal_b);
+                console.log("apply this budget :- " + (user_budget_manipulated-cal_b));
+                user_budget_manipulated = (user_budget_manipulated-cal_b);
+                $("#user_budget").text(user_budget_manipulated);
+            }
+            else{
+                if (user_budget_manipulated_keep_for_dd_change!=undefined){
+                    console.log("user_budget_manipulated_keep_for_dd_change :- " + user_budget_manipulated_keep_for_dd_change)
+                    user_budget_manipulated = user_budget_manipulated_keep_for_dd_change;
+                    console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                    $("#user_budget").text(user_budget_manipulated);
+                }
+
+            }
+
+
+
+//            var this_slot, this_select_e;
+//            $('form.edit_simulation').find('.fields:visible').each(function(index, ele) {
+//                this_slot = $(ele).find("input.form-control[type=text]").val();
+//                this_select_e = $(ele).find(".chosen-select");
+//
+//            });
+
         }
         else{
             console.log("please enter no_of_slots");
@@ -199,150 +232,163 @@
     }
 
     function calculate_budget(event, this_obj){
-      console.log("----- in calculate_budget -----");
+
+        console.log("----- in calculate_budget -----");
         var this_val = $(this_obj).val();
-      console.log("this_val :- " + this_val);
-//      console.log("user_budget_manipulated :- " + user_budget_manipulated);
-//      console.log("cost_per_slot :- " + cost_per_slot);
+        console.log("$(this_obj) :- ");
+        this_dropdown_val = $(this_obj).parents(".fields").find('.chosen-select').val();
+        console.log("this_dropdown_val :- " + this_dropdown_val);
+        //this_dropdown_val
+        console.log("this_val :- " + this_val);
 
-        //console.log("event.keyCode :- " + event.keyCode);
-        //console.clear();
-
-        var total_slots = 0;
-        var this_slot, this_select, total_cost = 0, total_thing = 0;
-
-
-        //allow only numbers
-        console.log("event.keyCode :- " + event.keyCode);
-        if ( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) ) {
-            console.log("allow");
-            console.log("this_val :- " + this_val);
-
-            console.log("check for -ve user_budget_manipulated in allow :- " + user_budget_manipulated);
-            if (user_budget_manipulated < 0) {
-                $("#user_budget").css({"color":"red"});
-            }
-            else{
-                $("#user_budget").css({"color":"white"});
-            }
-
-            $('form.edit_simulation').find('.fields:visible').each(function(index, ele) {
-                this_slot = $(ele).find("input.form-control[type=text]").val();
-                this_select = $(ele).find(".chosen-select");
-                //console.log($(this_select));
-
-
-                if (this_slot!="") {
-                    get_cost($(this_select));
-                    //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
-                    total_thing = total_thing + (this_slot*cost_per_slot);
-                    //total_cost = total_cost + cost_per_slot;
-                    //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
-                    //console.log("this_slot :- " + this_slot);
-                    //total_slots = parseInt(total_slots) + parseInt(this_slot);
-                }
-                else{
-                    this_slot = 0;
-                    console.log("this slot blank");
-                }
-
-            });
-            user_budget_manipulated = user_budget_real - (total_thing);
-            console.log("check for -ve user_budget_manipulated after compute :- " + user_budget_manipulated);
-            $("#user_budget").text(user_budget_manipulated);
-            $("#sim_user_data_budget_available").val(user_budget_manipulated);
-            if (user_budget_manipulated < 0) {
-                $("#user_budget").css({"color":"red"});
-            }
-            else{
-                $("#user_budget").css({"color":"white"});
-            }
+        if(parseInt(this_val) < 0 || isNaN(this_val)) {
+            console.log("please enter valid values");
+            $(this_obj).val("");
+            $(this_obj).focus();
         }
         else{
-            console.log("don't allow");
-            this_slot = 0;
-            console.log("total_thing :- " + total_thing);
-            console.log("user_budget_manipulated :- " + user_budget_manipulated);
-            $('form.edit_simulation').find('.fields').each(function(index, ele) {
-                this_slot = $(ele).find("input.form-control[type=text]").val();
-                if (this_slot==""){
-                    user_budget_manipulated = user_budget_real;
-                    $("#user_budget").text(user_budget_manipulated);
-                    $("#sim_user_data_budget_available").val(user_budget_manipulated);
-                }
-            });
-            if ( (event.keyCode != 17) || (event.keyCode != 27) ) {
-                console.log("event.keyCode da :- " + event.keyCode)
+            //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+//      console.log("cost_per_slot :- " + cost_per_slot);
 
-                var keycode = (event.which) ? event.which : event.keyCode;
-                console.log("keycode :- " + keycode)
+            //console.log("event.keyCode :- " + event.keyCode);
+            //console.clear();
+
+            var total_slots = 0;
+            var this_slot, this_select, total_cost = 0, total_thing = 0;
+
+
+            //allow only numbers
+            console.log("event.keyCode :- " + event.keyCode);
+            if ( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) ) {
+                console.log("allow");
+                console.log("this_val :- " + this_val);
+
+                console.log("check for -ve user_budget_manipulated in allow :- " + user_budget_manipulated);
+                if (user_budget_manipulated < 0) {
+                    $("#user_budget").css({"color":"red"});
+                }
+                else{
+                    $("#user_budget").css({"color":"white"});
+                }
+
+                $('form.edit_simulation').find('.fields:visible').each(function(index, ele) {
+                    this_slot = $(ele).find("input.form-control[type=text]").val();
+                    this_select = $(ele).find(".chosen-select");
+                    //console.log($(this_select));
+
+
+                    if (this_slot!="") {
+                        get_cost($(this_select));
+                        //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
+                        total_thing = total_thing + (this_slot*cost_per_slot);
+                        //total_cost = total_cost + cost_per_slot;
+                        //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+                        //console.log("this_slot :- " + this_slot);
+                        //total_slots = parseInt(total_slots) + parseInt(this_slot);
+                    }
+                    else{
+                        this_slot = 0;
+                        console.log("this slot blank");
+                    }
+
+                });
+                user_budget_manipulated = user_budget_real - (total_thing);
+                user_budget_manipulated_keep_for_dd_change = user_budget_manipulated;
+                console.log("check for -ve user_budget_manipulated after compute :- " + user_budget_manipulated);
+                $("#user_budget").text(user_budget_manipulated);
+                $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                if (user_budget_manipulated < 0) {
+                    $("#user_budget").css({"color":"red"});
+                }
+                else{
+                    $("#user_budget").css({"color":"white"});
+                }
+            }
+            else{
+                console.log("don't allow");
+                this_slot = 0;
+                console.log("total_thing :- " + total_thing);
+                console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                $('form.edit_simulation').find('.fields').each(function(index, ele) {
+                    this_slot = $(ele).find("input.form-control[type=text]").val();
+                    if (this_slot==""){
+                        user_budget_manipulated = user_budget_real;
+                        $("#user_budget").text(user_budget_manipulated);
+                        $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                    }
+                });
+                if ( (event.keyCode != 17) || (event.keyCode != 27) ) {
+                    console.log("event.keyCode da :- " + event.keyCode)
+
+                    var keycode = (event.which) ? event.which : event.keyCode;
+                    console.log("keycode :- " + keycode)
 
 
 //                //comparing pressed keycodes
-                if (!(keycode==8 || keycode==46)&&(keycode < 48 || keycode > 57))
-                {
-                    console.log("no");
-                    //return false;
-                }
-                else{
-                    console.log("yes");
-                    $('form.edit_simulation').find('.fields:visible').each(function(index, ele) {
-                        this_slot = $(ele).find("input.form-control[type=text]").val();
-                        this_select = $(ele).find(".chosen-select");
+                    if (!(keycode==8 || keycode==46)&&(keycode < 48 || keycode > 57))
+                    {
+                        console.log("no");
+                        //return false;
+                    }
+                    else{
+                        console.log("yes");
+                        $('form.edit_simulation').find('.fields:visible').each(function(index, ele) {
+                            this_slot = $(ele).find("input.form-control[type=text]").val();
+                            this_select = $(ele).find(".chosen-select");
 
-                        if (this_slot!=""){
-                            console.log("this_slot not blank");
-                            get_cost($(this_select));
-                            console.log("cost_per_slot in this_slot not blank :- " + cost_per_slot);
-                            total_thing = total_thing + (this_slot*cost_per_slot);
-                            console.log("total_thing in this_slot not blank :- " + total_thing);
-                            console.log("user_budget_manipulated in this_slot not blank :- " + user_budget_manipulated);
-                            user_budget_manipulated = user_budget_real - (total_thing);
-                            console.log("user_budget_manipulated in this_slot not blank after cal :- " + user_budget_manipulated);
-                            $("#user_budget").text(user_budget_manipulated);
-                            $("#sim_user_data_budget_available").val(user_budget_manipulated);
-                            if (user_budget_manipulated < 0) {
-                                $("#user_budget").css({"color":"red"});
+                            if (this_slot!=""){
+                                console.log("this_slot not blank");
+                                get_cost($(this_select));
+                                console.log("cost_per_slot in this_slot not blank :- " + cost_per_slot);
+                                total_thing = total_thing + (this_slot*cost_per_slot);
+                                console.log("total_thing in this_slot not blank :- " + total_thing);
+                                console.log("user_budget_manipulated in this_slot not blank :- " + user_budget_manipulated);
+                                user_budget_manipulated = user_budget_real - (total_thing);
+                                console.log("user_budget_manipulated in this_slot not blank after cal :- " + user_budget_manipulated);
+                                $("#user_budget").text(user_budget_manipulated);
+                                $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                                if (user_budget_manipulated < 0) {
+                                    $("#user_budget").css({"color":"red"});
+                                }
+                                else{
+                                    $("#user_budget").css({"color":"white"});
+                                }
+                                //user_budget_manipulated = total_thing + cost_per_slot;
+                                //console.log("user_budget_manipulated in this slot blank :- " + user_budget_manipulated);
+                                //total_thing = total_thing + (this_slot*cost_per_slot);
+                                //console.log("user_budget_manipulated in this_slot blank :- " + user_budget_manipulated)
+                                //user_budget_manipulated = user_budget_manipulated + cost_per_slot;
+                                //console.log("user_budget_manipulated in this_slot blank after adding :- " + user_budget_manipulated)
+                                //$("#user_budget").text(user_budget_manipulated);
                             }
-                            else{
-                                $("#user_budget").css({"color":"white"});
-                            }
-                            //user_budget_manipulated = total_thing + cost_per_slot;
-                            //console.log("user_budget_manipulated in this slot blank :- " + user_budget_manipulated);
-                            //total_thing = total_thing + (this_slot*cost_per_slot);
-                            //console.log("user_budget_manipulated in this_slot blank :- " + user_budget_manipulated)
-                            //user_budget_manipulated = user_budget_manipulated + cost_per_slot;
-                            //console.log("user_budget_manipulated in this_slot blank after adding :- " + user_budget_manipulated)
-                            //$("#user_budget").text(user_budget_manipulated);
-                        }
-                    });
+                        });
+                    }
+
+
                 }
 
 
+                //console.log("user_budget_manipulated :- " + user_budget_manipulated);
+
+                //total_thing = total_thing + (this_slot*cost_per_slot);
+                //console.log("total_thing :- " + total_thing);
+                //user_budget_manipulated = user_budget_real - (total_thing);
+                //console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                //$("#user_budget").text(user_budget_manipulated);
+//            user_budget_manipulated = user_budget_real;
             }
 
-
-            //console.log("user_budget_manipulated :- " + user_budget_manipulated);
-
-            //total_thing = total_thing + (this_slot*cost_per_slot);
             //console.log("total_thing :- " + total_thing);
+
             //user_budget_manipulated = user_budget_real - (total_thing);
-            //console.log("user_budget_manipulated :- " + user_budget_manipulated);
             //$("#user_budget").text(user_budget_manipulated);
-//            user_budget_manipulated = user_budget_real;
-        }
+            //$("#sim_user_data_budget_available").val(user_budget_manipulated);
 
-        //console.log("total_thing :- " + total_thing);
-
-        //user_budget_manipulated = user_budget_real - (total_thing);
-        //$("#user_budget").text(user_budget_manipulated);
-        //$("#sim_user_data_budget_available").val(user_budget_manipulated);
-
-        //console.log("total_cost :- " + total_cost);
-        //console.log("total_slots :- " + total_slots);
+            //console.log("total_cost :- " + total_cost);
+            //console.log("total_slots :- " + total_slots);
 
 
-        //working code starts from here
+            //working code starts from here
 //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
 //
 //      if ( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) ) {
@@ -363,10 +409,10 @@
 //          }
 //      }
 //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
-        //$("#user_budget").text(user_budget_manipulated);
-        //working code ends here
+            //$("#user_budget").text(user_budget_manipulated);
+            //working code ends here
 
-        //user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
+            //user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
 
 //      if (event.keyCode == 8 || event.keyCode == 46) {
 //          if (this_val==""){
@@ -384,6 +430,7 @@
 
 
 //      $("#user_budget").text(user_budget_manipulated);
+        }
 
     }
 
@@ -479,7 +526,7 @@
     $('form').on('nested:fieldAdded', function(event) {
         $(event.target).find('.chosen-select').chosen();
         $(event.target).find('.chosen-select option').eq(0).attr('selected', 'selected');
-        get_cost($(event.target).find('.chosen-select'));
+        //get_cost($(event.target).find('.chosen-select'));
         //$('#chosen-select option').eq(index).attr('selected', 'selected');
     });
 

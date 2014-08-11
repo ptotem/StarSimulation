@@ -40,22 +40,44 @@ class SimulationsController < ApplicationController
   # PATCH/PUT /simulations/1
   # PATCH/PUT /simulations/1.json
   def update
-    #render :json => params
-    #return
     @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
 
-    #if params[:sim_user_data_budget_available].to_i < 0
-    #  flash[:notice] = "Your budget can't be less than 0."
-    #  redirect_to "/play_sim/#{params[:id]}"
-    #else
-    #render :json=> @usd
+    @new_a = Array.new()
+    #params[:simulation][:user_sim_datums_attributes].each do |p|
+    #  @new_a << "#{p.simulation_datum_id}-#{p.no_of_slots}"
+    #end
+
+    #render :json => params[:simulation][:user_sim_datums_attributes]
     #return
-      @usd.budget_available = params[:sim_user_data_budget_available]
-      #@usd.save!
-    err = ""
+    params[:simulation][:user_sim_datums_attributes].size().times do |x|
+      #puts "cat #{x}"
+      #@new_a << "#{x.simulation_datum_id},#{x.no_of_slots}"
+      @new_a << "#{params[:simulation][:user_sim_datums_attributes]["#{x}"]["simulation_datum_id"]}||#{params[:simulation][:user_sim_datums_attributes]["#{x}"]["no_of_slots"]}"
+    end
+    #render :json => @new_a
+    #return
+
+    #simulation_params
+    #render :json => @usd
+    #return
+    #@usd.user_id = current_user.id
+    #
+    #@simulation.update(simulation_user_datas_params)
+    ##if params[:sim_user_data_budget_available].to_i < 0
+    ##  flash[:notice] = "Your budget can't be less than 0."
+    ##  redirect_to "/play_sim/#{params[:id]}"
+    ##else
+    ##render :json=> @usd
+    ##return
+    ##  @usd.budget_available = params[:sim_user_data_budget_available]
+    #  #@usd.save!
+    #err = ""
+
+    @usd.check_here(@new_a)
     if @usd.save
       #render :json => @usd.id
       if @simulation.update(simulation_params)
+      #if @simulation.update(simulation_user_datas_params)
         redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
       end
     else
@@ -136,6 +158,12 @@ class SimulationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def simulation_params
       #params.require(:simulation).permit(:name)
+      #params.require(:simulation).permit(:name, user_sim_datums_attributes: [:id, :user_id, :simulation_id, :simulation_datum_id, :no_of_slots, :_destroy], simulation_user_data: [:user_id, :simulation_id])
       params.require(:simulation).permit(:name, user_sim_datums_attributes: [:id, :user_id, :simulation_id, :simulation_datum_id, :no_of_slots, :_destroy])
     end
+
+    #def simulation_user_datas_params
+    #  params.require(:simulation).permit(:name, simulation_user_datas_attributes: [:id, :user_id, :simulation_id, :_destroy])
+    #end
+
 end

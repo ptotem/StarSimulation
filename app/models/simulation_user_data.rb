@@ -6,6 +6,44 @@ class SimulationUserData < ActiveRecord::Base
     validates :budget_available, :numericality => {greater_than: 0, :message => "Your budget can't go below 0."}
 
     #validate :validate_amount_left
+    #validate :my_method
+    #before_save :my_method
+
+    def check_here(user_sim_data_selected)
+      puts "in check_here"
+      puts "self.id :- #{self.id}"
+      #puts "user_sim_data_selected.size :- #{user_sim_data_selected.size()}"
+      #puts user_sim_data_selected
+      sim_data_id = 0
+      slots_baught = 0
+      cost_per_slot = 0
+      total_spent = 0
+
+      user_sim_data_selected.size().times do |x|
+        sim_data_id = user_sim_data_selected[x].split("||")[0]
+        slots_baught = user_sim_data_selected[x].split("||")[1]
+        puts "sim_data_id :- #{sim_data_id}"
+        puts "slots_baught :- #{slots_baught}"
+        cost_per_slot = SimulationDatum.find(sim_data_id).cost_per_slot
+        puts "cost_per_slot #{cost_per_slot}"
+        total_spent = (total_spent.to_i) + ((cost_per_slot.to_i)*(slots_baught.to_i))
+      end
+      self.budget_available = self.budget - total_spent
+      puts "budget_available :- #{self.budget_available}"
+
+
+    end
+
+    def my_method
+      puts "in my_method"
+      puts "self.id #{self.id}"
+      this_user_sim_data = UserSimDatum.where("simulation_id = ? AND user_id = ?", self.simulation_id, self.user_id)
+      puts "this_user_sim_data :- #{this_user_sim_data}"
+      this_user_sim_data.each do |individual_sim_data|
+        puts "individual_sim_data.id #{individual_sim_data.id}"
+        puts "individual_sim_data.no_of_slots #{individual_sim_data.no_of_slots}"
+      end
+    end
 
     def validate_amount_left
       puts "self.budget_available :-  #{self.budget_available}"

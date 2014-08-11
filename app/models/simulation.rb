@@ -16,7 +16,7 @@ class Simulation < ActiveRecord::Base
   accepts_nested_attributes_for :user_sim_datums, :allow_destroy => true, reject_if: :all_blank
 
   has_many :simulation_user_datas
-  #accepts_nested_attributes_for :simulation_user_datas, :allow_destroy => true
+  accepts_nested_attributes_for :simulation_user_datas, :allow_destroy => true
   has_many :users, :through => :simulation_user_datas
 
 

@@ -40,6 +40,8 @@ class SimulationsController < ApplicationController
   # PATCH/PUT /simulations/1
   # PATCH/PUT /simulations/1.json
   def update
+    #render :json => params
+    #return
     @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
 
     @new_a = Array.new()
@@ -47,13 +49,14 @@ class SimulationsController < ApplicationController
     #  @new_a << "#{p.simulation_datum_id}-#{p.no_of_slots}"
     #end
 
-    #render :json => params[:simulation][:user_sim_datums_attributes]
+    #render :json => params[:simulation][:user_sim_datums_attributes].keys().size()
     #return
-    params[:simulation][:user_sim_datums_attributes].size().times do |x|
-      #puts "cat #{x}"
-      #@new_a << "#{x.simulation_datum_id},#{x.no_of_slots}"
-      @new_a << "#{params[:simulation][:user_sim_datums_attributes]["#{x}"]["simulation_datum_id"]}||#{params[:simulation][:user_sim_datums_attributes]["#{x}"]["no_of_slots"]}"
+
+
+    params[:simulation][:user_sim_datums_attributes].keys().each do |k|
+      @new_a << "#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["simulation_datum_id"]}||#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"]}"
     end
+
     #render :json => @new_a
     #return
 
@@ -71,24 +74,41 @@ class SimulationsController < ApplicationController
     ##return
     ##  @usd.budget_available = params[:sim_user_data_budget_available]
     #  #@usd.save!
-    #err = ""
+
 
     @usd.check_here(@new_a)
-    if @usd.save
-      #render :json => @usd.id
-      if @simulation.update(simulation_params)
-      #if @simulation.update(simulation_user_datas_params)
-        redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
-      end
-    else
-      @usd.errors.each do |attr_name, message|
-        err = message
-      end
-      #render :json => @usd.errors["budget_available"][0]
+    err = ""
+    @usd.errors.each do |attr_name, message|
+      err = message
+    end
+    #render :json => err.blank?
+    #return
+    if err.blank?
+      @simulation.update(simulation_params)
+      #render :text => "success"
       #return
-      flash[:notice] = @usd.errors["budget_available"][0]
+      redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
+    else
+      #render :text => "fail"
+      #return
+      flash[:notice] = err
       redirect_to "/play_sim/#{params[:id]}"
     end
+    #if @usd.save
+    #  #render :json => @usd.id
+    #  if @simulation.update(simulation_params)
+    #  #if @simulation.update(simulation_user_datas_params)
+    #    redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
+    #  end
+    #else
+    #  @usd.errors.each do |attr_name, message|
+    #    err = message
+    #  end
+    #  render :json => @usd.errors["budget_available"][0]
+    #  return
+    #  flash[:notice] = @usd.errors["budget_available"][0]
+    #  redirect_to "/play_sim/#{params[:id]}"
+    #end
     #render :json => err
     #return
 

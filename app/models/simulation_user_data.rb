@@ -18,7 +18,7 @@ class SimulationUserData < ActiveRecord::Base
       slots_baught = 0
       cost_per_slot = 0
       total_spent = 0
-
+      ba = 0
       user_sim_data_selected.size().times do |x|
         sim_data_id = user_sim_data_selected[x].split("||")[0]
         slots_baught = user_sim_data_selected[x].split("||")[1]
@@ -28,8 +28,14 @@ class SimulationUserData < ActiveRecord::Base
         puts "cost_per_slot #{cost_per_slot}"
         total_spent = (total_spent.to_i) + ((cost_per_slot.to_i)*(slots_baught.to_i))
       end
-      self.budget_available = self.budget - total_spent
-      puts "budget_available :- #{self.budget_available}"
+      ba = self.budget - total_spent
+      puts "ba :- #{ba}"
+      if ba < 0
+        self.errors.add(:base, "Budget can't be less than 0")
+      else
+        self.budget_available = ba
+        self.save
+      end
 
 
     end

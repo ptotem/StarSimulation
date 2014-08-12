@@ -46,7 +46,10 @@
       </div>
       <div class="row">
         <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
-          <%# if !flash[:notice].blank? %>
+          <%#= flash[:notice].blank? %>
+          <%# if flash[:notice].blank? %>
+            <!--not-->
+          <%# else %>
               <%# if flash[:notice].include?("sign")!=false %>
                 <div style="color: red; text-align: center;"><%= flash[:notice] %></div>
               <%# end %>

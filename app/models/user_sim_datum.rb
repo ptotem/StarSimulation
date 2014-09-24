@@ -1,13 +1,24 @@
 class UserSimDatum < ActiveRecord::Base
 
-  #validates_uniqueness_of :simulation_datum_id, :scope => [:user_id, :simulation_id], :message => "You already have selected this program."
-  #validates :age_min, :numericality => {greater_than: 0, less_than_or_equal_to: :age_max}, :unless => Proc.new {|user| user.age_min.nil? || user.age_max.nil? }
+  # validates_uniqueness_of :simulation_datum_id, :scope => [:user_id, :simulation_id], :message => "You already have selected this program."
+  # validates_uniqueness_of :simulation_datum_id, scope: [:user_id, :simulation_id]
 
   belongs_to :simulation
   belongs_to :user
 
   #before_save :my_method_usd
   #validate :my_method_usd
+
+  def backup_prev_data(prev_data, user_id, sim_id)
+    puts "backup_prev_data :- #{prev_data}"
+    BUserSimData.where(:user_id=>user_id, :simulation_id=>sim_id).destroy_all
+    prev_data.each do |pd|
+      @b = BUserSimData.create(:user_id=>pd.user_id, :simulation_id=>pd.simulation_id, :simulation_datum_id=>pd.simulation_datum_id, :no_of_slots=>pd.no_of_slots, :budget_available=>pd.budget_available, :cprp=>pd.cprp, :grp=>pd.grp, :play_count=>pd.play_count)
+      @b.save!
+    end
+
+    # return prev_data
+  end
 
   def my_method_usd
     puts "UserSimDatum"

@@ -71,6 +71,52 @@ class UserSimDataController < ApplicationController
     @simulation_data = @simulation.simulation_datums
   end
 
+  def result
+    @simulation = params[:simulation_id]
+    # @user_sim_data = SimulationUserData.where(:user_id=>current_user.id, :simulation_id=>params[:simulation_id]).last
+    # # render :json => @user_sim_data
+    # # return
+    # @user_sim_datum = UserSimDatum.where(:user_id=>current_user.id, :simulation_id=>params[:simulation_id])
+    # @total_slots_bought = 0
+    # @user_sim_datum.each do |user_sim_data|
+    #   @total_slots_bought = @total_slots_bought + user_sim_data.no_of_slots
+    # end
+    @no_of_attempts = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id]).count
+    gon.no_of_attempts = @no_of_attempts
+
+    @sim_user_data = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id])
+    @user_sim_data = UserSimDatum.where(:user_id=>current_user.id, :simulation_id=>params[:simulation_id]).group(:play_count)
+    @sample_array = Array.new()
+    @sim_user_data.each_with_index do |sud, index|
+      @sample_array << UserSimDatum.where(:user_id=>current_user.id, :simulation_id=>params[:simulation_id], :play_count=>index+1).map{|usd| usd.no_of_slots}
+    end
+    @inner = Array.new()
+    @sample_array.each do |sa|
+      @inner << sa.length
+    end
+    # render :json => @inner
+    # return
+
+    # from here correct
+    @individual_grp_mapped = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id]).map{|sud| sud.total_grp}
+    @individual_grp = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id])
+    @individual_grp_array = Array.new()
+    @individual_grp.each_with_index do |ig, index|
+      igrp_point = index+1, ig.total_grp
+      c = igrp_point.to_a
+      @individual_grp_array << igrp_point
+    end
+
+    @individual_cprp_mapped = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id]).map{|sud| sud.total_cprp}
+    @individual_cprp = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id])
+    @individual_cprp_array = Array.new()
+    @individual_cprp.each_with_index do |ic, index|
+      icprp_point = index+1, ic.total_cprp
+      c = icprp_point.to_a
+      @individual_cprp_array << icprp_point
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user_sim_datum

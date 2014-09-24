@@ -40,10 +40,10 @@ class SimulationsController < ApplicationController
   # PATCH/PUT /simulations/1
   # PATCH/PUT /simulations/1.json
   def update
-    #render :json => params
-    #return
-    @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
-
+    # render :json => current_user.simulation_user_datas
+    # return
+    # @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
+    @usd = current_user.simulation_user_datas.build(:simulation_id=>params[:id], :budget=>1000, :budget_available=>1000)
     @new_a = Array.new()
     #params[:simulation][:user_sim_datums_attributes].each do |p|
     #  @new_a << "#{p.simulation_datum_id}-#{p.no_of_slots}"
@@ -52,13 +52,16 @@ class SimulationsController < ApplicationController
     #render :json => params[:simulation][:user_sim_datums_attributes].keys().size()
     #return
 
-
+    # @simulation.user_sim_datums.delete_all
+    # @simulation = Simulation.find(params[:id])
+    # render :json => @simulation.user_sim_datums
+    # return
     params[:simulation][:user_sim_datums_attributes].keys().each do |k|
       @new_a << "#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["simulation_datum_id"]}||#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"]}"
     end
 
-    #render :json => @new_a
-    #return
+    # render :json => "#{@new_a}||#{params[:id]}"
+    # return
 
     #simulation_params
     #render :json => @usd
@@ -76,7 +79,8 @@ class SimulationsController < ApplicationController
     #  #@usd.save!
 
 
-    @usd.check_here(@new_a)
+    @usd.check_here(@new_a, params[:id])
+
     err = ""
     @usd.errors.each do |attr_name, message|
       err = message
@@ -87,7 +91,9 @@ class SimulationsController < ApplicationController
       @simulation.update(simulation_params)
       #render :text => "success"
       #return
-      redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
+      @usd.set_cprp_and_grp(@new_a, params[:id])
+      # redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
+      redirect_to result_path(@simulation.id)
     else
       #render :text => "fail"
       #return
@@ -157,14 +163,25 @@ class SimulationsController < ApplicationController
   def play_sim
     @simulation = Simulation.find(params[:simulation_id])
     @simulation_data = @simulation.simulation_datums
-    @simulation_user_data = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
-    @usd = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
-    #render :json => @simulation_user_data
-    #return
+    # @simulation_user_data = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
+    @simulation_user_data = current_user.simulation_user_datas.new(:simulation_id=>@simulation.id, :budget=>1000, :budget_available=>1000)
+    # @usd = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
+    # render :json => @simulation_user_data
+    # return
 
     #render :json => @simulation
     #return
-    #@simulation.user_sim_datums.build
+    # @simulation.user_sim_datums.delete_all
+    @prev_data = current_user.user_sim_datums.where(:simulation_id=>@simulation.id)
+    # if !current_user.user_sim_datums.where(:simulation_id=>@simulation.id).first.nil?
+      current_user.user_sim_datums.where(:simulation_id=>@simulation.id).first.backup_prev_data(@prev_data, current_user.id, @simulation.id) rescue nil?
+    # end
+
+    # render :json => @prev_data
+    # return
+    current_user.user_sim_datums.where(:simulation_id=>@simulation.id).delete_all
+    # 1.times { current_user.user_sim_datums.where(:simulation_id=>@simulation.id).build }
+    1.times { @simulation.user_sim_datums.build }
     #@simulation.simulation_user_datas.build
   end
 
@@ -179,7 +196,7 @@ class SimulationsController < ApplicationController
     def simulation_params
       #params.require(:simulation).permit(:name)
       #params.require(:simulation).permit(:name, user_sim_datums_attributes: [:id, :user_id, :simulation_id, :simulation_datum_id, :no_of_slots, :_destroy], simulation_user_data: [:user_id, :simulation_id])
-      params.require(:simulation).permit(:name, user_sim_datums_attributes: [:id, :user_id, :simulation_id, :simulation_datum_id, :no_of_slots, :_destroy])
+      params.require(:simulation).permit(:name, user_sim_datums_attributes: [:id, :user_id, :simulation_id, :simulation_datum_id, :no_of_slots, :cprp, :grp, :_destroy])
     end
 
     #def simulation_user_datas_params

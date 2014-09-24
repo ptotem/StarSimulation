@@ -68,6 +68,13 @@ class SimulationDataController < ApplicationController
     return
   end
 
+  def get_duration
+    @simulation = Simulation.find(params[:simulation_id][0])
+    @simulation_data = @simulation.simulation_datums.where(:id=>params[:simulation_data_id][0]).first
+    render :json => @simulation_data
+    return
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_simulation_datum

@@ -11,7 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140806082450) do
+ActiveRecord::Schema.define(version: 20140923101327) do
+
+  create_table "b_user_sim_data", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "simulation_id"
+    t.integer  "simulation_datum_id"
+    t.integer  "no_of_slots"
+    t.integer  "budget_available"
+    t.float    "cprp"
+    t.float    "grp"
+    t.integer  "play_count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "simulation_data", force: true do |t|
     t.datetime "created_at"
@@ -36,6 +49,10 @@ ActiveRecord::Schema.define(version: 20140806082450) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "budget_available"
+    t.float    "total_grp"
+    t.float    "total_cprp"
+    t.integer  "score"
+    t.integer  "points"
   end
 
   create_table "simulations", force: true do |t|
@@ -56,6 +73,9 @@ ActiveRecord::Schema.define(version: 20140806082450) do
     t.integer  "simulation_datum_id"
     t.integer  "no_of_slots"
     t.integer  "budget_available"
+    t.float    "cprp"
+    t.float    "grp"
+    t.integer  "play_count"
   end
 
   create_table "users", force: true do |t|

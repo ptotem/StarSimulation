@@ -135,6 +135,7 @@
     var user_budget_manipulated, user_budget_real, user_budget_manipulated_keep_for_dd_change;
     var simulation_id = <%= @simulation.id %>
     var cost_per_slot;
+    var tvr, cprp;
     var total_thing = 0;
     var this_dropdown_val=0;
     $(function(){
@@ -176,6 +177,7 @@
         //console.log($(this_obj));
         var this_val = $(this_obj).val();
         var this_text_field = $(this_obj).parents(".fields").find('.form-control');
+        console.log("---- in get_cost() ------");
         console.log("this_val :- " + this_val);
 
         var data = {simulation_id:[], simulation_data_id: []};
@@ -190,6 +192,10 @@
             success: function (data) {
                 console.log(data.cost_per_slot);
                 cost_per_slot = data.cost_per_slot;
+                tvr = data.tvr;
+                console.log("tvr :- " + tvr);
+                cprp = parseInt(cost_per_slot/tvr);
+                console.log("cprp :- " + cprp);
                 //get_this_select_text_and_update_budget($(this_obj), $(this_text_field));
             }
         })
@@ -312,6 +318,7 @@
         console.log("----- in calculate_budget -----");
         var this_val = $(this_obj).val();
         console.log("$(this_obj) :- ");
+        console.log($(this_obj));
         this_dropdown_val = $(this_obj).parents(".fields").find('.chosen-select').val();
         console.log("this_dropdown_val :- " + this_dropdown_val);
         //this_dropdown_val
@@ -322,190 +329,227 @@
             $(this_obj).val("");
             $(this_obj).focus();
         }
-        else{
-            //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
-//      console.log("cost_per_slot :- " + cost_per_slot);
+        else{ //main else starts
+            console.log("======================================");
+            console.log("check entered value");
+            console.log("entered value :- " + this_val);
+            console.log("simulation_id :- " + simulation_id);
 
-            //console.log("event.keyCode :- " + event.keyCode);
-            //console.clear();
-
-            var total_slots = 0;
-            var this_slot, this_select, total_cost = 0, total_thing = 0;
-
-
-            //allow only numbers
-            console.log("event.keyCode :- " + event.keyCode);
-            if ( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) ) {
-                console.log("allow");
-                console.log("this_val :- " + this_val);
-
-                console.log("check for -ve user_budget_manipulated in allow :- " + user_budget_manipulated);
-                if (user_budget_manipulated < 0) {
-                    $("#user_budget").css({"color":"red"});
-                }
-                else{
-                    $("#user_budget").css({"color":"white"});
-                }
-
-                $('#usd').find('.fields:visible').each(function(index, ele) {
-                    this_slot = $(ele).find("input.form-control[type=text]").val();
-                    this_select = $(ele).find(".chosen-select");
-                    //console.log($(this_select));
-
-
-                    if (this_slot!="") {
-                        get_cost($(this_select));
-                        //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
-                        total_thing = total_thing + (this_slot*cost_per_slot);
-                        //total_cost = total_cost + cost_per_slot;
-                        //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
-                        //console.log("this_slot :- " + this_slot);
-                        //total_slots = parseInt(total_slots) + parseInt(this_slot);
+            var data = {simulation_id:[], simulation_data_id: []};
+            data["simulation_id"].push(simulation_id);
+            data["simulation_data_id"].push(this_dropdown_val);
+            $.ajax({
+                url: "/get_duration",
+                type: "post",
+                async: false,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    //console.log("data");
+                    var this_program_duration = data.duration;
+                    console.log("this_program_duration :- " + this_program_duration);
+                    console.log("this_program_duration/30 :- " + this_program_duration/30);
+                    var min_no_of_slots_reqd = Math.ceil(this_program_duration/30);
+                    //console.log("Math.ceil(min_no_of_slots_reqd) :- " + Math.ceil(min_no_of_slots_reqd))
+                    //console.log(this_program_duration%60);
+                    console.log("+++++++++++");
+                    if (this_val > min_no_of_slots_reqd) {
+                        console.log("Not allowed");
+                        $(this_obj).val("");
+                        $(this_obj).focus();
                     }
-                    else{
-                        this_slot = 0;
-                        console.log("this slot blank");
-                    }
+                    else{ //duration else starts
+                        console.log("allowed");
 
-                });
-                user_budget_manipulated = user_budget_real - (total_thing);
-                user_budget_manipulated_keep_for_dd_change = user_budget_manipulated;
-                console.log("check for -ve user_budget_manipulated after compute :- " + user_budget_manipulated);
-                $("#user_budget").text(user_budget_manipulated);
-                $("#sim_user_data_budget_available").val(user_budget_manipulated);
-                if (user_budget_manipulated < 0) {
-                    $("#user_budget").css({"color":"red"});
-                }
-                else{
-                    $("#user_budget").css({"color":"white"});
-                }
-            }
-            else{
-                console.log("don't allow");
-                this_slot = 0;
-                console.log("total_thing :- " + total_thing);
-                console.log("user_budget_manipulated :- " + user_budget_manipulated);
-                $('#usd').find('.fields').each(function(index, ele) {
-                    this_slot = $(ele).find("input.form-control[type=text]").val();
-                    if (this_slot==""){
-                        user_budget_manipulated = user_budget_real;
-                        $("#user_budget").text(user_budget_manipulated);
-                        $("#sim_user_data_budget_available").val(user_budget_manipulated);
-                    }
-                });
-                if ( (event.keyCode != 17) || (event.keyCode != 27) ) {
-                    console.log("event.keyCode da :- " + event.keyCode)
+                        //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                        //      console.log("cost_per_slot :- " + cost_per_slot);
 
-                    var keycode = (event.which) ? event.which : event.keyCode;
-                    console.log("keycode :- " + keycode)
+                        //console.log("event.keyCode :- " + event.keyCode);
+                        //console.clear();
+
+                        var total_slots = 0;
+                        var this_slot, this_select, total_cost = 0, total_thing = 0;
+                        var this_tvr = 0, total_tvr = 0;
+
+
+                        //allow only numbers
+                        console.log("event.keyCode :- " + event.keyCode);
+
+                        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {
+                            console.log("allow");
+                            console.log("this_val :- " + this_val);
+
+                            console.log("check for -ve user_budget_manipulated in allow :- " + user_budget_manipulated);
+                            if (user_budget_manipulated < 0) {
+                                $("#user_budget").css({"color": "red"});
+                            }
+                            else {
+                                $("#user_budget").css({"color": "white"});
+                            }
+
+                            $('#usd').find('.fields:visible').each(function (index, ele) {
+                                this_slot = $(ele).find("input.form-control[type=text]").val();
+                                this_select = $(ele).find(".chosen-select");
+                                //console.log($(this_select));
+
+
+                                if (this_slot != "") {
+                                    get_cost($(this_select));
+                                    //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
+                                    total_thing = total_thing + (this_slot * cost_per_slot);
+                                    //total_cost = total_cost + cost_per_slot;
+                                    //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+                                    //console.log("this_slot :- " + this_slot);
+                                    //total_slots = parseInt(total_slots) + parseInt(this_slot);
+                                }
+                                else {
+                                    this_slot = 0;
+                                    console.log("this slot blank");
+                                }
+
+                            });
+                            user_budget_manipulated = user_budget_real - (total_thing);
+                            user_budget_manipulated_keep_for_dd_change = user_budget_manipulated;
+                            console.log("check for -ve user_budget_manipulated after compute :- " + user_budget_manipulated);
+                            $("#user_budget").text(user_budget_manipulated);
+                            $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                            if (user_budget_manipulated < 0) {
+                                $("#user_budget").css({"color": "red"});
+                            }
+                            else {
+                                $("#user_budget").css({"color": "white"});
+                            }
+                        }
+                        else {
+                            console.log("don't allow");
+                            this_slot = 0;
+                            console.log("total_thing :- " + total_thing);
+                            console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                            $('#usd').find('.fields').each(function (index, ele) {
+                                this_slot = $(ele).find("input.form-control[type=text]").val();
+                                if (this_slot == "") {
+                                    user_budget_manipulated = user_budget_real;
+                                    $("#user_budget").text(user_budget_manipulated);
+                                    $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                                }
+                            });
+                            if ((event.keyCode != 17) || (event.keyCode != 27)) {
+                                console.log("event.keyCode da :- " + event.keyCode)
+
+                                var keycode = (event.which) ? event.which : event.keyCode;
+                                console.log("keycode :- " + keycode)
 
 
 //                //comparing pressed keycodes
-                    if (!(keycode==8 || keycode==46)&&(keycode < 48 || keycode > 57))
-                    {
-                        console.log("no");
-                        //return false;
-                    }
-                    else{
-                        console.log("yes");
-                        $('#usd').find('.fields:visible').each(function(index, ele) {
-                            this_slot = $(ele).find("input.form-control[type=text]").val();
-                            this_select = $(ele).find(".chosen-select");
+                                if (!(keycode == 8 || keycode == 46) && (keycode < 48 || keycode > 57)) {
+                                    console.log("no");
+                                    //return false;
+                                }
+                                else {
+                                    console.log("yes");
+                                    $('#usd').find('.fields:visible').each(function (index, ele) {
+                                        this_slot = $(ele).find("input.form-control[type=text]").val();
+                                        this_select = $(ele).find(".chosen-select");
 
-                            if (this_slot!=""){
-                                console.log("this_slot not blank");
-                                get_cost($(this_select));
-                                console.log("cost_per_slot in this_slot not blank :- " + cost_per_slot);
-                                total_thing = total_thing + (this_slot*cost_per_slot);
-                                console.log("total_thing in this_slot not blank :- " + total_thing);
-                                console.log("user_budget_manipulated in this_slot not blank :- " + user_budget_manipulated);
-                                user_budget_manipulated = user_budget_real - (total_thing);
-                                console.log("user_budget_manipulated in this_slot not blank after cal :- " + user_budget_manipulated);
-                                $("#user_budget").text(user_budget_manipulated);
-                                $("#sim_user_data_budget_available").val(user_budget_manipulated);
-                                if (user_budget_manipulated < 0) {
-                                    $("#user_budget").css({"color":"red"});
+                                        if (this_slot != "") {
+                                            console.log("this_slot not blank");
+                                            get_cost($(this_select));
+                                            console.log("cost_per_slot in this_slot not blank :- " + cost_per_slot);
+                                            total_thing = total_thing + (this_slot * cost_per_slot);
+                                            console.log("total_thing in this_slot not blank :- " + total_thing);
+                                            console.log("user_budget_manipulated in this_slot not blank :- " + user_budget_manipulated);
+                                            user_budget_manipulated = user_budget_real - (total_thing);
+                                            console.log("user_budget_manipulated in this_slot not blank after cal :- " + user_budget_manipulated);
+                                            $("#user_budget").text(user_budget_manipulated);
+                                            $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                                            if (user_budget_manipulated < 0) {
+                                                $("#user_budget").css({"color": "red"});
+                                            }
+                                            else {
+                                                $("#user_budget").css({"color": "white"});
+                                            }
+                                            //user_budget_manipulated = total_thing + cost_per_slot;
+                                            //console.log("user_budget_manipulated in this slot blank :- " + user_budget_manipulated);
+                                            //total_thing = total_thing + (this_slot*cost_per_slot);
+                                            //console.log("user_budget_manipulated in this_slot blank :- " + user_budget_manipulated)
+                                            //user_budget_manipulated = user_budget_manipulated + cost_per_slot;
+                                            //console.log("user_budget_manipulated in this_slot blank after adding :- " + user_budget_manipulated)
+                                            //$("#user_budget").text(user_budget_manipulated);
+                                        }
+                                    });
                                 }
-                                else{
-                                    $("#user_budget").css({"color":"white"});
-                                }
-                                //user_budget_manipulated = total_thing + cost_per_slot;
-                                //console.log("user_budget_manipulated in this slot blank :- " + user_budget_manipulated);
-                                //total_thing = total_thing + (this_slot*cost_per_slot);
-                                //console.log("user_budget_manipulated in this_slot blank :- " + user_budget_manipulated)
-                                //user_budget_manipulated = user_budget_manipulated + cost_per_slot;
-                                //console.log("user_budget_manipulated in this_slot blank after adding :- " + user_budget_manipulated)
-                                //$("#user_budget").text(user_budget_manipulated);
+
+
                             }
-                        });
-                    }
 
 
-                }
+                            //console.log("user_budget_manipulated :- " + user_budget_manipulated);
 
-
-                //console.log("user_budget_manipulated :- " + user_budget_manipulated);
-
-                //total_thing = total_thing + (this_slot*cost_per_slot);
-                //console.log("total_thing :- " + total_thing);
-                //user_budget_manipulated = user_budget_real - (total_thing);
-                //console.log("user_budget_manipulated :- " + user_budget_manipulated);
-                //$("#user_budget").text(user_budget_manipulated);
+                            //total_thing = total_thing + (this_slot*cost_per_slot);
+                            //console.log("total_thing :- " + total_thing);
+                            //user_budget_manipulated = user_budget_real - (total_thing);
+                            //console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                            //$("#user_budget").text(user_budget_manipulated);
 //            user_budget_manipulated = user_budget_real;
-            }
+                        }
 
-            //console.log("total_thing :- " + total_thing);
+                        //console.log("total_thing :- " + total_thing);
 
-            //user_budget_manipulated = user_budget_real - (total_thing);
-            //$("#user_budget").text(user_budget_manipulated);
-            //$("#sim_user_data_budget_available").val(user_budget_manipulated);
+                        //user_budget_manipulated = user_budget_real - (total_thing);
+                        //$("#user_budget").text(user_budget_manipulated);
+                        //$("#sim_user_data_budget_available").val(user_budget_manipulated);
 
-            //console.log("total_cost :- " + total_cost);
-            //console.log("total_slots :- " + total_slots);
-
-
-            //working code starts from here
-//      console.log("user_budget_manipulated :- " + user_budget_manipulated);
-//
-//      if ( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) ) {
-//          console.log("allow");
-//          user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
-//      }
-//      else{
-//          console.log("don't allow");
-//          if (event.keyCode == 8 || event.keyCode == 46) {
-//              if (this_val==""){
-//              console.log("blank");
-//              user_budget_manipulated = user_budget_real;
-//          }
-//          else{
-//              console.log("backspace or delete :- " + this_val);
-//              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
-//          }
-//          }
-//      }
-//      console.log("user_budget_manipulated :- " + user_budget_manipulated);
-            //$("#user_budget").text(user_budget_manipulated);
-            //working code ends here
-
-            //user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
-
-//      if (event.keyCode == 8 || event.keyCode == 46) {
-//          if (this_val==""){
-//              console.log("blank");
-//              user_budget_manipulated = user_budget_real;
-//          }
-//          else{
-//              console.log("backspace or delete :- " + this_val);
-//              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
-//          }
-//      }
-//      else{
-//          user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
-//      }
+                        //console.log("total_cost :- " + total_cost);
+                        //console.log("total_slots :- " + total_slots);
 
 
-//      $("#user_budget").text(user_budget_manipulated);
+                        //working code starts from here
+                        //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                        //
+                        //      if ( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) ) {
+                        //          console.log("allow");
+                        //          user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+                        //      }
+                        //      else{
+                        //          console.log("don't allow");
+                        //          if (event.keyCode == 8 || event.keyCode == 46) {
+                        //              if (this_val==""){
+                        //              console.log("blank");
+                        //              user_budget_manipulated = user_budget_real;
+                        //          }
+                        //          else{
+                        //              console.log("backspace or delete :- " + this_val);
+                        //              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+                        //          }
+                        //          }
+                        //      }
+                        //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                                                //$("#user_budget").text(user_budget_manipulated);
+                                                //working code ends here
+
+                                                //user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
+
+                        //      if (event.keyCode == 8 || event.keyCode == 46) {
+                        //          if (this_val==""){
+                        //              console.log("blank");
+                        //              user_budget_manipulated = user_budget_real;
+                        //          }
+                        //          else{
+                        //              console.log("backspace or delete :- " + this_val);
+                        //              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+                        //          }
+                        //      }
+                        //      else{
+                        //          user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
+                        //      }
+
+
+                        //      $("#user_budget").text(user_budget_manipulated);
+                    }
+                }
+            });
+
+
         }
 
     }

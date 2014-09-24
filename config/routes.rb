@@ -26,6 +26,8 @@ StarMediaSim::Application.routes.draw do
   #match '/play_simulation/:simulation_id', to: 'user_sim_data#play_simulation', via: [:get, :post], :as=>"play_simulation"
   match '/play_sim/:simulation_id', to: 'simulations#play_sim', via: [:get, :post], :as=>"play_sim"
   match '/get_cost', to: 'simulation_data#get_cost', via: [:get, :post], :as=>"get_cost"
+  match '/get_duration', to: 'simulation_data#get_duration', via: [:get, :post], :as=>"get_duration"
+  match '/result/:simulation_id', to: 'user_sim_data#result', via: [:get, :post], :as=>"result"
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

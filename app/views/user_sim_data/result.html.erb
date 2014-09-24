@@ -11,6 +11,9 @@
     .jqplot-yaxis-label{
         font-size: 10px;
     }
+    table.dataTable.no-footer{
+        border-bottom: none;
+    }
 
 </style>
 <div class="container">
@@ -23,7 +26,7 @@
     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
       <div class="table-block" style="background-color: #969696;
               border: 1px solid #969696;
-              overflow: hidden;
+              overflow: auto;
               height: 338px;
               width: 100%;
               padding: 5px;
@@ -51,11 +54,20 @@
           </tbody>
         </table>
       </div>
-      <%= link_to "Back", play_sim_path(@simulation), :class=>"btn btn-lg button_style" %>
+      <%#= link_to "Play Again", play_sim_path(@simulation), :class=>"btn btn-lg button_style" %>
+      <%#= link_to "Home", root_path, :class=>"btn btn-lg button_style" %>
+      <a href="#" style="margin-top: 13%" class="btn btn-lg button_style" onclick="javascript:window.location.href='/'; return false;">Home</a>
     </div>
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <div id="chartdiv" style="height:400px;width:100%; "></div>
+      <div id="chartdiv" style="height:400px;width:100%;"></div>
       <!--<div id="chartdiv"></div>-->
+      <%#= link_to "Play Again", play_sim_path(@simulation), :class=>"btn btn-lg button_style" %>
+      <%#= link_to "Home", root_path, :class=>"btn btn-lg button_style" %>
+      <div class="row">
+        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 pull-right">
+          <a href="#" class="btn btn-lg button_style pull-right" onclick="javascript:window.location.href='/play_sim/<%= @simulation %>'; return false;">Play Again</a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -65,9 +77,10 @@
   $(function(){
       //$('#example').dataTable();
       $('#example').dataTable({
-          "bPaginate": false,
+          "bPaginate": true,
           "bInfo": false,
           "bFilter": false,
+          'iDisplayLength': 7,
           "bLengthChange": false,
           "aaSorting": [
               [ 0, "desc" ]

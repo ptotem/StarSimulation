@@ -368,6 +368,8 @@ a:hover {
 .chosen-container-single .chosen-single{
     height: 34px;
     line-height: 32px;
+    width: 232px;
+    max-width: 232px;
 }
 
 .chosen-container-single .chosen-single div{

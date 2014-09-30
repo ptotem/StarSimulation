@@ -35,7 +35,7 @@ class Simulation < ActiveRecord::Base
   #  belongs_to :year
   #end
 
-  after_create :set_user_budget
+  # after_create :set_user_budget
   #before_save :check_all_users_budget
 
   def set_user_budget

@@ -124,7 +124,13 @@ class SimulationUserData < ActiveRecord::Base
       self.total_cprp = total_cprp
       self.score = ( ((0.5)*(total_grp)) + ((0.5)*(total_cprp)) )
       puts "total_slots_bought :- #{total_slots_bought}"
-      penalty = ( ((110)-(total_slots_bought)) + ((369)-(total_grp)) + ((27379)-(total_cprp)) )
+      check_simulation = Simulation.find(sim_id)
+      simulation_spot = check_simulation.sim_spot
+      simulation_grp = check_simulation.sim_grp
+      simulation_cprp = check_simulation.sim_cprp
+      puts "simulation_spot :- #{simulation_spot}, simulation_grp :- #{simulation_grp}, simulation_cprp :- #{simulation_cprp}"
+      # penalty = ( ((110)-(total_slots_bought)) + ((369)-(total_grp)) + ((27379)-(total_cprp)) )
+      penalty = ( ((simulation_spot)-(total_slots_bought)) + ((simulation_grp)-(total_grp)) + ((simulation_cprp)-(total_cprp)) )
       puts "points :- #{points}"
       self.points = 100000 - penalty
       self.save!

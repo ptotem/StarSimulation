@@ -18,8 +18,13 @@
 </style>
 <div class="container">
   <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <h1 class="white" style="font-weight: bold">Result</h1>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
+      <div class="row">
+        <div class="col-lg-3">
+          <h1 class="white" style="font-weight: bold">Result</h1>
+        </div>
+      </div>
+
     </div>
   </div>
   <div class="row">
@@ -56,6 +61,10 @@
       </div>
       <%#= link_to "Play Again", play_sim_path(@simulation), :class=>"btn btn-lg button_style" %>
       <%#= link_to "Home", root_path, :class=>"btn btn-lg button_style" %>
+      <ul class="grp_and_cprp_block" style="font-weight: bold; list-style: none outside none; margin: 0; padding: 2% 0 0 0;">
+        <li>Ideal GRP :- <%= @simulation_og.sim_grp %></li>
+        <li>Ideal CPRP :- <%= @simulation_og.sim_cprp %></li>
+      </ul>
       <a href="#" style="margin-top: 13%" class="btn btn-lg button_style" onclick="javascript:window.location.href='/'; return false;">Home</a>
     </div>
     <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">

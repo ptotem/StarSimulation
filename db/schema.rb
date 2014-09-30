@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140923101327) do
+ActiveRecord::Schema.define(version: 20140930085717) do
 
   create_table "b_user_sim_data", force: true do |t|
     t.integer  "user_id"
@@ -63,6 +63,9 @@ ActiveRecord::Schema.define(version: 20140923101327) do
     t.string   "excel_file_content_type"
     t.integer  "excel_file_file_size"
     t.datetime "excel_file_updated_at"
+    t.integer  "sim_spot"
+    t.integer  "sim_grp"
+    t.integer  "sim_cprp"
   end
 
   create_table "user_sim_data", force: true do |t|

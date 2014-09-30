@@ -73,6 +73,9 @@ class UserSimDataController < ApplicationController
 
   def result
     @simulation = params[:simulation_id]
+    @simulation_og = Simulation.find(@simulation)
+    # render :json => @simulation_og
+    # return
     # @user_sim_data = SimulationUserData.where(:user_id=>current_user.id, :simulation_id=>params[:simulation_id]).last
     # # render :json => @user_sim_data
     # # return

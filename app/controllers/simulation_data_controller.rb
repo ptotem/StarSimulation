@@ -75,6 +75,14 @@ class SimulationDataController < ApplicationController
     return
   end
 
+  def get_this_date_slots
+    @simulation = Simulation.find(params[:simulation_id][0])
+    @this_date = params[:this_date][0]
+    @this_date_slots = @simulation.simulation_datums.where(:performance_date=>@this_date).map{|tds| [tds.id, tds.programme_name, tds.start_time.strftime("%T")]}
+    render :json => @this_date_slots
+    return
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_simulation_datum

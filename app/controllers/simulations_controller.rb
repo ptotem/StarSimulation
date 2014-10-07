@@ -163,6 +163,11 @@ class SimulationsController < ApplicationController
   def play_sim
     @simulation = Simulation.find(params[:simulation_id])
     @simulation_data = @simulation.simulation_datums
+    @simulation_dates = @simulation_data.select("performance_date").map{ |i| i.performance_date}.uniq
+
+    # render :json => @simulation_data.select("performance_date").map{ |i| i.performance_date}.uniq
+    # return
+
     # @simulation_user_data = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
     @simulation_user_data = current_user.simulation_user_datas.new(:simulation_id=>@simulation.id, :budget=>1000, :budget_available=>1000)
     # @usd = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first

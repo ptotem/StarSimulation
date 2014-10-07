@@ -372,6 +372,17 @@ a:hover {
     max-width: 232px;
 }
 
+#programme_performance_date_chosen .chosen-single{
+    width: 86px;
+}
+
+#programme_performance_date_chosen .chosen-drop{
+    width: 86px;
+}
+
+.chosen-container-single .chosen-drop{
+    width: 232px;
+}
 .chosen-container-single .chosen-single div{
     top: 3px;
 }

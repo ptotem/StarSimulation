@@ -10,7 +10,9 @@
             <h3 id="user_budget_header" class="top-bottom-nil-margin">Budget</h3>
           </div>
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
-            <h3 id="user_budget" class="top-bottom-nil-margin"> <%= @simulation_user_data.budget_available %> </h3>
+            <h3 class="top-bottom-nil-margin"> Rs. <span id="user_budget"><%= @simulation_user_data.budget_available %></span>
+              (in 000's)
+            </h3>
           </div>
         </div>
       </div>
@@ -77,13 +79,16 @@
                   <%= hidden_field_tag 'sim_user_data_budget_available', @simulation_user_data.budget_available %>
                   <div id="usd">
                     <%= f.fields_for :user_sim_datums do |user_sim_data| %>
-
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                          <%#= select_tag 'programme_performance_date', options_for_select(@simulation_dates.collect{ |u| [u.performance_date, u.id] }), class: 'chosen-select' %>
+                          <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), { class: 'chosen-select', :onchange => 'get_this_date_slots($(this))' } %>
+                        </div>
                         <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
-                        <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style="margin-left: 3%">
+                        <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 2%">
                           <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
                           <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' }%>
                         </div>
-                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
                           <%= user_sim_data.text_field :no_of_slots, {class: 'form-control', :onkeyup=>"calculate_budget(event, $(this))"} %>
                         </div>
                         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
@@ -173,6 +178,37 @@
 
     });
 
+    function get_this_date_slots(this_obj){
+
+        var this_date = $(this_obj).val();
+
+        var data = {simulation_id:[], this_date: []};
+        data["simulation_id"].push(simulation_id);
+        data["this_date"].push(this_date);
+
+        $.ajax({
+            url: "/get_this_date_slots",
+            type: "post",
+            async: false,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (data) {
+                //console.log(data);
+                var this_field_channel_dropdown = $(this_obj).parent().parent().find('.dropdown_class');
+                //console.log($(this_field_channel_dropdown));
+                $(this_field_channel_dropdown).empty();
+                $(this_field_channel_dropdown).trigger("chosen:updated");
+                var channel_name_and_start_time;
+                $.each( data, function( key, value ) {
+                    //channel_name_and_start_time = value.programme_name + " " + value.start_time;
+                    channel_name_and_start_time = value[1] + " - " + value[2];
+                    $(this_field_channel_dropdown).append("<option value='"+value[0]+"'>"+channel_name_and_start_time+"</option>");
+                });
+                $(this_field_channel_dropdown).trigger("chosen:updated");
+            }
+        })
+    }
+
     function get_cost(this_obj){
         //console.log($(this_obj));
         var this_val = $(this_obj).val();
@@ -235,7 +271,7 @@
                 var individual_cost_per_slot=0;
                 $('#usd').find('.fields:visible').each(function(index, ele) {
                     this_slot = $(ele).find("input.form-control[type=text]").val();
-                    this_select = $(ele).find(".chosen-select");
+                    this_select = $(ele).find(".dropdown_class");
                     console.log($(this_select));
 
 
@@ -319,7 +355,7 @@
         var this_val = $(this_obj).val();
         console.log("$(this_obj) :- ");
         console.log($(this_obj));
-        this_dropdown_val = $(this_obj).parents(".fields").find('.chosen-select').val();
+        this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class').val();
         console.log("this_dropdown_val :- " + this_dropdown_val);
         //this_dropdown_val
         console.log("this_val :- " + this_val);
@@ -389,7 +425,7 @@
 
                             $('#usd').find('.fields:visible').each(function (index, ele) {
                                 this_slot = $(ele).find("input.form-control[type=text]").val();
-                                this_select = $(ele).find(".chosen-select");
+                                this_select = $(ele).find(".dropdown_class");
                                 //console.log($(this_select));
 
 
@@ -449,7 +485,7 @@
                                     console.log("yes");
                                     $('#usd').find('.fields:visible').each(function (index, ele) {
                                         this_slot = $(ele).find("input.form-control[type=text]").val();
-                                        this_select = $(ele).find(".chosen-select");
+                                        this_select = $(ele).find(".dropdown_class");
 
                                         if (this_slot != "") {
                                             console.log("this_slot not blank");
@@ -563,11 +599,12 @@
         //console.log($(this_obj).parents(".fields").find('.chosen-select'));
 
         this_slot_hidden = $(this_obj).parents(".fields").find('.form-control').val();
-        this_select_hidden = $(this_obj).parents(".fields").find('.chosen-select');
+        //this_select_hidden = $(this_obj).parents(".fields").find('.chosen-select');
+        this_select_hidden = $(this_obj).parents(".fields").find('.dropdown_class');
         get_cost($(this_select_hidden));
         cost_per_slot_hidden = cost_per_slot;
         total_thing_hidden = total_thing_hidden + (this_slot_hidden*cost_per_slot_hidden);
-        console.log("total_thing_hidden :- " + total_thing_hidden)
+        console.log("total_thing_hidden :- " + total_thing_hidden);
 
         setTimeout(function() {
             console.log("remaining fields len :- " + $('#usd').find('.fields:visible').length);
@@ -585,7 +622,8 @@
 
             $('#usd').find('.fields:visible').each(function(index, ele) {
                 this_slot = $(ele).find("input.form-control[type=text]").val();
-                this_select = $(ele).find(".chosen-select");
+                this_select = $(ele).find(".dropdown_class");
+                //.chosen-select -> .dropdown_class
 
                 //console.log("this_slot :- ");
                 //console.log(this_slot);
@@ -637,10 +675,11 @@
     }
 
     function get_my_dropdown_val(this_obj){
+        console.log("in get_my_dropdown_val()");
         //console.log($(this_obj).parents(".fields").attr("class"));
-        var this_dropdown_val = $(this_obj).parents(".fields").find('.chosen-select option:selected').val();
+        var this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class option:selected').val();
         //console.log("this_dropdown_val :- " + this_dropdown_val);
-        get_cost($(this_obj).parents(".fields").find('.chosen-select'));
+        get_cost($(this_obj).parents(".fields").find('.dropdown_class'));
     }
 
     $('a.add_nested_fields').on('click', function(){

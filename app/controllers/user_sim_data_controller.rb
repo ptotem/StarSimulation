@@ -105,7 +105,7 @@ class UserSimDataController < ApplicationController
     @individual_grp = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id])
     @individual_grp_array = Array.new()
     @individual_grp.each_with_index do |ig, index|
-      igrp_point = index+1, ig.total_grp
+      igrp_point = index+1, ig.total_grp rescue 0
       c = igrp_point.to_a
       @individual_grp_array << igrp_point
     end
@@ -114,7 +114,7 @@ class UserSimDataController < ApplicationController
     @individual_cprp = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id])
     @individual_cprp_array = Array.new()
     @individual_cprp.each_with_index do |ic, index|
-      icprp_point = index+1, ic.total_cprp
+      icprp_point = index+1, ic.total_cprp rescue 0
       c = icprp_point.to_a
       @individual_cprp_array << icprp_point
     end

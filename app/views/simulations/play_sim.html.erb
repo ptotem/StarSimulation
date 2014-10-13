@@ -89,7 +89,7 @@
                           <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' }%>
                         </div>
                         <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
-                          <%= user_sim_data.text_field :no_of_slots, {class: 'slot_number', :onkeyup=>"calculate_budget(event, $(this))"} %>
+                          <%= user_sim_data.text_field :no_of_slots, {class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))"} %>
                         </div>
                         <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                           <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
@@ -194,7 +194,7 @@
             data: JSON.stringify(data),
             contentType: "application/json",
             success: function (data) {
-                //console.log(data);
+                console.log(data);
                 var this_field_channel_dropdown = $(this_obj).parent().parent().find('.dropdown_class');
                 //console.log($(this_field_channel_dropdown));
                 $(this_field_channel_dropdown).empty();

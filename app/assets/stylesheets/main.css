@@ -306,6 +306,23 @@ a:hover {
     background-color: #4D4D4D;
 }
 
+.slot_number
+{
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+    color: #555;
+    display: block;
+    font-size: 14px;
+    height: 34px;
+    line-height: 1.42857;
+    text-align: center;
+    transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s ease-in-out 0s;
+
+
+}
+
+
 .button_box
 {
     width:30%;
@@ -349,7 +366,7 @@ a:hover {
 .program-wall input[type="text"]
 {
     /*margin-bottom: -1px;*/
-    margin-top: 5%;
+
     border:1px;
     border-radius:7px;
     background-color: #c7c5c5;
@@ -368,7 +385,7 @@ a:hover {
 .chosen-container-single .chosen-single{
     height: 34px;
     line-height: 32px;
-    width: 232px;
+    width: 200px;
     max-width: 232px;
 }
 
@@ -437,6 +454,7 @@ a:hover {
     font-size: 1.2em;
     font-weight: bold;
     line-height: 1.4em;
+    height: 263px;
 }
 
 .listing_button

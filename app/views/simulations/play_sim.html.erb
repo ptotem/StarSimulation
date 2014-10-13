@@ -143,6 +143,7 @@
     var tvr, cprp;
     var total_thing = 0;
     var this_dropdown_val=0;
+    var na = "";
     $(function(){
 
         //user_budget = $("#user_budget").text();
@@ -244,6 +245,8 @@
         var this_text_field, this_text_field_val;
         var this_cost_per_slot, this_text_field_val;
         this_dropdown = $(this_obj);
+        console.log("this_dropdown");
+        console.log(this_dropdown);
         this_dropdown_val = this_dropdown.val();
         //console.log(this_dropdown);
         //console.log("this_dropdown_val :- " + this_dropdown_val);
@@ -251,54 +254,95 @@
         this_text_field_val = this_text_field.val();
         console.log("this_text_field_val :- " + this_text_field_val);
 
-        var data = {simulation_id:[], simulation_data_id: []};
-        data["simulation_id"].push(simulation_id);
-        data["simulation_data_id"].push(this_dropdown_val);
-        $.ajax({
-            url: "/get_cost",
-            type: "post",
-            async: false,
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            success: function (data) {
-                this_cost_per_slot = data.cost_per_slot;
-                console.log("this_cost_per_slot :- " + this_cost_per_slot);
-                console.log("user_budget_manipulated :- " + user_budget_manipulated);
-                console.log("cal :- " + this_text_field_val*this_cost_per_slot);
+        $(this_obj).parent().next().find('input[type=text]').keyup()
+        if (na=="Not allowed"){
+            console.log("na :- " + na)
 
-                var this_slot, this_select;
-                var total_cost = 0, total_thing = 0;
-                var individual_cost_per_slot=0;
-                $('#usd').find('.fields:visible').each(function(index, ele) {
-                    this_slot = $(ele).find("input.form-control[type=text]").val();
-                    this_select = $(ele).find(".dropdown_class");
-                    console.log($(this_select));
+            var this_slot, this_select;
+            var total_cost = 0, total_thing = 0;
+            var individual_cost_per_slot=0;
+            $('#usd').find('.fields:visible').each(function(index, ele) {
+                this_slot = $(ele).find("input.form-control[type=text]").val();
+                this_select = $(ele).find(".dropdown_class");
+                console.log($(this_select));
 
 
-                    if (this_slot!="") {
-                        get_cost($(this_select));
-                        //console.log("cost_per_slot :- " + cost_per_slot);
-                        individual_cost_per_slot = cost_per_slot;
-                        //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
-                        total_thing = total_thing + (this_slot*individual_cost_per_slot);
-                        //total_cost = total_cost + cost_per_slot;
-                        //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
-                        //console.log("this_slot :- " + this_slot);
-                        //total_slots = parseInt(total_slots) + parseInt(this_slot);
-                    }
-                    else{
-                        this_slot = 0;
-                        console.log("this slot blank");
-                    }
+                if (this_slot!="") {
+                    get_cost($(this_select));
+                    //console.log("cost_per_slot :- " + cost_per_slot);
+                    individual_cost_per_slot = cost_per_slot;
+                    //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
+                    total_thing = total_thing + (this_slot*individual_cost_per_slot);
+                    //total_cost = total_cost + cost_per_slot;
+                    //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+                    //console.log("this_slot :- " + this_slot);
+                    //total_slots = parseInt(total_slots) + parseInt(this_slot);
+                }
+                else{
+                    this_slot = 0;
+                    console.log("this slot blank");
+                }
 
-                });
-                console.log("total_thing :- " + total_thing);
-                user_budget_manipulated = user_budget_real - (total_thing);
-                $("#user_budget").text(user_budget_manipulated);
+            });
+            console.log("total_thing :- " + total_thing);
+            user_budget_manipulated = user_budget_real - (total_thing);
+            $("#user_budget").text(user_budget_manipulated);
+
+        }
+        else{
+            console.log("proceed");
+
+            var data = {simulation_id:[], simulation_data_id: []};
+            data["simulation_id"].push(simulation_id);
+            data["simulation_data_id"].push(this_dropdown_val);
+            $.ajax({
+                url: "/get_cost",
+                type: "post",
+                async: false,
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    this_cost_per_slot = data.cost_per_slot;
+                    console.log("this_cost_per_slot :- " + this_cost_per_slot);
+                    console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                    console.log("cal :- " + this_text_field_val*this_cost_per_slot);
+
+                    var this_slot, this_select;
+                    var total_cost = 0, total_thing = 0;
+                    var individual_cost_per_slot=0;
+                    $('#usd').find('.fields:visible').each(function(index, ele) {
+                        this_slot = $(ele).find("input.form-control[type=text]").val();
+                        this_select = $(ele).find(".dropdown_class");
+                        console.log($(this_select));
+
+
+                        if (this_slot!="") {
+                            get_cost($(this_select));
+                            //console.log("cost_per_slot :- " + cost_per_slot);
+                            individual_cost_per_slot = cost_per_slot;
+                            //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
+                            total_thing = total_thing + (this_slot*individual_cost_per_slot);
+                            //total_cost = total_cost + cost_per_slot;
+                            //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+                            //console.log("this_slot :- " + this_slot);
+                            //total_slots = parseInt(total_slots) + parseInt(this_slot);
+                        }
+                        else{
+                            this_slot = 0;
+                            console.log("this slot blank");
+                        }
+
+                    });
+                    console.log("total_thing :- " + total_thing);
+                    user_budget_manipulated = user_budget_real - (total_thing);
+                    $("#user_budget").text(user_budget_manipulated);
 //                user_budget_manipulated_keep_for_dd_change = user_budget_manipulated;
 
-            }
-        })
+                }
+            })
+        }
+
+
     }
 
     function get_this_select_text_and_update_budget(this_select, this_text){
@@ -349,6 +393,8 @@
         }
     }
 
+
+
     function calculate_budget(event, this_obj){
 
         console.log("----- in calculate_budget -----");
@@ -393,6 +439,8 @@
                         console.log("Not allowed");
                         $(this_obj).val("");
                         $(this_obj).focus();
+                        na = "Not allowed";
+                        return false;
                     }
                     else{ //duration else starts
                         console.log("allowed");

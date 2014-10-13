@@ -56,70 +56,86 @@ class SimulationsController < ApplicationController
     # @simulation = Simulation.find(params[:id])
     # render :json => @simulation.user_sim_datums
     # return
-    params[:simulation][:user_sim_datums_attributes].keys().each do |k|
-      @new_a << "#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["simulation_datum_id"]}||#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"]}"
-    end
-
-    # render :json => "#{@new_a}||#{params[:id]}"
+    # render :json => params[:simulation][:user_sim_datums_attributes]
     # return
-
-    #simulation_params
-    #render :json => @usd
-    #return
-    #@usd.user_id = current_user.id
-    #
-    #@simulation.update(simulation_user_datas_params)
-    ##if params[:sim_user_data_budget_available].to_i < 0
-    ##  flash[:notice] = "Your budget can't be less than 0."
-    ##  redirect_to "/play_sim/#{params[:id]}"
-    ##else
-    ##render :json=> @usd
-    ##return
-    ##  @usd.budget_available = params[:sim_user_data_budget_available]
-    #  #@usd.save!
-
-
-    @usd.check_here(@new_a, params[:id])
-
-    err = ""
-    @usd.errors.each do |attr_name, message|
-      err = message
+    @no_slot_selected = false
+    # @no_slot_selected = Array.new
+    params[:simulation][:user_sim_datums_attributes].keys().each do |k|
+      # @no_slot_selected << params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"]
+      if params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"] == ""
+        @no_slot_selected = true
+      else
+        @new_a << "#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["simulation_datum_id"]}||#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"]}"
+      end
     end
-    #render :json => err.blank?
-    #return
-    if err.blank?
-      @simulation.update(simulation_params)
-      #render :text => "success"
-      #return
-      @usd.set_cprp_and_grp(@new_a, params[:id])
-      # redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
-      redirect_to result_path(@simulation.id)
+    # render :json => @no_slot_selected
+    # return
+    if @no_slot_selected == true
+      # redirect_to play_sim_path(params[:id])
+      respond_to do |format|
+          format.html { redirect_to play_sim_path(params[:id]), notice: 'Please, select a slot.' }
+      end
     else
-      #render :text => "fail"
-      #return
-      flash[:notice] = err
-      redirect_to "/play_sim/#{params[:id]}"
-    end
-    #if @usd.save
-    #  #render :json => @usd.id
-    #  if @simulation.update(simulation_params)
-    #  #if @simulation.update(simulation_user_datas_params)
-    #    redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
-    #  end
-    #else
-    #  @usd.errors.each do |attr_name, message|
-    #    err = message
-    #  end
-    #  render :json => @usd.errors["budget_available"][0]
-    #  return
-    #  flash[:notice] = @usd.errors["budget_available"][0]
-    #  redirect_to "/play_sim/#{params[:id]}"
-    #end
-    #render :json => err
-    #return
+      # render :json => "#{@new_a}||#{params[:id]}"
+      # return
 
-    #render :json => @usd.errors
-    #return
+      #simulation_params
+      #render :json => @usd
+      #return
+      #@usd.user_id = current_user.id
+      #
+      #@simulation.update(simulation_user_datas_params)
+      ##if params[:sim_user_data_budget_available].to_i < 0
+      ##  flash[:notice] = "Your budget can't be less than 0."
+      ##  redirect_to "/play_sim/#{params[:id]}"
+      ##else
+      ##render :json=> @usd
+      ##return
+      ##  @usd.budget_available = params[:sim_user_data_budget_available]
+      #  #@usd.save!
+
+
+      @usd.check_here(@new_a, params[:id])
+
+      err = ""
+      @usd.errors.each do |attr_name, message|
+        err = message
+      end
+      #render :json => err.blank?
+      #return
+      if err.blank?
+        @simulation.update(simulation_params)
+        #render :text => "success"
+        #return
+        @usd.set_cprp_and_grp(@new_a, params[:id])
+        # redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
+        redirect_to result_path(@simulation.id)
+      else
+        #render :text => "fail"
+        #return
+        flash[:notice] = err
+        redirect_to "/play_sim/#{params[:id]}"
+      end
+      #if @usd.save
+      #  #render :json => @usd.id
+      #  if @simulation.update(simulation_params)
+      #  #if @simulation.update(simulation_user_datas_params)
+      #    redirect_to "/play_sim/#{params[:id]}", notice: 'You have successfully bought slots.'
+      #  end
+      #else
+      #  @usd.errors.each do |attr_name, message|
+      #    err = message
+      #  end
+      #  render :json => @usd.errors["budget_available"][0]
+      #  return
+      #  flash[:notice] = @usd.errors["budget_available"][0]
+      #  redirect_to "/play_sim/#{params[:id]}"
+      #end
+      #render :json => err
+      #return
+
+      #render :json => @usd.errors
+      #return
       #@simulation.check_user_budget(current_user)
       #render :text => @simulation.errors["base"][0]
       #return
@@ -140,13 +156,15 @@ class SimulationsController < ApplicationController
       #end
 
 
-    #end
+      #end
 
 
 
-    #render :json => params[:sim_user_data_budget_available]
-    #render :json => params[:sim_user_data_budget_available]
-    #return
+      #render :json => params[:sim_user_data_budget_available]
+      #render :json => params[:sim_user_data_budget_available]
+      #return
+    end
+
 
   end
 

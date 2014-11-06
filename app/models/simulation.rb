@@ -40,7 +40,7 @@ class Simulation < ActiveRecord::Base
 
   def set_user_budget
     User.all.each do |user|
-      user.simulation_user_datas.build(:simulation_id => self.id, :budget=>1000, :budget_available=>1000)
+      user.simulation_user_datas.build(:simulation_id => self.id, :budget=>10000, :budget_available=>10000)
       user.save!
     end
   end

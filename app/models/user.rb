@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
 
   def set_budget
     sim_user_data = self.simulation_user_datas.build
-    sim_user_data.budget = 10000
+    sim_user_data.budget = 1000
     sim_user_data.save!
     self.save!
   end

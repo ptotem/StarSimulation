@@ -41,8 +41,8 @@ class SimulationsController < ApplicationController
   # PATCH/PUT /simulations/1.json
   def update
     #render :json => current_user.simulation_user_datas
-    render :json => params
-    return
+    # render :json => params
+    # return
     # @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
     @usd = current_user.simulation_user_datas.build(:simulation_id=>params[:id], :budget=>1000, :budget_available=>1000)
     @new_a = Array.new()

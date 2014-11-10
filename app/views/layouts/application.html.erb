@@ -21,14 +21,39 @@
     <div class="navbar navbar-fixed-top header" role="navigation">
       <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="#"> <img src="/assets/toplogo.png" class="logo"></a>
+          <a class="brand" href="/">
+            <img src="/assets/toplogo.png" class="logo">
+            <h2 style="float: left; color: white;">Media Simulation</h2>
+          </a>
           <!--<button class="btn logout_button" type="submit">Sign Out</button>-->
           <% if user_signed_in? %>
-              <%= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn logout_button", :style => "font-size: 1.4em;" %>
+              <div class="name-block" style="position: relative">
+                <h2 style="color: #ffffff; float: left; margin-left: 20%">
+                  Hello, <%= current_user.name.truncate(1) rescue "" %>
+                </h2>
+                <%= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn logout_button", :style => "font-size: 1.4em;" %>
+              </div>
           <% end %>
         </div>
       </div>
     </div>
+
+    <!--<div class="navbar navbar-fixed-top header" role="navigation">-->
+      <!--<div class="container-fluid">-->
+        <!--&lt;!&ndash; Brand and toggle get grouped for better mobile display &ndash;&gt;-->
+        <!--<div class="navbar-header">-->
+          <!--<a class="navbar-brand" href="#">-->
+            <!--<img src="/assets/toplogo.png" class="logo" style="margin-top: -14px;">-->
+            <!--<h2 style="float: left; color: white; margin-top: -4px;">Media Simulation</h2>-->
+          <!--</a>-->
+        <!--</div>-->
+
+        <!--&lt;!&ndash; Collect the nav links, forms, and other content for toggling &ndash;&gt;-->
+        <!--<%# if user_signed_in? %>-->
+            <!--<%#= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn logout_button", :style => "font-size: 1.4em;" %>-->
+        <!--<%# end %>-->
+      <!--</div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
+    <!--</div>-->
 
     <div class="container">
       <div class="row row_style">

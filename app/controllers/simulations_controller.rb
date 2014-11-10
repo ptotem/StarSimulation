@@ -40,8 +40,9 @@ class SimulationsController < ApplicationController
   # PATCH/PUT /simulations/1
   # PATCH/PUT /simulations/1.json
   def update
-    # render :json => current_user.simulation_user_datas
-    # return
+    #render :json => current_user.simulation_user_datas
+    render :json => params
+    return
     # @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
     @usd = current_user.simulation_user_datas.build(:simulation_id=>params[:id], :budget=>1000, :budget_available=>1000)
     @new_a = Array.new()
@@ -202,8 +203,23 @@ class SimulationsController < ApplicationController
 
     # render :json => @prev_data
     # return
+
+    #render :json => current_user.user_sim_datums.where(:simulation_id=>@simulation.id)
+    #return
+
+    #@all_user_array = Array.new
+    #
+    #User.all.each do |user|
+    #  @all_user_array << user.user_sim_datums.where(:simulation_id=>@simulation.id)
+    #end
+    #
+    #render :json => @all_user_array
+    #return
+
     current_user.user_sim_datums.where(:simulation_id=>@simulation.id).delete_all
+
     # 1.times { current_user.user_sim_datums.where(:simulation_id=>@simulation.id).build }
+    # //TODO: Check if more than 1 users are playing, other users can see others data....
     1.times { @simulation.user_sim_datums.build }
     #@simulation.simulation_user_datas.build
   end

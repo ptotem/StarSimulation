@@ -10,6 +10,7 @@ gem 'therubyracer'
 gem 'mysql2'
 
 gem 'devise'
+
 gem 'rails_admin'
 gem "rails_admin_import"
 

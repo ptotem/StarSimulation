@@ -97,20 +97,22 @@
                   <div id="usd">
                     <%= f.fields_for :user_sim_datums do |user_sim_data| %>
                         <% if user_sim_data.object.id.nil? %>
-                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                              <%#= select_tag 'programme_performance_date', options_for_select(@simulation_dates.collect{ |u| [u.performance_date, u.id] }), class: 'chosen-select' %>
-                              <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), { class: 'chosen-select', :onchange => 'get_this_date_slots($(this))' } %>
-                            </div>
-                            <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
-                            <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 3%">
-                              <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
-                              <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
-                            </div>
-                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
-                              <%= user_sim_data.text_field :no_of_slots, {class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))"} %>
-                            </div>
-                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-                              <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
+                            <div class="actual-fields">
+                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                <%#= select_tag 'programme_performance_date', options_for_select(@simulation_dates.collect{ |u| [u.performance_date, u.id] }), class: 'chosen-select' %>
+                                <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), { class: 'chosen-select', :onchange => 'get_this_date_slots($(this))' } %>
+                              </div>
+                              <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
+                              <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 3%">
+                                <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
+                                <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
+                              </div>
+                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
+                                <%= user_sim_data.text_field :no_of_slots, {class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))"} %>
+                              </div>
+                              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+                                <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
+                              </div>
                             </div>
                         <% end %>
                     <% end %>
@@ -232,7 +234,8 @@
     function get_cost(this_obj){
         //console.log($(this_obj));
         var this_val = $(this_obj).val();
-        var this_text_field = $(this_obj).parents(".fields").find('.form-control');
+        //var this_text_field = $(this_obj).parents(".fields").find('.form-control');
+        var this_text_field = $(this_obj).parents(".actual-fields").find('.form-control');
         console.log("---- in get_cost() ------");
         console.log("this_val :- " + this_val);
 
@@ -271,7 +274,8 @@
         this_dropdown_val = this_dropdown.val();
         //console.log(this_dropdown);
         //console.log("this_dropdown_val :- " + this_dropdown_val);
-        this_text_field = $(this_obj).parents(".fields").find('.form-control');
+        //this_text_field = $(this_obj).parents(".fields").find('.form-control');
+        this_text_field = $(this_obj).parents(".actual-fields").find('.form-control');
         console.log("THIS_TEXT_FIELD");
         this_text_field_val = this_text_field.val();
         console.log("this_text_field_val :- " + this_text_field_val);
@@ -289,7 +293,8 @@
             var this_slot, this_select;
             var total_cost = 0, total_thing = 0;
             var individual_cost_per_slot=0;
-            $('#usd').find('.fields:visible').each(function(index, ele) {
+            //$('#usd').find('.fields:visible').each(function(index, ele) {
+            $('#usd').find('.actual-fields').each(function(index, ele) {
                 this_slot = $(ele).find("input.form-control[type=text]").val();
                 this_select = $(ele).find(".dropdown_class");
                 console.log($(this_select));
@@ -340,7 +345,8 @@
                     var total_cost = 0, total_thing = 0;
                     var individual_cost_per_slot=0;
                     var field_child;
-                    $('#usd').find('.fields:visible').each(function(index, ele) {
+                    //$('#usd').find('.fields:visible').each(function(index, ele) {
+                    $('#usd').find('.actual-fields').each(function(index, ele) {
                         field_child =  $(ele).children();
                         if ( $(field_child).length > 0 ) {
                             this_slot = $(ele).find("input.form-control[type=text]").val();
@@ -435,7 +441,8 @@
         var this_val = $(this_obj).val();
         console.log("$(this_obj) :- ");
         console.log($(this_obj));
-        this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class').val();
+        //this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class').val();
+        this_dropdown_val = $(this_obj).parents(".actual-fields").find('.dropdown_class').val();
         console.log("this_dropdown_val :- " + this_dropdown_val);
         //this_dropdown_val
         console.log("this_val :- " + this_val);
@@ -505,13 +512,15 @@
                                 $("#user_budget").css({"color": "white"});
                             }
 
-                            $('#usd').find('.fields:visible').each(function (index, ele) {
+                            //$('#usd').find('.fields:visible').each(function (index, ele) {
+                            $('#usd').find('.actual-fields').each(function (index, ele) {
                                 this_slot = $(ele).find("input.form-control[type=text]").val();
                                 this_select = $(ele).find(".dropdown_class");
                                 //console.log($(this_select));
 
 
                                 if (this_slot != "") {
+                                    console.log("CALLED FROM HERE");
                                     get_cost($(this_select));
                                     //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
                                     total_thing = total_thing + (this_slot * cost_per_slot);
@@ -545,7 +554,8 @@
                             console.log("user_budget_manipulated :- " + user_budget_manipulated);
 
 
-                            $('#usd').find('.fields').each(function (index, ele) {
+                            //$('#usd').find('.fields').each(function (index, ele) {
+                            $('#usd').find('.actual-fields').each(function (index, ele) {
                                 this_slot = $(ele).find("input.form-control[type=text]").val();
                                 if (this_slot == "") {
                                     user_budget_manipulated = user_budget_real;
@@ -567,7 +577,8 @@
                                 }
                                 else {
                                     console.log("yes");
-                                    $('#usd').find('.fields:visible').each(function (index, ele) {
+                                    //$('#usd').find('.fields:visible').each(function (index, ele) {
+                                    $('#usd').find('.actual-fields').each(function (index, ele) {
                                         this_slot = $(ele).find("input.form-control[type=text]").val();
                                         this_select = $(ele).find(".dropdown_class");
 
@@ -682,9 +693,11 @@
         //console.log($(this_obj).parents(".fields").find('.form-control').val());
         //console.log($(this_obj).parents(".fields").find('.chosen-select'));
 
-        this_slot_hidden = $(this_obj).parents(".fields").find('.form-control').val();
+        //this_slot_hidden = $(this_obj).parents(".fields").find('.form-control').val();
+        this_slot_hidden = $(this_obj).parents(".actual-fields").find('.form-control').val();
         //this_select_hidden = $(this_obj).parents(".fields").find('.chosen-select');
-        this_select_hidden = $(this_obj).parents(".fields").find('.dropdown_class');
+        //this_select_hidden = $(this_obj).parents(".fields").find('.dropdown_class');
+        this_select_hidden = $(this_obj).parents(".actual-fields").find('.dropdown_class');
         get_cost($(this_select_hidden));
         cost_per_slot_hidden = cost_per_slot;
         total_thing_hidden = total_thing_hidden + (this_slot_hidden*cost_per_slot_hidden);
@@ -704,7 +717,8 @@
 //            });
 //            console.log("total_thing_hidden :- " + total_thing_hidden);
 
-            $('#usd').find('.fields:visible').each(function(index, ele) {
+            //$('#usd').find('.fields:visible').each(function(index, ele) {
+            $('#usd').find('.actual-fields').each(function(index, ele) {
                 this_slot = $(ele).find("input.form-control[type=text]").val();
                 this_select = $(ele).find(".dropdown_class");
                 //.chosen-select -> .dropdown_class
@@ -761,9 +775,11 @@
     function get_my_dropdown_val(this_obj){
         console.log("in get_my_dropdown_val()");
         //console.log($(this_obj).parents(".fields").attr("class"));
-        var this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class option:selected').val();
+        //var this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class option:selected').val();
+        var this_dropdown_val = $(this_obj).parents(".actual-fields").find('.dropdown_class option:selected').val();
         //console.log("this_dropdown_val :- " + this_dropdown_val);
-        get_cost($(this_obj).parents(".fields").find('.dropdown_class'));
+        //get_cost($(this_obj).parents(".fields").find('.dropdown_class'));
+        get_cost($(this_obj).parents(".actual-fields").find('.dropdown_class'));
     }
 
     $('a.add_nested_fields').on('click', function(){

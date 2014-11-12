@@ -10,9 +10,7 @@ class WelcomeController < ApplicationController
     render :layout => false
   end
 
-
   def importing_simulation_data
-
     if request.post? && params[:file].present?
       SimulationDatum.import(params[:file], Simulation.find(params[:simulation_id]))
       redirect_to '/admin/simulation_datum', notice: "Simulation data imported."
@@ -21,4 +19,16 @@ class WelcomeController < ApplicationController
     end
   end
 
+  def import_users
+    render :layout => false
+  end
+
+  def importing_users
+    if request.post? && params[:file].present?
+      User.import(params[:file])
+      redirect_to '/admin/user', notice: "Users imported."
+    else
+      redirect_to '/admin/user', notice: "Users couldn't be imported."
+    end
+  end
 end

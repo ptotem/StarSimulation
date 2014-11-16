@@ -182,7 +182,7 @@ class SimulationsController < ApplicationController
   def play_sim
     @simulation = Simulation.find(params[:simulation_id])
     @simulation_data = @simulation.simulation_datums
-    @simulation_dates = @simulation_data.select("performance_date").map{ |i| i.performance_date}.uniq
+    @simulation_dates = @simulation_data.select("performance_date").map{ |i| i.performance_date.strftime('%d-%m-%Y')}.uniq
 
     # render :json => @simulation_data.select("performance_date").map{ |i| i.performance_date}.uniq
     # return

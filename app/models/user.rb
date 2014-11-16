@@ -4,6 +4,14 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  # attr_accessible :name
+
+  # include  ActiveModel::MassAssignmentSecurity
+  # attr_accessible :name, as: :create_params
+  # def create_objects(params)
+  #   User.new(sanitized_params(params, :create_params))
+  # end
+
   has_many :user_sim_datums
 
   has_many :simulation_user_datas

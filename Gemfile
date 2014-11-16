@@ -10,6 +10,9 @@ gem 'therubyracer'
 gem 'mysql2'
 
 gem 'devise'
+gem 'cancan'
+
+# gem 'protected_attributes'
 
 gem 'rails_admin'
 gem "rails_admin_import"

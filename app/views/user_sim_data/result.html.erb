@@ -137,43 +137,43 @@
       var no_of_attempts = gon.no_of_attempts;
       console.log("no_of_attempts :- " + no_of_attempts);
 
-      var xAxisTickInterval = "1", yAxisTickInterval = "1";
+      var xAxisTickInterval = "5", yAxisTickInterval = "5000";
 
       //for y-axis interval
-      if ( ((rounded_max_val>30) && (rounded_max_val<49)) ) {
-          console.log("here 1");
-          yAxisTickInterval = "2";
-      }
-      else if ( ((rounded_max_val>50) && (rounded_max_val<99)) ) {
-          console.log("here 2");
-          yAxisTickInterval = "5";
-      }
-      else if ( ((rounded_max_val>100) && (rounded_max_val<199)) ) {
-          console.log("here 3");
-          yAxisTickInterval = "10";
-      }
-      else if ( ((rounded_max_val>100) && (rounded_max_val<199)) ) {
-          console.log("here 4");
-          yAxisTickInterval = "20";
-      }
-      else{
-          console.log("here 5");
-          yAxisTickInterval = "1";
-      }
+//      if ( ((rounded_max_val>30) && (rounded_max_val<49)) ) {
+//          console.log("here 1");
+//          yAxisTickInterval = "2";
+//      }
+//      else if ( ((rounded_max_val>50) && (rounded_max_val<99)) ) {
+//          console.log("here 2");
+//          yAxisTickInterval = "5";
+//      }
+//      else if ( ((rounded_max_val>100) && (rounded_max_val<199)) ) {
+//          console.log("here 3");
+//          yAxisTickInterval = "10";
+//      }
+//      else if ( ((rounded_max_val>100) && (rounded_max_val<199)) ) {
+//          console.log("here 4");
+//          yAxisTickInterval = "20";
+//      }
+//      else{
+//          console.log("here 5");
+//          yAxisTickInterval = "1";
+//      }
 
       //for x-axis interval
-      if (no_of_attempts>20) {
-          xAxisTickInterval = "2";
-      }
-      else if (no_of_attempts>30) {
-          xAxisTickInterval = "3";
-      }
-      else if (no_of_attempts>50) {
-          xAxisTickInterval = "5";
-      }
-      else if (no_of_attempts>100) {
-          xAxisTickInterval = "10";
-      }
+//      if (no_of_attempts>20) {
+//          xAxisTickInterval = "2";
+//      }
+//      else if (no_of_attempts>30) {
+//          xAxisTickInterval = "3";
+//      }
+//      else if (no_of_attempts>50) {
+//          xAxisTickInterval = "5";
+//      }
+//      else if (no_of_attempts>100) {
+//          xAxisTickInterval = "10";
+//      }
 
 
       //$.jqplot('chartdiv',  [
@@ -187,8 +187,8 @@
           //axes:{yaxis:{min:-10, max:240}},
           axes: {
               // options for each axis are specified in seperate option objects.
-              xaxis: {min:0, max:no_of_attempts+1, label:"No. of Attempts", tickInterval: xAxisTickInterval},
-              yaxis: {min:0, max:rounded_max_val_limit, label:"GRP, CPRP", tickInterval: yAxisTickInterval}
+              xaxis: {min:0, max:50, label:"No. of Attempts", tickInterval: xAxisTickInterval},
+              yaxis: {min:0, max:80000, label:"GRP, CPRP", tickInterval: yAxisTickInterval}
           },
           series:[
               {label:'GRP'},

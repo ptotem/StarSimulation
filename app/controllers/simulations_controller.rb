@@ -44,7 +44,7 @@ class SimulationsController < ApplicationController
     # render :json => params
     # return
     # @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
-    @usd = current_user.simulation_user_datas.build(:simulation_id=>params[:id], :budget=>1000, :budget_available=>1000)
+    @usd = current_user.simulation_user_datas.build(:simulation_id=>params[:id], :budget=>10000000, :budget_available=>10000000)
     @new_a = Array.new()
     #params[:simulation][:user_sim_datums_attributes].each do |p|
     #  @new_a << "#{p.simulation_datum_id}-#{p.no_of_slots}"
@@ -179,6 +179,10 @@ class SimulationsController < ApplicationController
     end
   end
 
+  def check
+    @budget = 1000
+  end
+
   def play_sim
     @simulation = Simulation.find(params[:simulation_id])
     @simulation_data = @simulation.simulation_datums
@@ -188,7 +192,8 @@ class SimulationsController < ApplicationController
     # return
 
     # @simulation_user_data = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
-    @simulation_user_data = current_user.simulation_user_datas.new(:simulation_id=>@simulation.id, :budget=>1000, :budget_available=>1000)
+    @simulation_user_data = current_user.simulation_user_datas.new(:simulation_id=>@simulation.id, :budget=>10000000, :budget_available=>10000000)
+    # @simulation_user_data.save!
     # @usd = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
     # render :json => @simulation_user_data
     # return

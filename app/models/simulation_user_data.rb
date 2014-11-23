@@ -34,13 +34,17 @@ class SimulationUserData < ActiveRecord::Base
 
         total_spent = (total_spent.to_i) + ((cost_per_slot.to_i)*(slots_baught.to_i))
 
+
       end
+      puts "total_spent :- #{total_spent}"
+      puts "self.budget :- #{self.budget}"
+
       ba = self.budget - total_spent
       puts "ba :- #{ba}"
       puts "self.user_id :- #{self.user_id}"
 
       if ba < 0
-        self.errors.add(:base, "Budget can't be less than 0")
+        self.errors.add(:base, "You don't have sufficient funds.")
       else
         self.budget_available = ba
         self.save

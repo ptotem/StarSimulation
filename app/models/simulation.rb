@@ -40,7 +40,7 @@ class Simulation < ActiveRecord::Base
 
   def set_user_budget
     User.all.each do |user|
-      user.simulation_user_datas.build(:simulation_id => self.id, :budget=>1000, :budget_available=>1000)
+      user.simulation_user_datas.build(:simulation_id => self.id, :budget=>10000000, :budget_available=>10000000)
       user.save!
     end
   end
@@ -53,14 +53,12 @@ class Simulation < ActiveRecord::Base
       puts "in if"
       #errors.add_to_base("At least one form of contact must be entered: phone or email" )
       #self.errors.add(:simulation_id, "can not be nil")
-      self.errors.add(:base, "Budget can't be 0 or less than 0.")
+      self.errors.add(:base, "You don't have sufficient funds.")
       #self.errors[:base] << "Msg"
       puts "errors #{self.errors}"
     #else
     #  user.save!
     end
-
-
   end
 
 end

@@ -6,68 +6,86 @@
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
+
+  <style>
+    .nav > li > a:hover, .nav > li > a:focus {
+        text-decoration: none;
+        background-color: transparent;
+    }
+
+    .nav .open > a, .nav .open > a:hover, .nav .open > a:focus {
+        background-color: transparent;
+        border-color: #428bca;
+    }
+  </style>
 </head>
 <body>
 
-    <!--<nav class="navbar navbar-fixed-top" role="navigation">-->
-      <!--<div class="container-fluid">-->
-        <!--<a href="#"><img src="/assets/toplogo.png" class="logo"></a>-->
-        <!--<%# if user_signed_in? %>-->
-            <!--<%#= link_to "Sign out", destroy_user_session_path, :method => :delete %>-->
-        <!--<%# end %>-->
-      <!--</div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
-    <!--</nav>-->
-
-    <div class="navbar navbar-fixed-top header" role="navigation">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="/">
-            <img src="/assets/toplogo.png" class="logo">
-            <h2 style="float: left; color: white;">Media Simulation</h2>
-          </a>
-          <!--<button class="btn logout_button" type="submit">Sign Out</button>-->
-          <% if user_signed_in? %>
-              <div class="name-block" style="position: relative">
-                <h2 style="color: #ffffff; float: left; margin-left: 20%">
-                  Hello, <%= current_user.name.truncate(1) rescue "" %>
-                </h2>
-                <%= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn logout_button", :style => "font-size: 1.4em;" %>
-                <br>
-                <%= link_to "Change your password", edit_user_registration_path, :style=>"color: white; float: right;" %>
-              </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-
     <!--<div class="navbar navbar-fixed-top header" role="navigation">-->
-      <!--<div class="container-fluid">-->
-        <!--&lt;!&ndash; Brand and toggle get grouped for better mobile display &ndash;&gt;-->
-        <!--<div class="navbar-header">-->
-          <!--<a class="navbar-brand" href="#">-->
-            <!--<img src="/assets/toplogo.png" class="logo" style="margin-top: -14px;">-->
-            <!--<h2 style="float: left; color: white; margin-top: -4px;">Media Simulation</h2>-->
+      <!--<div class="navbar-inner">-->
+        <!--<div class="container">-->
+          <!--<a class="brand" href="/">-->
+            <!--<img src="/assets/toplogo.png" class="logo">-->
+            <!--<h2 style="float: left; color: white;">Media Simulation</h2>-->
           <!--</a>-->
+          <!--&lt;!&ndash;<button class="btn logout_button" type="submit">Sign Out</button>&ndash;&gt;-->
+          <!--<%# if user_signed_in? %>-->
+              <!--<div class="name-block" style="position: relative">-->
+                <!--<h2 style="color: #ffffff; float: left; margin-left: 20%">-->
+                  <!--Hello, -->
+                  <%#= current_user.name.truncate(1) rescue "" %>
+                <!--</h2>-->
+                <!--<%#= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn logout_button", :style => "font-size: 1.4em;" %>-->
+                <!--<br>-->
+                <!--<%#= link_to "Change your password", edit_user_registration_path, :style=>"color: white; float: right;" %>-->
+              <!--</div>-->
+          <!--<%# end %>-->
         <!--</div>-->
-
-        <!--&lt;!&ndash; Collect the nav links, forms, and other content for toggling &ndash;&gt;-->
-        <!--<%# if user_signed_in? %>-->
-            <!--<%#= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn logout_button", :style => "font-size: 1.4em;" %>-->
-        <!--<%# end %>-->
-      <!--</div>&lt;!&ndash; /.container-fluid &ndash;&gt;-->
+      <!--</div>-->
     <!--</div>-->
+
+    <nav class="navbar navbar-fixed-top header" role="navigation">
+      <div class="navbar-inner" style="position: relative">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="brand" href="/"> <!--class="navbar-brand"-->
+                <img src="/assets/toplogo.png" class="logo">
+                <h2 style="float: left; color: white;">Media Simulation</h2>
+              </a>
+            </div>
+            <% if user_signed_in? %>
+                <div class="name-block" style="overflow: hidden; position: absolute; right: 196px; top: 0;">
+                  <h2 style="color: #ffffff;">
+                    Hello, <%= current_user.name rescue "" %>
+                  </h2>
+                </div>
+
+                <ul class="nav navbar-nav navbar-right">
+                  <li class="dropdown">
+                    <a style="color: white; padding-top: 35%;" href="#" class="dropdown-toggle non-style-hover" data-toggle="dropdown" role="button" aria-expanded="false">
+                      Options
+                      <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                      <li>
+                        <%= link_to "Change your password", edit_user_registration_path %>
+                      </li>
+                      <li>
+                        <%= link_to "Sign out", destroy_user_session_path, :method => :delete %>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+            <% end %>
+          </div>
+      </div>
+    </nav>
+
+
 
     <div class="container">
       <div class="row row_style">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <!--<div class="row row_style">-->
-            <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-2 col-lg-offset-10">-->
-              <!--<%# if user_signed_in? %>-->
-                  <!--<%#= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn btn-lg button_style", :style => "font-size: 1.4em; margin-top: 5%;" %>-->
-              <!--<%# end %>-->
-              <!--<%#= link_to 'Download',  @simulation.excel_file.url, :class=>"btn btn-lg button_style", :style => "font-size: 1.4em; margin-top: 5%; padding: 8%;" %>-->
-            <!--</div>-->
-          <!--</div>-->
             <%= yield %>
         </div>
       </div>

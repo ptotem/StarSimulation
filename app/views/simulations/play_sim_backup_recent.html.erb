@@ -15,9 +15,6 @@
           </div>
         </div>
       </div>
-      <div class="center" style="text-align: center">
-        <b id="budget_exceeded_text" style="color: red; display: none;">You don't have sufficient funds</b>
-      </div>
     </div>
   </div>
 
@@ -237,7 +234,7 @@
         //console.log($(this_obj));
         var this_val = $(this_obj).val();
         //var this_text_field = $(this_obj).parents(".fields").find('.form-control');
-        var this_text_field = $(this_obj).parents(".actual-fields:visible").find('.form-control');
+        var this_text_field = $(this_obj).parents(".actual-fields").find('.form-control');
         console.log("---- in get_cost() ------");
         console.log("this_val :- " + this_val);
 
@@ -277,7 +274,7 @@
         //console.log(this_dropdown);
         //console.log("this_dropdown_val :- " + this_dropdown_val);
         //this_text_field = $(this_obj).parents(".fields").find('.form-control');
-        this_text_field = $(this_obj).parents(".actual-fields:visible").find('.form-control');
+        this_text_field = $(this_obj).parents(".actual-fields").find('.form-control');
         console.log("THIS_TEXT_FIELD");
         this_text_field_val = this_text_field.val();
         console.log("this_text_field_val :- " + this_text_field_val);
@@ -296,7 +293,7 @@
             var total_cost = 0, total_thing = 0;
             var individual_cost_per_slot=0;
             //$('#usd').find('.fields:visible').each(function(index, ele) {
-            $('#usd').find('.actual-fields:visible').each(function(index, ele) {
+            $('#usd').find('.actual-fields').each(function(index, ele) {
                 this_slot = $(ele).find("input.form-control[type=text]").val();
                 this_select = $(ele).find(".dropdown_class");
                 console.log($(this_select));
@@ -348,7 +345,7 @@
                     var individual_cost_per_slot=0;
                     var field_child;
                     //$('#usd').find('.fields:visible').each(function(index, ele) {
-                    $('#usd').find('.actual-fields:visible').each(function(index, ele) {
+                    $('#usd').find('.actual-fields').each(function(index, ele) {
                         field_child =  $(ele).children();
                         if ( $(field_child).length > 0 ) {
                             this_slot = $(ele).find("input.form-control[type=text]").val();
@@ -444,7 +441,7 @@
         console.log("$(this_obj) :- ");
         console.log($(this_obj));
         //this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class').val();
-        this_dropdown_val = $(this_obj).parents(".actual-fields:visible").find('.dropdown_class').val();
+        this_dropdown_val = $(this_obj).parents(".actual-fields").find('.dropdown_class').val();
         console.log("this_dropdown_val :- " + this_dropdown_val);
         //this_dropdown_val
         console.log("this_val :- " + this_val);
@@ -556,19 +553,15 @@
                             console.log("check for -ve user_budget_manipulated in allow :- " + user_budget_manipulated);
                             if (user_budget_manipulated < 0) {
                                 $("#user_budget").css({"color": "red"});
-                                $("#budget_exceeded_text").show();
-                                $('a.add_nested_fields').css('pointer-events', 'none');
                                 $("#submit_btn").css('pointer-events', 'none');
                             }
                             else {
                                 $("#user_budget").css({"color": "white"});
-                                $("#budget_exceeded_text").hide();
-                                $('a.add_nested_fields').css('pointer-events', 'auto');
                                 $("#submit_btn").css('pointer-events', 'auto');
                             }
 
                             //$('#usd').find('.fields:visible').each(function (index, ele) {
-                            $('#usd').find('.actual-fields:visible').each(function (index, ele) {
+                            $('#usd').find('.actual-fields').each(function (index, ele) {
                                 this_slot = $(ele).find("input.form-control[type=text]").val();
                                 this_select = $(ele).find(".dropdown_class");
                                 //console.log($(this_select));
@@ -597,14 +590,10 @@
                             $("#sim_user_data_budget_available").val(user_budget_manipulated);
                             if (user_budget_manipulated < 0) {
                                 $("#user_budget").css({"color": "red"});
-                                $("#budget_exceeded_text").show();
-                                $('a.add_nested_fields').css('pointer-events', 'none');
                                 $("#submit_btn").css('pointer-events', 'none');
                             }
                             else {
                                 $("#user_budget").css({"color": "white"});
-                                $("#budget_exceeded_text").hide();
-                                $('a.add_nested_fields').css('pointer-events', 'auto');
                                 $("#submit_btn").css('pointer-events', 'auto');
                             }
                         }
@@ -616,7 +605,7 @@
 
 
                             //$('#usd').find('.fields').each(function (index, ele) {
-                            $('#usd').find('.actual-fields:visible').each(function (index, ele) {
+                            $('#usd').find('.actual-fields').each(function (index, ele) {
                                 this_slot = $(ele).find("input.form-control[type=text]").val();
                                 if (this_slot == "") {
                                     user_budget_manipulated = user_budget_real;
@@ -639,7 +628,7 @@
                                 else {
                                     console.log("yes");
                                     //$('#usd').find('.fields:visible').each(function (index, ele) {
-                                    $('#usd').find('.actual-fields:visible').each(function (index, ele) {
+                                    $('#usd').find('.actual-fields').each(function (index, ele) {
                                         this_slot = $(ele).find("input.form-control[type=text]").val();
                                         this_select = $(ele).find(".dropdown_class");
 
@@ -755,10 +744,10 @@
         //console.log($(this_obj).parents(".fields").find('.chosen-select'));
 
         //this_slot_hidden = $(this_obj).parents(".fields").find('.form-control').val();
-        this_slot_hidden = $(this_obj).parents(".actual-fields:visible").find('.form-control').val();
+        this_slot_hidden = $(this_obj).parents(".actual-fields").find('.form-control').val();
         //this_select_hidden = $(this_obj).parents(".fields").find('.chosen-select');
         //this_select_hidden = $(this_obj).parents(".fields").find('.dropdown_class');
-        this_select_hidden = $(this_obj).parents(".actual-fields:visible").find('.dropdown_class');
+        this_select_hidden = $(this_obj).parents(".actual-fields").find('.dropdown_class');
         get_cost($(this_select_hidden));
         cost_per_slot_hidden = cost_per_slot;
         total_thing_hidden = total_thing_hidden + (this_slot_hidden*cost_per_slot_hidden);
@@ -779,7 +768,7 @@
 //            console.log("total_thing_hidden :- " + total_thing_hidden);
 
             //$('#usd').find('.fields:visible').each(function(index, ele) {
-            $('#usd').find('.actual-fields:visible').each(function(index, ele) {
+            $('#usd').find('.actual-fields').each(function(index, ele) {
                 this_slot = $(ele).find("input.form-control[type=text]").val();
                 this_select = $(ele).find(".dropdown_class");
                 //.chosen-select -> .dropdown_class
@@ -814,20 +803,6 @@
             console.log("user_budget_manipulated after compute :- " + user_budget_manipulated);
             $("#user_budget").text(user_budget_manipulated);
             $("#sim_user_data_budget_available").val(user_budget_manipulated);
-
-            if (user_budget_manipulated < 0) {
-                $("#user_budget").css({"color": "red"});
-                $("#budget_exceeded_text").show();
-                $('a.add_nested_fields').css('pointer-events', 'none');
-                $("#submit_btn").css('pointer-events', 'none');
-            }
-            else {
-                $("#user_budget").css({"color": "white"});
-                $("#budget_exceeded_text").hide();
-                $('a.add_nested_fields').css('pointer-events', 'auto');
-                $("#submit_btn").css('pointer-events', 'auto');
-            }
-
         }, 100);
 
 
@@ -851,10 +826,10 @@
         console.log("in get_my_dropdown_val()");
         //console.log($(this_obj).parents(".fields").attr("class"));
         //var this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class option:selected').val();
-        var this_dropdown_val = $(this_obj).parents(".actual-fields:visible").find('.dropdown_class option:selected').val();
+        var this_dropdown_val = $(this_obj).parents(".actual-fields").find('.dropdown_class option:selected').val();
         //console.log("this_dropdown_val :- " + this_dropdown_val);
         //get_cost($(this_obj).parents(".fields").find('.dropdown_class'));
-        get_cost($(this_obj).parents(".actual-fields:visible").find('.dropdown_class'));
+        get_cost($(this_obj).parents(".actual-fields").find('.dropdown_class'));
     }
 
     $('a.add_nested_fields').on('click', function(){

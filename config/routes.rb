@@ -33,6 +33,8 @@ StarMediaSim::Application.routes.draw do
   match '/get_this_date_slots', to: 'simulation_data#get_this_date_slots', via: [:get, :post], :as=>"get_this_date_slots"
   match '/result/:simulation_id', to: 'user_sim_data#result', via: [:get, :post], :as=>"result"
 
+  match '/check', to: 'simulations#check', via: [:get, :post], :as=>"check"
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

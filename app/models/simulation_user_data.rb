@@ -3,7 +3,7 @@ class SimulationUserData < ActiveRecord::Base
     belongs_to :user
 
     # validates_uniqueness_of :simulation_id, :scope => [:user_id], :message => "This user is already allotted simulation."
-    validates :budget_available, :numericality => {greater_than: 0, :message => "Your budget can't go below 0."}
+    # validates :budget_available, :numericality => {greater_than: 0, :message => "You don't have sufficient funds."}
 
     #validate :validate_amount_left
     #validate :my_method

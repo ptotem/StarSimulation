@@ -66,10 +66,13 @@ class SimulationsController < ApplicationController
       if params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"] == ""
         @no_slot_selected = true
       else
-        @new_a << "#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["simulation_datum_id"]}||#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"]}"
+        if params[:simulation][:user_sim_datums_attributes]["#{k}"]["_destroy"] == "false"
+          @new_a << "#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["simulation_datum_id"]}||#{params[:simulation][:user_sim_datums_attributes]["#{k}"]["no_of_slots"]}"
+        end
+
       end
     end
-    # render :json => @no_slot_selected
+    # render :json => @new_a
     # return
     if @no_slot_selected == true
       # redirect_to play_sim_path(params[:id])

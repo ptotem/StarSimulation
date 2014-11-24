@@ -37,43 +37,20 @@
 </head>
 <body>
 
-    <!--<div class="navbar navbar-fixed-top header" role="navigation">-->
-      <!--<div class="navbar-inner">-->
-        <!--<div class="container">-->
-          <!--<a class="brand" href="/">-->
-            <!--<img src="/assets/toplogo.png" class="logo">-->
-            <!--<h2 style="float: left; color: white;">Media Simulation</h2>-->
-          <!--</a>-->
-          <!--&lt;!&ndash;<button class="btn logout_button" type="submit">Sign Out</button>&ndash;&gt;-->
-          <!--<%# if user_signed_in? %>-->
-              <!--<div class="name-block" style="position: relative">-->
-                <!--<h2 style="color: #ffffff; float: left; margin-left: 20%">-->
-                  <!--Hello, -->
-                  <%#= current_user.name.truncate(1) rescue "" %>
-                <!--</h2>-->
-                <!--<%#= link_to "Sign out", destroy_user_session_path, :method => :delete, :class => "btn logout_button", :style => "font-size: 1.4em;" %>-->
-                <!--<br>-->
-                <!--<%#= link_to "Change your password", edit_user_registration_path, :style=>"color: white; float: right;" %>-->
-              <!--</div>-->
-          <!--<%# end %>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
-
     <nav class="navbar navbar-fixed-top header" role="navigation">
       <div class="navbar-inner" style="position: relative">
           <div class="container">
             <div class="navbar-header">
               <a class="brand" href="/"> <!--class="navbar-brand"-->
-                <img src="/assets/toplogo.png" class="logo">
+                <img src="/assets/logo.png" class="logo">
                 <h2 style="float: left; color: white;">Media Simulation</h2>
               </a>
             </div>
             <% if user_signed_in? %>
                 <div class="name-block" style="overflow: hidden; position: absolute; right: 196px; top: 0;">
-                  <h2 style="color: #ffffff;">
+                  <h3 style="color: #ffffff;">
                     Hello, <%= current_user.name rescue "" %>
-                  </h2>
+                  </h3>
                 </div>
 
                 <ul class="nav navbar-nav navbar-right">

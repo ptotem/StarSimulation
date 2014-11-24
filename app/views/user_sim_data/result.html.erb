@@ -67,7 +67,8 @@
             <a href="#" style="margin-top: 15px !important;" class="btn btn-lg button_style" onclick="javascript:window.location.href='/'; return false;">Home</a>
           </div>
           <div class="col-sm-6 col-md-6 col-lg-6">
-            <%= link_to "Play Again", play_sim_path(@simulation), :class=>"btn btn-lg button_style pull-right", :style => "margin-top: 15px;" %>
+            <a href="#" style="margin-top: 15px !important;" class="btn btn-lg button_style pull-right" onclick="javascript:window.location.href='/play_sim/<%= @simulation %>'; return false;">Play Again</a>
+            <%#= link_to "Play Again", play_sim_path(@simulation), :class=>"btn btn-lg button_style pull-right", :style => "margin-top: 15px;" %>
           </div>
         </div>
 

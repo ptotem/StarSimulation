@@ -62,19 +62,27 @@
           <li>Ideal GRP :- <%= @simulation_og.sim_grp %></li>
           <li>Ideal CPRP :- <%= @simulation_og.sim_cprp %></li>
         </ul>
-        <!--<a href="#" style="margin-top: 15px !important;" class="btn btn-lg button_style" onclick="javascript:window.location.href='/'; return false;">Home</a>-->
+        <div class="row">
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <a href="#" style="margin-top: 15px !important;" class="btn btn-lg button_style" onclick="javascript:window.location.href='/'; return false;">Home</a>
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <%= link_to "Play Again", play_sim_path(@simulation), :class=>"btn btn-lg button_style pull-right", :style => "margin-top: 15px;" %>
+          </div>
+        </div>
+
       </div>
 
       <div class="col-sm-6 col-md-6 col-lg-6">
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <div id="chartdiv" style="height:280px;width:100%;"></div>
+            <div id="chartdiv" style="height:265px;width:100%;"></div>
           </div>
         </div>
         <br>
         <div class="row">
           <div class="col-sm-12 col-md-12 col-lg-12">
-            <div id="chartdiv_grp" style="height:280px;width:96%; margin-left: 4%;"></div>
+            <div id="chartdiv_grp" style="height:265px;width:96%; margin-left: 4%;"></div>
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@
     /*}*/
     .jqplot-xaxis-label{
         font-size: 12px;
+        margin-top: -10px;
     }
     .jqplot-yaxis-label{
         font-size: 10px;
@@ -15,71 +16,69 @@
         border-bottom: none;
     }
 
+    .table-block{
+        background-color: #969696;
+        border: 1px solid #969696;
+        overflow: auto;
+        height: 338px;
+        width: 100%;
+        padding: 5px;
+    }
+
 </style>
 <div class="container">
-  <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
-      <div class="row">
-        <div class="col-lg-3">
-          <h1 class="white" style="font-weight: bold">Result</h1>
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12">
+        <h1 class="white" style="font-weight: bold; margin-top: -5px;">Result</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-5 col-md-5 col-lg-5">
+        <div class="table-block">
+          <table id="example" class="table">
+            <thead style="background-color: #fff">
+            <tr>
+              <th class="text-center">Attempt No.</th>
+              <th class="text-center">Slots Bought</th>
+              <th class="text-center">GRP</th>
+              <th class="text-center">CPRP</th>
+              <th class="text-center">Score</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @sim_user_data.each_with_index do |sim_user_data, index| %>
+                <tr>
+                  <td class="text-center"><%= index+1 %></td>
+                  <td class="text-center"><%= @inner[index] %></td>
+                  <td class="text-center"><%= sim_user_data.total_grp %></td>
+                  <td class="text-center"><%= sim_user_data.total_cprp %></td>
+                  <td class="text-center"><%= sim_user_data.score %></td>
+                </tr>
+            <% end %>
+            </tbody>
+          </table>
         </div>
+        <ul class="grp_and_cprp_block" style="font-weight: bold; list-style: none outside none; margin: 0; padding: 2% 0 0 0;">
+          <li>Ideal GRP :- <%= @simulation_og.sim_grp %></li>
+          <li>Ideal CPRP :- <%= @simulation_og.sim_cprp %></li>
+        </ul>
+        <!--<a href="#" style="margin-top: 15px !important;" class="btn btn-lg button_style" onclick="javascript:window.location.href='/'; return false;">Home</a>-->
       </div>
 
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-      <div class="table-block" style="background-color: #969696;
-              border: 1px solid #969696;
-              overflow: auto;
-              height: 338px;
-              width: 100%;
-              padding: 5px;
-      ">
-        <table id="example" class="table">
-          <thead style="background-color: #fff">
-          <tr>
-            <th class="text-center">Attempt No.</th>
-            <th class="text-center">Slots Bought</th>
-            <th class="text-center">GRP</th>
-            <th class="text-center">CPRP</th>
-            <th class="text-center">Score</th>
-          </tr>
-          </thead>
-          <tbody>
-          <% @sim_user_data.each_with_index do |sim_user_data, index| %>
-              <tr>
-                <td class="text-center"><%= index+1 %></td>
-                <td class="text-center"><%= @inner[index] %></td>
-                <td class="text-center"><%= sim_user_data.total_grp %></td>
-                <td class="text-center"><%= sim_user_data.total_cprp %></td>
-                <td class="text-center"><%= sim_user_data.score %></td>
-              </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-      <%#= link_to "Play Again", play_sim_path(@simulation), :class=>"btn btn-lg button_style" %>
-      <%#= link_to "Home", root_path, :class=>"btn btn-lg button_style" %>
-      <ul class="grp_and_cprp_block" style="font-weight: bold; list-style: none outside none; margin: 0; padding: 2% 0 0 0;">
-        <li>Ideal GRP :- <%= @simulation_og.sim_grp %></li>
-        <li>Ideal CPRP :- <%= @simulation_og.sim_cprp %></li>
-      </ul>
-      <a href="#" style="margin-top: 15px !important;" class="btn btn-lg button_style" onclick="javascript:window.location.href='/'; return false;">Home</a>
-    </div>
-    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <div id="chartdiv" style="height:400px;width:100%;"></div>
-      <!--<div id="chartdiv"></div>-->
-      <%#= link_to "Play Again", play_sim_path(@simulation), :class=>"btn btn-lg button_style" %>
-      <%#= link_to "Home", root_path, :class=>"btn btn-lg button_style" %>
-      <div class="row">
-        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 pull-right">
-          <a href="#" class="btn btn-lg button_style pull-right" onclick="javascript:window.location.href='/play_sim/<%= @simulation %>'; return false;">Play Again</a>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <div id="chartdiv" style="height:280px;width:100%;"></div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <div id="chartdiv_grp" style="height:280px;width:96%; margin-left: 4%;"></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-
 </div>
 
 <script>
@@ -89,7 +88,7 @@
           "bPaginate": true,
           "bInfo": false,
           "bFilter": false,
-          'iDisplayLength': 7,
+          'iDisplayLength': 10,
           "bLengthChange": false,
           "aaSorting": [
               [ 0, "desc" ]
@@ -137,7 +136,8 @@
       var no_of_attempts = gon.no_of_attempts;
       console.log("no_of_attempts :- " + no_of_attempts);
 
-      var xAxisTickInterval = "5", yAxisTickInterval = "5000";
+      var xAxisTickInterval = "1", yAxisTickInterval = "5000";
+      var gprpyAxisTickInterval = "5";
 
       //for y-axis interval
 //      if ( ((rounded_max_val>30) && (rounded_max_val<49)) ) {
@@ -161,37 +161,37 @@
 //          yAxisTickInterval = "1";
 //      }
 
-      //for x-axis interval
-//      if (no_of_attempts>20) {
-//          xAxisTickInterval = "2";
-//      }
-//      else if (no_of_attempts>30) {
-//          xAxisTickInterval = "3";
-//      }
-//      else if (no_of_attempts>50) {
-//          xAxisTickInterval = "5";
-//      }
-//      else if (no_of_attempts>100) {
-//          xAxisTickInterval = "10";
-//      }
+//      for x-axis interval
+      if (no_of_attempts>20) {
+          xAxisTickInterval = "2";
+      }
+      else if (no_of_attempts>30) {
+          xAxisTickInterval = "3";
+      }
+      else if (no_of_attempts>50) {
+          xAxisTickInterval = "5";
+      }
+      else if (no_of_attempts>100) {
+          xAxisTickInterval = "10";
+      }
 
 
       //$.jqplot('chartdiv',  [
       //            [[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,219.9]],
       //            [[10, 20],[5,6.12],[6,10.1],[8,30.6],[5,75.9],[10,119.9]]],
       $.jqplot('chartdiv',  [
-                  grp_plots,
+                  //grp_plots,
                   cprp_plots
               ],
       { title:'',
           //axes:{yaxis:{min:-10, max:240}},
           axes: {
               // options for each axis are specified in seperate option objects.
-              xaxis: {min:0, max:50, label:"No. of Attempts", tickInterval: xAxisTickInterval},
-              yaxis: {min:0, max:80000, label:"GRP, CPRP", tickInterval: yAxisTickInterval}
+              xaxis: {min:0, max:no_of_attempts+1, label:"No. of Attempts", tickInterval: xAxisTickInterval},
+              yaxis: {min:0, max:rounded_max_val+5000, label:"CPRP", tickInterval: yAxisTickInterval}
           },
           series:[
-              {label:'GRP'},
+//              {label:'GRP'},
               {label:'CPRP'}
           ],
           // Show the legend and put it outside the grid, but inside the
@@ -203,5 +203,30 @@
           }
           //series:[{color:'#5FAB78'}]
       });
+
+      $.jqplot('chartdiv_grp',  [
+                  grp_plots //,
+//                  cprp_plots
+              ],
+              { title:'',
+                  //axes:{yaxis:{min:-10, max:240}},
+                  axes: {
+                      // options for each axis are specified in seperate option objects.
+                      xaxis: {min:0, max:no_of_attempts+1, label:"No. of Attempts", tickInterval: xAxisTickInterval},
+                      yaxis: {min:0, max:parseInt(max_grp)+3, label:"GRP", tickInterval: gprpyAxisTickInterval}
+                  },
+                  series:[
+//              {label:'GRP'},
+                      {label:'GRP'}
+                  ],
+                  // Show the legend and put it outside the grid, but inside the
+                  // plot container, shrinking the grid to accomodate the legend.
+                  // A value of "outside" would not shrink the grid and allow
+                  // the legend to overflow the container.
+                  legend: {
+                      show: true
+                  }
+                  //series:[{color:'#5FAB78'}]
+              });
   })
 </script>

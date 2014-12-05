@@ -19,10 +19,11 @@
     .table-block{
         background-color: #969696;
         border: 1px solid #969696;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
         height: 395px;
         width: 100%;
-        padding: 5px;
+        padding: 0px;
     }
 
 </style>
@@ -43,6 +44,7 @@
               <th class="text-center">GRP</th>
               <th class="text-center">CPRP</th>
               <th class="text-center">Score</th>
+              <th class="text-center">Points</th>
             </tr>
             </thead>
             <tbody>
@@ -53,6 +55,7 @@
                   <td class="text-center"><%= sim_user_data.total_grp %></td>
                   <td class="text-center"><%= sim_user_data.total_cprp %></td>
                   <td class="text-center"><%= sim_user_data.score %></td>
+                  <td class="text-center"><%= sim_user_data.points %></td>
                 </tr>
             <% end %>
             </tbody>

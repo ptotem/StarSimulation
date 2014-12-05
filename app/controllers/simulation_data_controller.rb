@@ -81,7 +81,7 @@ class SimulationDataController < ApplicationController
     @this_date = params[:this_date][0].to_date.strftime('%Y-%m-%d')
     # render :json => @this_date
     # return
-    @this_date_slots = @simulation.simulation_datums.where(:performance_date=>@this_date).map{|tds| [tds.id, tds.programme_name, tds.start_time.strftime("%T")]}
+    @this_date_slots = @simulation.simulation_datums.where(:performance_date=>@this_date).map{|tds| [tds.id, tds.programme_name, tds.start_time.strftime("%T"), (tds.end_time.strftime("%T") rescue "")]}
     render :json => @this_date_slots
     return
   end

@@ -16,7 +16,9 @@
         </div>
       </div>
       <div class="center" style="text-align: center">
-        <b id="budget_exceeded_text" style="color: red; display: none;">You don't have sufficient funds</b>
+        <b id="budget_exceeded_text" style="color: red; display: none;">You don't have sufficient funds.</b>
+        <br>
+        <b id="already_selected_text" style="color: red; display: none;">You cannot add duplicate programmes!</b>
       </div>
     </div>
   </div>
@@ -147,15 +149,16 @@
                             <div class="actual-fields">
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                 <%#= select_tag 'programme_performance_date', options_for_select(@simulation_dates.collect{ |u| [u.performance_date, u.id] }), class: 'chosen-select' %>
-                                <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), { class: 'chosen-select', :onchange => 'get_this_date_slots($(this))' } %>
+                                <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), {prompt: 'Select Date', class: 'chosen-select', :onchange => 'get_this_date_slots($(this))' } %>
                               </div>
                               <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
                               <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 3%">
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
-                                <%= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")} - #{u.end_time.strftime("%T") rescue ""}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
+                                <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")} - #{u.end_time.strftime("%T") rescue ""}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
+                                <%= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
                               </div>
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
-                                <%= user_sim_data.text_field :no_of_slots, {class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off} %>
+                                <%= user_sim_data.text_field :no_of_slots, {:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off} %>
                               </div>
                               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                 <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
@@ -166,7 +169,10 @@
                   </div>
 
                   <%= f.link_to_add "Add", :user_sim_datums, :class=>"btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; left: 15px; font-size: 1.4em;" %>
-                  <%= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" %>
+                  <%#= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;", :onclick=>"event.preventDefault(); return checkDropdowns();" %>
+                  <%= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"display:none; position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" %>
+                  <%#= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;", :onclick=>"return checkDropdowns();" %>
+                  <a href="javascript:void(0);" id="dummy_submit_btn" class="btn btn-lg button_style" style="position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" onclick="return checkDropdowns();">Submit</a>
               <% end %>
             </div>
           </div>
@@ -212,11 +218,13 @@
     var total_thing = 0;
     var this_dropdown_val=0;
     var na = "";
+    var already_selected = false;
     $(function(){
 
         //user_budget = $("#user_budget").text();
         user_budget_manipulated = <%= @simulation_user_data.budget_available %>
                 user_budget_real = <%= @simulation_user_data.budget %>
+
 
 
 
@@ -270,7 +278,7 @@
                 var channel_name_and_start_time;
                 $.each( data, function( key, value ) {
                     //channel_name_and_start_time = value.programme_name + " " + value.start_time;
-                    channel_name_and_start_time = value[1] + " - " + value[2];
+                    channel_name_and_start_time = value[1] + " - " + value[2] + " - " + value[3];
                     $(this_field_channel_dropdown).append("<option value='"+value[0]+"'>"+channel_name_and_start_time+"</option>");
                 });
                 $(this_field_channel_dropdown).trigger("chosen:updated");
@@ -307,20 +315,145 @@
         })
     }
 
+    function checkDropdowns(){
+        console.log("in checkDropdowns()");
+        $("#already_selected_text").hide();
+
+        // The number of dropdowns you have (use the naming convention 'dropx' as an id attribute)
+        //var iDropdowns = 4;
+
+        //var actual_dropdown_len = $('#usd').find('.actual-fields:visible').find(".dropdown_class").length;
+        //console.log("actual_dropdown_len :- " + actual_dropdown_len);
+
+
+        var sValue;
+        var sValue2;
+        var dupResult = "";
+        var slot;
+        var blankSlotResult = "";
+        // Loop over dropdowns
+
+        $('#usd').find('.actual-fields:visible').each(function(outerIndex, outerEle) {
+            // Get selected value
+            //sValue = document.getElementById('drop' + i).value;
+            sValue = $(outerEle).find(".dropdown_class").val();
+            console.log("sValue :- " + sValue);
+
+            // Nested loop - loop over dropdowns again
+            $('#usd').find('.actual-fields:visible').each(function(innerIndex, innerEle) {
+                // Get selected value
+                //sValue2 = document.getElementById('drop' + j).value;
+                sValue2 = $(innerEle).find(".dropdown_class").val();
+                console.log("sValue2 :- " + sValue2);
+
+                // If we're not checking the same dropdown and the values are the same...
+                if ( outerIndex != innerIndex && sValue == sValue2 )
+                {
+                    // ...we have a duplicate!
+                    //alert('Duplicate!');
+                    //$(innerEle).find(".dropdown_class").parent().parent().addClass("duplicate-prog-err");
+                    $(outerEle).find(".dropdown_class").parent().parent().addClass("duplicate-prog-err");
+                    //$(innerEle).find(".dropdown_class").parent().css("border","2px solid red");
+                    $("#already_selected_text").show();
+                    dupResult = "found";
+                    //$("#submit_btn").css('pointer-events', 'none');
+
+                    return false;
+                }
+            });
+
+            slot = $(outerEle).find(".slot_number").val();
+            if (slot == "") {
+                blankSlotResult = "yes";
+                $(outerEle).find(".slot_number").parent().parent().addClass("blank-slot-err");
+                console.log("in if, slot is blank :- " + slot);
+            }
+            else{
+                console.log("else slot :- " + slot);
+            }
+        });
+
+        // No duplicates
+        //$("#already_selected_text").hide();
+        console.log("dupResult :- " + dupResult);
+        if ( (dupResult != "found") && (blankSlotResult != "yes") ) {
+            $("#submit_btn").click();
+        }
+        else{
+            console.log("dupResult :- " + dupResult);
+            console.log("blankSlotResult :- " + blankSlotResult);
+        }
+        return true;
+        //$('form').submit();
+
+        //return false;
+    }
+
     function get_cost_only_for_change(this_obj){
 
 
         console.log("------ get_cost_only_for_change() -----");
         //console.log("user_budget_manipulated :- " + user_budget_manipulated);
         var this_dropdown, this_dropdown_val;
-        var this_text_field, this_text_field_val;
+        var this_text_field, this_text_field_val, this_dropdown_id;
         var this_cost_per_slot, this_text_field_val;
         this_dropdown = $(this_obj);
+        this_dropdown.parent().parent().removeClass("duplicate-prog-err");
         console.log("this_dropdown");
         console.log(this_dropdown);
         this_dropdown_val = this_dropdown.val();
+        this_dropdown_id = this_dropdown.attr("id");
+
         //console.log(this_dropdown);
-        //console.log("this_dropdown_val :- " + this_dropdown_val);
+        console.log("this_dropdown_val :- " + this_dropdown_val);
+        console.log("this_dropdown id :- " + this_dropdown_id);
+
+        console.log("STARTING");
+        $("#already_selected_text").hide();
+        //$("#submit_btn").css('pointer-events', 'auto');
+
+//        $('#usd').find('.actual-fields:visible').each(function(index, ele) {
+//            console.log($(ele).find(".dropdown_class").val());
+//            if (this_dropdown_id != $(ele).find(".dropdown_class").attr("id")) {
+//                if (this_dropdown_val == $(ele).find(".dropdown_class").val()) {
+//                    console.log("Already Selected");
+//                    already_selected = true;
+//                    $("#already_selected_text").show();
+//                    $("#submit_btn").css('pointer-events', 'none');
+//                }
+////                else{
+////                    console.log("Can Select");
+////                    $("#already_selected_text").hide();
+////                    $("#submit_btn").css('pointer-events', 'auto');
+////                }
+//            }
+////            else if (this_dropdown_id == $(ele).find(".dropdown_class").attr("id")) {
+////                console.log("here");
+////                //console.log("this_dropdown_id :- " + this_dropdown_id);
+////                //console.log("$(ele).find(.dropdown_class).attr(id) :- " + $(ele).find(".dropdown_class").attr("id"));
+//////                console.log("this_dropdown_val :- " + this_dropdown_val);
+//////                console.log("$(ele).find(.dropdown_class).val() :- " + $(ele).find(".dropdown_class").val());
+//////
+//////                if (this_dropdown_val == $(ele).find(".dropdown_class").val()) {
+//////                    console.log("Changed");
+//////                    $("#already_selected_text").hide();
+//////                    $("#submit_btn").css('pointer-events', 'auto');
+//////                }
+//////                else{
+//////                    console.log("Changed 2");
+//////                    $("#already_selected_text").hide();
+//////                    $("#submit_btn").css('pointer-events', 'auto');
+//////                }
+////            }
+//            else{
+//                console.log("Doesn't Matches");
+//                console.log("this_dropdown_val :- " + this_dropdown_val);
+//                console.log("$(ele).find(.dropdown_class).val() :- " + $(ele).find(".dropdown_class").val());
+//            }
+//
+//        });
+
+
         //this_text_field = $(this_obj).parents(".fields").find('.form-control');
         this_text_field = $(this_obj).parents(".actual-fields:visible").find('.form-control');
         console.log("THIS_TEXT_FIELD");
@@ -349,6 +482,7 @@
 
                 if (this_slot!="") {
                     get_cost($(this_select));
+                    this_dropdown.parent().parent().removeClass("blank-slot-err");
                     //console.log("cost_per_slot :- " + cost_per_slot);
                     individual_cost_per_slot = cost_per_slot;
                     //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
@@ -360,6 +494,9 @@
                 }
                 else{
                     this_slot = 0;
+                    this_dropdown.parent().parent().addClass("blank-slot-err");
+                    console.log("this_dropdown.parent().parent()");
+                    console.log(this_dropdown.parent().parent());
                     console.log("this slot blank");
                 }
 
@@ -488,6 +625,7 @@
         var this_val = $(this_obj).val();
         console.log("$(this_obj) :- ");
         console.log($(this_obj));
+        $(this_obj).parent().parent().removeClass("blank-slot-err").removeClass("duplicate-prog-err");
         //this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class').val();
         this_dropdown_val = $(this_obj).parents(".actual-fields:visible").find('.dropdown_class').val();
         console.log("this_dropdown_val :- " + this_dropdown_val);
@@ -603,13 +741,13 @@
                                 $("#user_budget").css({"color": "red"});
                                 $("#budget_exceeded_text").show();
                                 $('a.add_nested_fields').css('pointer-events', 'none');
-                                $("#submit_btn").css('pointer-events', 'none');
+                                $("#dummy_submit_btn").css('pointer-events', 'none');
                             }
                             else {
                                 $("#user_budget").css({"color": "white"});
                                 $("#budget_exceeded_text").hide();
                                 $('a.add_nested_fields').css('pointer-events', 'auto');
-                                $("#submit_btn").css('pointer-events', 'auto');
+                                $("#dummy_submit_btn").css('pointer-events', 'auto');
                             }
 
                             //$('#usd').find('.fields:visible').each(function (index, ele) {
@@ -644,13 +782,13 @@
                                 $("#user_budget").css({"color": "red"});
                                 $("#budget_exceeded_text").show();
                                 $('a.add_nested_fields').css('pointer-events', 'none');
-                                $("#submit_btn").css('pointer-events', 'none');
+                                $("#dummy_submit_btn").css('pointer-events', 'none');
                             }
                             else {
                                 $("#user_budget").css({"color": "white"});
                                 $("#budget_exceeded_text").hide();
                                 $('a.add_nested_fields').css('pointer-events', 'auto');
-                                $("#submit_btn").css('pointer-events', 'auto');
+                                $("#dummy_submit_btn").css('pointer-events', 'auto');
                             }
                         }
                         else {
@@ -864,13 +1002,13 @@
                 $("#user_budget").css({"color": "red"});
                 $("#budget_exceeded_text").show();
                 $('a.add_nested_fields').css('pointer-events', 'none');
-                $("#submit_btn").css('pointer-events', 'none');
+                $("#dummy_submit_btn").css('pointer-events', 'none');
             }
             else {
                 $("#user_budget").css({"color": "white"});
                 $("#budget_exceeded_text").hide();
                 $('a.add_nested_fields').css('pointer-events', 'auto');
-                $("#submit_btn").css('pointer-events', 'auto');
+                $("#dummy_submit_btn").css('pointer-events', 'auto');
             }
 
         }, 100);

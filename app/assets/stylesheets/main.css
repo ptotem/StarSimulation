@@ -491,4 +491,15 @@ a:hover {
 }
 /* anagha css ends */
 
+.duplicate-prog-err, .blank-slot-err{
+    border: 2px solid red;
+}
+
+.actual-fields{
+    height: 38px;
+    margin: 0 auto;
+    width: 98%;
+    margin-bottom: 1%;
+}
+
 /*$("#sim_user_data_budget_available").val(user_budget_manipulated);*/

@@ -315,6 +315,74 @@
         })
     }
 
+    function checkDropdownsOnRemove(){
+        console.log("in checkDropdownsOnRemove");
+        $("#already_selected_text").hide();
+
+        // The number of dropdowns you have (use the naming convention 'dropx' as an id attribute)
+        //var iDropdowns = 4;
+
+        //var actual_dropdown_len = $('#usd').find('.actual-fields:visible').find(".dropdown_class").length;
+        //console.log("actual_dropdown_len :- " + actual_dropdown_len);
+
+
+        var sValue;
+        var sValue2;
+        var dupResult = "";
+        var slot;
+        var blankSlotResult = "";
+        // Loop over dropdowns
+
+        $('#usd').find('.actual-fields:visible').each(function(outerIndex, outerEle) {
+            // Get selected value
+            //sValue = document.getElementById('drop' + i).value;
+            sValue = $(outerEle).find(".dropdown_class").val();
+            console.log("sValue :- " + sValue);
+
+            // Nested loop - loop over dropdowns again
+            $('#usd').find('.actual-fields:visible').each(function(innerIndex, innerEle) {
+                // Get selected value
+                //sValue2 = document.getElementById('drop' + j).value;
+                sValue2 = $(innerEle).find(".dropdown_class").val();
+                console.log("sValue2 :- " + sValue2);
+
+                // If we're not checking the same dropdown and the values are the same...
+                if ( outerIndex != innerIndex && sValue == sValue2 )
+                {
+                    // ...we have a duplicate!
+                    //alert('Duplicate!');
+                    //$(innerEle).find(".dropdown_class").parent().parent().addClass("duplicate-prog-err");
+                    $(outerEle).find(".dropdown_class").parent().parent().addClass("duplicate-prog-err");
+                    //$(innerEle).find(".dropdown_class").parent().css("border","2px solid red");
+                    $("#already_selected_text").show();
+                    dupResult = "found";
+                    //$("#submit_btn").css('pointer-events', 'none');
+
+                    return false;
+                }
+            });
+
+            slot = $(outerEle).find(".slot_number").val();
+            if (slot == "") {
+                blankSlotResult = "yes";
+                $(outerEle).find(".slot_number").parent().parent().addClass("blank-slot-err");
+                console.log("in if, slot is blank :- " + slot);
+            }
+            else{
+                console.log("else slot :- " + slot);
+            }
+        });
+
+        // No duplicates
+        //$("#already_selected_text").hide();
+        console.log("dupResult :- " + dupResult);
+
+        return true;
+        //$('form').submit();
+
+        //return false;
+    }
+
     function checkDropdowns(){
         console.log("in checkDropdowns()");
         $("#already_selected_text").hide();
@@ -931,6 +999,10 @@
 
     function calculate_budget_on_remove(event, this_obj){
         console.log("on remove text val");
+
+        console.log("this_obj :- ");
+        var this_deleted_program_id = this_obj.parent().prev().prev().find(".dropdown_class").val();
+
         var this_slot, this_select;
         var this_slot_hidden, this_select_hidden, cost_per_slot_hidden, total_thing_hidden = 0;
 
@@ -965,6 +1037,8 @@
             $('#usd').find('.actual-fields:visible').each(function(index, ele) {
                 this_slot = $(ele).find("input.form-control[type=text]").val();
                 this_select = $(ele).find(".dropdown_class");
+                console.log("THIS_SELECT VAL");
+                console.log(this_select.val());
                 //.chosen-select -> .dropdown_class
 
                 //console.log("this_slot :- ");
@@ -991,6 +1065,23 @@
 //                console.log("check for -ve user_budget_manipulated after compute :- " + user_budget_manipulated);
 //                $("#user_budget").text(user_budget_manipulated);
             });
+
+            var other_select, other_select_val;
+
+            $('#usd').find('.actual-fields:visible').each(function(index1, ele1) {
+                console.log("repeat");
+
+                other_select = $(ele1).find(".dropdown_class");
+                other_select_val = other_select.val();
+                console.log("other_select_val :- " + other_select_val);
+                console.log("this_deleted_program_id :- " + this_deleted_program_id);
+
+                if ( other_select_val == this_deleted_program_id ) {
+                    $(ele1).removeClass("duplicate-prog-err");
+                }
+                checkDropdownsOnRemove();
+            });
+
             console.log("total_thing :- " + total_thing);
             console.log("user_budget_manipulated here :- " + user_budget_manipulated);
             user_budget_manipulated = user_budget_manipulated + total_thing_hidden;

@@ -19,6 +19,8 @@
         <b id="budget_exceeded_text" style="color: red; display: none;">You don't have sufficient funds.</b>
         <br>
         <b id="already_selected_text" style="color: red; display: none;">You cannot add duplicate programmes!</b>
+        <br>
+        <b id="blank_slot_text" style="color: red; display: none;">Enter no. of slots.</b>
       </div>
     </div>
   </div>
@@ -366,6 +368,7 @@
             if (slot == "") {
                 blankSlotResult = "yes";
                 $(outerEle).find(".slot_number").parent().parent().addClass("blank-slot-err");
+                $("#blank_slot_text").show();
                 console.log("in if, slot is blank :- " + slot);
             }
             else{
@@ -434,6 +437,7 @@
             if (slot == "") {
                 blankSlotResult = "yes";
                 $(outerEle).find(".slot_number").parent().parent().addClass("blank-slot-err");
+                $("#blank_slot_text").show();
                 console.log("in if, slot is blank :- " + slot);
             }
             else{
@@ -706,6 +710,7 @@
             $(this_obj).focus();
         }
         else{ //main else starts
+            $("#blank_slot_text").hide();
             console.log("======================================");
             console.log("check entered value");
             console.log("entered value :- " + this_val);

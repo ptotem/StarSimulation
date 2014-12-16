@@ -178,7 +178,7 @@
                               </div>
                               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
 
-                                <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
+                                <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"removeSlot()" %>
                               </div>
                             </div>
 
@@ -293,6 +293,11 @@
     {
       return programText.split("(")[1].split(")")[0];
     }
+    function removeSlot(){
+      setTimeout(function(){
+        reCalibrateBudget();
+      },2000)
+    }
     function getMaxAllowedSlots(this_program_duration){
 
 
@@ -328,10 +333,13 @@
       total_spent = 0;
       total_budget = 10000000;
       $(".cost_per_program").each(function(v,e){
+        if($(e).parents(".fields").is(":visible"))
+          {
         console.log($(e).val());
         total_spent = total_spent + parseInt($(e).val());
+      }
       });
-      $("#user_budget").text(total_budget-total_spent);
+      $("#user_budget").text(ReplaceNumberWithCommas(total_budget-total_spent));
     }
     function calculate_cost_of_program(e,t){
       var no_of_slots = $(t).val();

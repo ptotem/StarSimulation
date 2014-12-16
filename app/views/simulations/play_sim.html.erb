@@ -16,11 +16,11 @@
         </div>
       </div>
       <div class="center" style="text-align: center">
-        <b id="budget_exceeded_text" style="color: red; display: none;">You don't have sufficient funds.</b>
+        <b id="budget_exceeded_text" style="color: red; display: none;font-size:14px;">You don't have sufficient funds.</b>
         <br>
-        <b id="already_selected_text" style="color: red; display: none;">You cannot add duplicate programmes!</b>
+        <b id="already_selected_text" style="color: red; display: none;font-size:14px;">You cannot add duplicate programmes!</b>
         <br>
-        <b id="blank_slot_text" style="color: red; display: none;">Enter no. of slots.</b>
+        <b id="blank_slot_text" style="color: red; display: none;font-size:14px;">Enter no. of slots.</b>
       </div>
     </div>
   </div>
@@ -155,12 +155,13 @@
                               </div>
                               <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
                               <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 3%">
+
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")} - #{u.end_time.strftime("%T") rescue ""}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
                                 <%= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
                               </div>
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
-                                <%= user_sim_data.text_field :no_of_slots, {:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off} %>
+                                <%= user_sim_data.text_field :no_of_slots, {:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off,:disabled => true} %>
                               </div>
                               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                 <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
@@ -273,6 +274,7 @@
             contentType: "application/json",
             success: function (data) {
                 console.log(data);
+                $('.slot_number').attr('disabled',false);
                 var this_field_channel_dropdown = $(this_obj).parent().parent().find('.dropdown_class');
                 //console.log($(this_field_channel_dropdown));
                 $(this_field_channel_dropdown).empty();

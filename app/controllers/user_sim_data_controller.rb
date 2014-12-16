@@ -88,11 +88,15 @@ class UserSimDataController < ApplicationController
     gon.no_of_attempts = @no_of_attempts
 
     @sim_user_data = current_user.simulation_user_datas.where(:simulation_id=>params[:simulation_id])
+
     @user_sim_data = UserSimDatum.where(:user_id=>current_user.id, :simulation_id=>params[:simulation_id]).group(:play_count)
     @sample_array = Array.new()
     @sim_user_data.each_with_index do |sud, index|
       @sample_array << UserSimDatum.where(:user_id=>current_user.id, :simulation_id=>params[:simulation_id], :play_count=>index+1).map{|usd| usd.no_of_slots}
     end
+    sum = 0;
+    # render :json => @sample_array
+    # return
     @inner = Array.new()
     @sample_array.each do |sa|
       @inner << sa.length

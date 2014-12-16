@@ -30,8 +30,19 @@
 <div class="container">
     <div class="row">
       <div class="col-sm-12 col-md-12 col-lg-12">
-        <h1 class="white" style="font-weight: bold; margin-top: -5px;">Result</h1>
+        <h1 class="white" style="font-weight: bold; margin-top: -5px;">Result:
+           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size:0.5em;color:black;">Ideal GRP : <%= @simulation_og.sim_grp %></span>
+           &nbsp;<span style="font-size:0.5em;color:black;">Ideal CPRP : <%= @simulation_og.sim_cprp %></span>
+
+           </h1>
       </div>
+    </div>
+    <div class="row">
+
+      <!-- <ul class="grp_and_cprp_block" style="font-weight: bold; list-style: none outside none; margin: 0; padding: 2% 0 2% 1%;">
+        <li>Ideal GRP :- <%= @simulation_og.sim_grp %></li>
+        <li>Ideal CPRP :- <%= @simulation_og.sim_cprp %></li>
+      </ul> -->
     </div>
     <div class="row">
       <div class="col-sm-5 col-md-5 col-lg-5">
@@ -43,8 +54,8 @@
               <th class="text-center">Slots Bought</th>
               <th class="text-center">GRP</th>
               <th class="text-center">CPRP</th>
-              <th class="text-center">Score</th>
-              <th class="text-center">Points</th>
+              <!-- <th class="text-center">Score</th> -->
+              <!-- <th class="text-center">Points</th> -->
             </tr>
             </thead>
             <tbody>
@@ -54,17 +65,14 @@
                   <td class="text-center"><%= @inner[index] %></td>
                   <td class="text-center"><%= sim_user_data.total_grp %></td>
                   <td class="text-center"><%= sim_user_data.total_cprp %></td>
-                  <td class="text-center"><%= sim_user_data.score %></td>
-                  <td class="text-center"><%= sim_user_data.points %></td>
+                  <!-- <td class="text-center"><%= sim_user_data.score %></td> -->
+                  <!-- <td class="text-center"><%= sim_user_data.points %></td> -->
                 </tr>
             <% end %>
             </tbody>
           </table>
         </div>
-        <ul class="grp_and_cprp_block" style="font-weight: bold; list-style: none outside none; margin: 0; padding: 2% 0 0 0;">
-          <li>Ideal GRP :- <%= @simulation_og.sim_grp %></li>
-          <li>Ideal CPRP :- <%= @simulation_og.sim_cprp %></li>
-        </ul>
+
         <div class="row">
           <div class="col-sm-6 col-md-6 col-lg-6">
             <a href="#" style="margin-top: 15px !important;" class="btn btn-lg button_style" onclick="javascript:window.location.href='/'; return false;">Home</a>
@@ -137,6 +145,7 @@
 
       var max_val = Math.max(max_grp, max_cprp);
       var rounded_max_val = Math.ceil(max_val);
+      console.log(max_val);
       //var rounded_max_val = 53;
       var rounded_max_val_limit = 0;
       rounded_max_val_limit = Math.ceil(rounded_max_val / 10) * 10;
@@ -200,7 +209,7 @@
           axes: {
               // options for each axis are specified in seperate option objects.
               xaxis: {min:0, max:no_of_attempts+1, label:"No. of Attempts", tickInterval: xAxisTickInterval},
-              yaxis: {min:0, max:rounded_max_val+5000, label:"CPRP", tickInterval: yAxisTickInterval}
+              yaxis: {min:0, max:rounded_max_val+2000, label:"CPRP", tickInterval: Math.ceil((rounded_max_val+2000)/10)}
           },
           series:[
 //              {label:'GRP'},
@@ -225,7 +234,7 @@
                   axes: {
                       // options for each axis are specified in seperate option objects.
                       xaxis: {min:0, max:no_of_attempts+1, label:"No. of Attempts", tickInterval: xAxisTickInterval},
-                      yaxis: {min:0, max:parseInt(max_grp)+3, label:"GRP", tickInterval: gprpyAxisTickInterval}
+                      yaxis: {min:0, max:parseInt(max_grp)+3, label:"GRP", tickInterval: Math.ceil((parseInt(max_grp)+3)/10)}
                   },
                   series:[
 //              {label:'GRP'},

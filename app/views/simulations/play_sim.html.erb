@@ -146,27 +146,38 @@
                   <% end %>
                   <%= hidden_field_tag 'sim_user_data_budget_available', @simulation_user_data.budget_available %>
                   <div id="usd">
+                    <% count = 0 %>
                     <%= f.fields_for :user_sim_datums do |user_sim_data| %>
                         <% if user_sim_data.object.id.nil? %>
-                            <div class="actual-fields">
+                            <div class="actual-fields fld-<%=count%>">
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                 <%#= select_tag 'programme_performance_date', options_for_select(@simulation_dates.collect{ |u| [u.performance_date, u.id] }), class: 'chosen-select' %>
-                                <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), {prompt: 'Select Date', class: 'chosen-select', :onchange => 'get_this_date_slots($(this))' } %>
+                                <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), {prompt: 'Select Date', class: 'chosen-select',  :onchange => 'get_this_date_slots($(this))' } %>
                               </div>
                               <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
                               <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 3%">
 
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")} - #{u.end_time.strftime("%T") rescue ""}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
-                                <%= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
+                                <%#= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program' } %>
+                                <%= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program',:pariden=>"fld-#{count}",:onchange=>"changeProgram($(this))" } %>
+
                               </div>
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
-                                <%= user_sim_data.text_field :no_of_slots, {:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off,:disabled => true} %>
+                                <%#= user_sim_data.text_field :no_of_slots, {:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off,:disabled => true} %>
+                                <%= user_sim_data.text_field :no_of_slots ,{:value=>0,:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_cost_of_program(event, $(this))", :autocomplete => :off,:disabled => true} %>
+
                               </div>
+                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;display:none">
+                                <%= text_field_tag :cost_per_program, "0", class: 'form-control cost_per_program' %>
+                              </div>
+
                               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
                                 <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
                               </div>
                             </div>
+                            <% count = count+1 %>
+
                         <% end %>
                     <% end %>
                   </div>
@@ -231,6 +242,8 @@
 
 
 
+
+
 //      $(".chosen-select").chosen().change(function(event){
 //
 //          if(event.target == this){
@@ -257,6 +270,87 @@
 //      });
 
     });
+
+
+    // Rushabh and Rakesh' adventure in wonderland begins..
+    function getCostPerSlot(programText)
+    {
+      return programText.split("[")[1].split("]")[0];
+    }
+    function getProgramDuration(programText)
+    {
+      return programText.split("(")[1].split(")")[0];
+    }
+    function getMaxAllowedSlots(this_program_duration){
+
+
+      if (this_program_duration <= 60)  {
+        max_no_of_slots = 1;
+
+      }
+      else if ( (this_program_duration >= 61) && (this_program_duration <= 90) )  {
+        max_no_of_slots = 2;
+      }
+      else if ( (this_program_duration >= 91) && (this_program_duration <= 120) )  {
+        max_no_of_slots = 3;
+      }
+      else if ( (this_program_duration >= 121) && (this_program_duration <= 150) )  {
+        max_no_of_slots = 4;
+      }
+      else if ( (this_program_duration >= 151) && (this_program_duration <= 180) )  {
+        max_no_of_slots = 5;
+      }
+      else if ( (this_program_duration >= 181) && (this_program_duration <= 210) )  {
+        max_no_of_slots = 6;
+      }
+      else if ( (this_program_duration >= 211) && (this_program_duration <= 240) )  {
+        max_no_of_slots = 7;
+      }
+      else if ( (this_program_duration >= 241) && (this_program_duration <= 270) )  {
+        max_no_of_slots = 8;
+      }
+      return max_no_of_slots;
+    }
+
+    function reCalibrateBudget(){
+      total_spent = 0;
+      total_budget = 10000000;
+      $(".cost_per_program").each(function(v,e){
+        console.log($(e).val());
+        total_spent = total_spent + parseInt($(e).val());
+      });
+      $("#user_budget").text(total_budget-total_spent);
+    }
+    function calculate_cost_of_program(e,t){
+      var no_of_slots = $(t).val();
+      console.log(no_of_slots);
+      if(!isNaN(no_of_slots))
+        {
+          if(no_of_slots<= getMaxAllowedSlots(getProgramDuration($(t).parents("#usd").find(".selected_program option:selected").text())))
+            {
+          program_cost_per_slot = getCostPerSlot($(t).parents("#usd").find(".selected_program option:selected").text());
+          total_program_cost = parseInt(program_cost_per_slot)*parseInt(no_of_slots);
+          $(t).parents("#usd").find(".cost_per_program").val(total_program_cost);
+          reCalibrateBudget();
+        }
+        else
+          {
+            alert("Exceeded no of slots");
+            $(t).val("");
+
+          }
+
+        }
+      else
+        {
+          $(t).val("");
+        }
+    }
+    function changeProgram(t){
+      console.log($(t).parents(".actual-fields").find(".slot_number"))
+      rc=$(t).attr("pariden")
+      $("."+rc).trigger("keyup")
+    }
 
     // Toconvert number with commas
     function ReplaceNumberWithCommas(yourNumber) {
@@ -538,9 +632,9 @@
 //                console.log("this_dropdown_val :- " + this_dropdown_val);
 //                console.log("$(ele).find(.dropdown_class).val() :- " + $(ele).find(".dropdown_class").val());
 //            }
+
 //
 //        });
-
 
         //this_text_field = $(this_obj).parents(".fields").find('.form-control');
         this_text_field = $(this_obj).parents(".actual-fields:visible").find('.form-control');
@@ -686,7 +780,7 @@
                     console.log("user_budget_manipulated_keep_for_dd_change :- " + user_budget_manipulated_keep_for_dd_change)
                     user_budget_manipulated = user_budget_manipulated_keep_for_dd_change;
                     console.log("user_budget_manipulated :- " + user_budget_manipulated);
-                    $("#user_budget").text(99);
+                    $("#user_budget").text(user_budget_manipulated);
                 }
 
             }

@@ -10,7 +10,7 @@
             <h3 id="user_budget_header" class="top-bottom-nil-margin">Budget</h3>
           </div>
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
-            <h4 class="top-bottom-nil-margin"> Rs. <span id="user_budget"><%= @simulation_user_data.budget_available %></span>
+            <h4 class="top-bottom-nil-margin"> Rs. <span id="user_budget"><%= number_with_delimiter(@simulation_user_data.budget_available,:delimiter=>",") %></span>
             </h4>
           </div>
         </div>
@@ -280,7 +280,7 @@
                 var channel_name_and_start_time;
                 $.each( data, function( key, value ) {
                     //channel_name_and_start_time = value.programme_name + " " + value.start_time;
-                    channel_name_and_start_time = value[1] + " - " + value[2] + " - " + value[3];
+                    channel_name_and_start_time = value[1] + " - " + value[2] + " - " + value[3]+"("+value[4]+")";
                     $(this_field_channel_dropdown).append("<option value='"+value[0]+"'>"+channel_name_and_start_time+"</option>");
                 });
                 $(this_field_channel_dropdown).trigger("chosen:updated");
@@ -693,17 +693,12 @@
 
     function calculate_budget(event, this_obj){
 
-        console.log("----- in calculate_budget -----");
         var this_val = $(this_obj).val();
-        console.log("$(this_obj) :- ");
-        console.log($(this_obj));
         $(this_obj).parent().parent().removeClass("blank-slot-err").removeClass("duplicate-prog-err");
         //this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class').val();
         this_dropdown_val = $(this_obj).parents(".actual-fields:visible").find('.dropdown_class').val();
-        console.log("this_dropdown_val :- " + this_dropdown_val);
-        //this_dropdown_val
-        console.log("this_val :- " + this_val);
-
+        this_dropdown_text = $(".dropdown_class option:selected").text();
+        var pduration = this_dropdown_text.split("(")[1].split(")")[0]
         if(parseInt(this_val) < 0 || isNaN(this_val)) {
             console.log("please enter valid values");
             $(this_obj).val("");
@@ -711,23 +706,19 @@
         }
         else{ //main else starts
             $("#blank_slot_text").hide();
-            console.log("======================================");
-            console.log("check entered value");
-            console.log("entered value :- " + this_val);
-            console.log("simulation_id :- " + simulation_id);
-
             var data = {simulation_id:[], simulation_data_id: []};
             data["simulation_id"].push(simulation_id);
             data["simulation_data_id"].push(this_dropdown_val);
-            $.ajax({
-                url: "/get_duration",
-                type: "post",
-                async: false,
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                success: function (data) {
-                    //console.log("data");
-                    var this_program_duration = data.duration;
+            // $.ajax({
+            //     url: "/get_duration",
+            //     type: "post",
+            //     async: false,
+            //     data: JSON.stringify(data),
+            //     contentType: "application/json",
+            //     success: function (data) {
+            if(1===1){
+                                  //console.log("data");
+                    var this_program_duration = pduration;
                     console.log("this_program_duration :- " + this_program_duration);
 
                     //console.log("this_program_duration/30 :- " + this_program_duration/30);
@@ -995,7 +986,7 @@
                         //      $("#user_budget").text(user_budget_manipulated);
                     }
                 }
-            });
+            // });
 
 
         }

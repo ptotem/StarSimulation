@@ -146,10 +146,15 @@
                   <% end %>
                   <%= hidden_field_tag 'sim_user_data_budget_available', @simulation_user_data.budget_available %>
                   <div id="usd">
-                    <% count = 0 %>
+                    <% @count = 0 %>
+
                     <%= f.fields_for :user_sim_datums do |user_sim_data| %>
+                    <% count  = Random.rand(1000) %>
+
                         <% if user_sim_data.object.id.nil? %>
-                            <div class="actual-fields fld-<%=count%>">
+                            <div class="actual-fields fld-<%=@count%>">
+                                <% @count  = user_sim_data.options[:child_index]  %>
+
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
                                 <%#= select_tag 'programme_performance_date', options_for_select(@simulation_dates.collect{ |u| [u.performance_date, u.id] }), class: 'chosen-select' %>
                                 <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), {prompt: 'Select Date', class: 'chosen-select',  :onchange => 'get_this_date_slots($(this))' } %>
@@ -160,25 +165,26 @@
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")} - #{u.end_time.strftime("%T") rescue ""}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
                                 <%#= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program' } %>
-                                <%= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program',:pariden=>"fld-#{count}",:onchange=>"changeProgram($(this))" } %>
+                                <%= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program',:pariden=>"fld-#{@count}",:onchange=>"changeProgram($(this))" } %>
 
                               </div>
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
                                 <%#= user_sim_data.text_field :no_of_slots, {:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off,:disabled => true} %>
-                                <%= user_sim_data.text_field :no_of_slots ,{:value=>0,:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_cost_of_program(event, $(this))", :autocomplete => :off,:disabled => true} %>
+                                <%= user_sim_data.text_field :no_of_slots ,{:value=>0,:required => true,:pariden=>"fld-#{@count}", class: "form-control slot_number fld-#{@count}", :onkeyup=>"calculate_cost_of_program(event, $(this))", :autocomplete => :off,:disabled => true} %>
 
                               </div>
                               <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;display:none">
-                                <%= text_field_tag :cost_per_program, "0", class: 'form-control cost_per_program' %>
+                                <%= text_field_tag :cost_per_program, "0", class: "form-control cost_per_program cost_per_program_for-#{@count}" %>
                               </div>
-
                               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+
                                 <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"calculate_budget_on_remove(event, $(this))" %>
                               </div>
                             </div>
-                            <% count = count+1 %>
 
                         <% end %>
+                        <% #@count = @count+1 %>
+
                     <% end %>
                   </div>
 
@@ -233,6 +239,12 @@
     var this_dropdown_val=0;
     var na = "";
     var already_selected = false;
+    $(document).on('nested:fieldAdded', function(event){
+      // this field was just inserted into your form
+      var field = event.field;
+      console.log(field);
+      // it's a jQuery object already! Now you can find date input
+      })
     $(function(){
 
         //user_budget = $("#user_budget").text();
@@ -323,14 +335,17 @@
     }
     function calculate_cost_of_program(e,t){
       var no_of_slots = $(t).val();
+      ra  = $(t).attr("pariden");
+
       console.log(no_of_slots);
       if(!isNaN(no_of_slots))
         {
-          if(no_of_slots<= getMaxAllowedSlots(getProgramDuration($(t).parents("#usd").find(".selected_program option:selected").text())))
+          if(no_of_slots<= getMaxAllowedSlots(getProgramDuration($("select[pariden='"+ra+"'] option:selected").text())))
             {
-          program_cost_per_slot = getCostPerSlot($(t).parents("#usd").find(".selected_program option:selected").text());
+          program_cost_per_slot = getCostPerSlot($("select[pariden='"+ra+"'] option:selected").text());
+          console.log($("select[pariden='"+ra+"'] option:selected").text());
           total_program_cost = parseInt(program_cost_per_slot)*parseInt(no_of_slots);
-          $(t).parents("#usd").find(".cost_per_program").val(total_program_cost);
+          $(".cost_per_program_for-"+ra.split("-")[1]).val(total_program_cost);
           reCalibrateBudget();
         }
         else

@@ -98,8 +98,10 @@ class UserSimDataController < ApplicationController
     # render :json => @sample_array
     # return
     @inner = Array.new()
+    @no_of_slots = Array.new()
     @sample_array.each do |sa|
       @inner << sa.length
+      @no_of_slots << sa.sum
     end
     # render :json => @inner
     # return

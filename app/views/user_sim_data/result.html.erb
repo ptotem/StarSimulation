@@ -51,7 +51,7 @@
             <thead style="background-color: #fff">
             <tr>
               <th class="text-center">Attempt No.</th>
-              <th class="text-center">Slots Bought</th>
+              <th class="text-center">Total Slots</th>
               <th class="text-center">GRP</th>
               <th class="text-center">CPRP</th>
               <!-- <th class="text-center">Score</th> -->
@@ -62,7 +62,7 @@
             <% @sim_user_data.each_with_index do |sim_user_data, index| %>
                 <tr>
                   <td class="text-center"><%= index+1 %></td>
-                  <td class="text-center"><%= @inner[index] %></td>
+                  <td class="text-center"><%= @no_of_slots[index]  %></td>
                   <td class="text-center"><%= sim_user_data.total_grp %></td>
                   <td class="text-center"><%= sim_user_data.total_cprp %></td>
                   <!-- <td class="text-center"><%= sim_user_data.score %></td> -->

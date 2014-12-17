@@ -339,7 +339,10 @@
         total_spent = total_spent + parseInt($(e).val());
       }
       });
-      $("#user_budget").text(ReplaceNumberWithCommas(total_budget-total_spent));
+      total=total_budget-total_spent
+      if(!isNaN(total)){
+        $("#user_budget").text(ReplaceNumberWithCommas(total));
+      }
     }
     function calculate_cost_of_program(e,t){
       var no_of_slots = $(t).val();
@@ -537,6 +540,7 @@
         $('#usd').find('.actual-fields:visible').each(function(outerIndex, outerEle) {
             // Get selected value
             //sValue = document.getElementById('drop' + i).value;
+            console.log ($(outerEle));
             sValue = $(outerEle).find(".dropdown_class").val();
             console.log("sValue :- " + sValue);
 
@@ -564,9 +568,11 @@
             });
 
             slot = $(outerEle).find(".slot_number").val();
-            if (slot == "") {
+            // console.log(slot)
+            if ((slot==0) || (slot == '')) {
                 blankSlotResult = "yes";
                 $(outerEle).find(".slot_number").parent().parent().addClass("blank-slot-err");
+
                 $("#blank_slot_text").show();
                 console.log("in if, slot is blank :- " + slot);
             }
@@ -578,8 +584,11 @@
         // No duplicates
         //$("#already_selected_text").hide();
         console.log("dupResult :- " + dupResult);
-        if ( (dupResult != "found") && (blankSlotResult != "yes") ) {
+        console.log (blankSlotResult);
+        // if ( (dupResult != "found") && (blankSlotResult != "yes") ) {
+        if ( (dupResult != "found") && (slot != 0) ) {
             $("#submit_btn").click();
+
         }
         else{
             console.log("dupResult :- " + dupResult);

@@ -180,7 +180,7 @@
                               </div>
                               <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
 
-                                <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"removeSlot()" %>
+                                <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"removeSlot($(this))" %>
                               </div>
                             </div>
 
@@ -194,7 +194,7 @@
                   <%#= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;", :onclick=>"event.preventDefault(); return checkDropdowns();" %>
                   <%= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"display:none; position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" %>
                   <%#= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;", :onclick=>"return checkDropdowns();" %>
-                  <a href="javascript:void(0);" id="dummy_submit_btn" class="btn btn-lg button_style" style="position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" onclick="return checkDropdowns();">Submit</a>
+                  <a href="javascript:void(0);" id="dummy_submit_btn" class="btn btn-lg button_style" style="position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" onclick="return checkDropdowns();">Submit123</a>
               <% end %>
             </div>
           </div>
@@ -295,8 +295,9 @@
     {
       return programText.split("(")[1].split(")")[0];
     }
-    function removeSlot(){
+    function removeSlot(t){
       $("#budget_exceeded_text").hide();
+      $(t).parents(".actual-fields").remove();
       $('#already_selected_text').hide();
       setTimeout(function(){
         reCalibrateBudget();
@@ -623,18 +624,11 @@
         console.log("dupResult :- " + dupResult);
 
         // if ( (dupResult != "found") && (blankSlotResult != "yes") ) {
-        if ( (dupResult != "found") && (slot != 0) ) {
-            // $("#submit_btn").click();
-            if(parseInt($('#user_budget').text()) >= 0 ){
-              // alert("bbbb")
-              $("#submit_btn").click();
-            }
-
-
+        if ( (dupResult != "found") && (slot != 0) && (parseInt($('#user_budget').text()) >= 0 ) ) {
+            $("#submit_btn").trigger('click');
         }
         else{
-            console.log("dupResult :- " + dupResult);
-            console.log("blankSlotResult :- " + blankSlotResult);
+          // alert("true")
         }
         return true;
         //$('form').submit();
@@ -887,7 +881,7 @@
         if(parseInt(this_val) < 0 || isNaN(this_val)) {
             console.log("please enter valid values");
             $(this_obj).val("");
-            $(this_obj).focus();
+            // $(this_obj).focus();
         }
         else{ //main else starts
             $("#blank_slot_text").hide();

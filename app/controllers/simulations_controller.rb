@@ -195,7 +195,7 @@ class SimulationsController < ApplicationController
     # return
 
     # @simulation_user_data = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
-    @simulation_user_data = current_user.simulation_user_datas.new(:simulation_id=>@simulation.id, :budget=>10000000, :budget_available=>10000000)
+    @simulation_user_data = current_user.simulation_user_datas.new(:simulation_id=>@simulation.id, :budget=>10000000, :budget_available=>1000000)
     # @simulation_user_data.save!
     # @usd = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
     # render :json => @simulation_user_data

@@ -162,7 +162,7 @@
                                 <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), {prompt: 'Select Date', class: 'chosen-select',  :onchange => 'get_this_date_slots($(this))' } %>
                               </div>
                               <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
-                              <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 3%">
+                              <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 6%">
 
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
                                 <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")} - #{u.end_time.strftime("%T") rescue ""}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
@@ -297,6 +297,7 @@
     }
     function removeSlot(){
       $("#budget_exceeded_text").hide();
+      $('#already_selected_text').hide();
       setTimeout(function(){
         reCalibrateBudget();
 
@@ -342,6 +343,8 @@
             if (($(e).val()) != 0 ){
               console.log($(e))
               $(e).parents('.actual-fields').removeClass("blank-slot-err");
+              $(e).parents('.actual-fields').removeClass("duplicate-prog-err");
+
               $("#blank_slot_text").hide();
             }
 
@@ -353,6 +356,8 @@
         $("#user_budget").text(ReplaceNumberWithCommas(total));
         $('#exceeded_slots').hide();
         $('#budget_exceeded_text').hide();
+        $('#already_selected_text').hide();
+
         return 0;
       }
       if(total < 0){
@@ -363,6 +368,7 @@
       }
     }
     function calculate_cost_of_program(e,t){
+
       var no_of_slots = $(t).val();
       ra  = $(t).attr("pariden");
 
@@ -378,6 +384,7 @@
           if(reCalibrateBudget() == -1)
             {
             $(t).val("")
+
             }
         }
         else

@@ -21,6 +21,8 @@
         <b id="already_selected_text" style="color: red; display: none;font-size:14px;">You cannot add duplicate programmes!</b>
         <br>
         <b id="blank_slot_text" style="color: red; display: none;font-size:14px;">Enter no. of slots.</b>
+        <br>
+        <b id="exceeded_slots" style="color: red; display: none;font-size:14px;">Exceeded no of slots</b>
       </div>
     </div>
   </div>
@@ -294,8 +296,10 @@
       return programText.split("(")[1].split(")")[0];
     }
     function removeSlot(){
+      $("#budget_exceeded_text").hide();
       setTimeout(function(){
         reCalibrateBudget();
+
       },2000)
     }
     function getMaxAllowedSlots(this_program_duration){
@@ -331,17 +335,31 @@
 
     function reCalibrateBudget(){
       total_spent = 0;
-      total_budget = 10000000;
+      total_budget = 20000;
       $(".cost_per_program").each(function(v,e){
         if($(e).parents(".fields").is(":visible"))
           {
-        console.log($(e).val());
+            if (($(e).val()) != 0 ){
+              console.log($(e))
+              $(e).parents('.actual-fields').removeClass("blank-slot-err");
+              $("#blank_slot_text").hide();
+            }
+
         total_spent = total_spent + parseInt($(e).val());
       }
       });
       total=total_budget-total_spent
-      if(!isNaN(total)){
+      if((!isNaN(total)) && (total >= 0)){
         $("#user_budget").text(ReplaceNumberWithCommas(total));
+        $('#exceeded_slots').hide();
+        $('#budget_exceeded_text').hide();
+        return 0;
+      }
+      if(total < 0){
+
+        $("#budget_exceeded_text").show();
+        return -1;
+
       }
     }
     function calculate_cost_of_program(e,t){
@@ -357,11 +375,14 @@
           console.log($("select[pariden='"+ra+"'] option:selected").text());
           total_program_cost = parseInt(program_cost_per_slot)*parseInt(no_of_slots);
           $(".cost_per_program_for-"+ra.split("-")[1]).val(total_program_cost);
-          reCalibrateBudget();
+          if(reCalibrateBudget() == -1)
+            {
+            $(t).val("")
+            }
         }
         else
           {
-            alert("Exceeded no of slots");
+            $('#exceeded_slots').show();
             $(t).val("");
 
           }
@@ -372,6 +393,13 @@
           $(t).val("");
         }
     }
+
+    // $('#dSuggest').keypress(function() {
+    //   var dInput = this.value;
+    //   console.log(dInput);
+    //   $(".dDimension:contains('" + dInput + "')").css("display","block");
+    // });
+
     function changeProgram(t){
       console.log($(t).parents(".actual-fields").find(".slot_number"))
       rc=$(t).attr("pariden")
@@ -505,7 +533,9 @@
                 console.log("in if, slot is blank :- " + slot);
             }
             else{
-                console.log("else slot :- " + slot);
+              $(outerEle).find(".slot_number").parent().parent().removeClass("blank-slot-err");
+              $("#blank_slot_text").hide();
+
             }
         });
 
@@ -584,10 +614,15 @@
         // No duplicates
         //$("#already_selected_text").hide();
         console.log("dupResult :- " + dupResult);
-        console.log (blankSlotResult);
+
         // if ( (dupResult != "found") && (blankSlotResult != "yes") ) {
         if ( (dupResult != "found") && (slot != 0) ) {
-            $("#submit_btn").click();
+            // $("#submit_btn").click();
+            if(parseInt($('#user_budget').text()) >= 0 ){
+              // alert("bbbb")
+              $("#submit_btn").click();
+            }
+
 
         }
         else{

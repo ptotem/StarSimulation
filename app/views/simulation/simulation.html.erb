@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mediasimulation</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<%= form_tag({action: :simulate}, multipart: true) do %>
+    <p><label for="post_title">Enter game NAme</label> :
+      <%= text_field_tag(:contact) %>
+    <br/>
+      <p><label for="destination">Enter game Location</label> :
+      <%= text_field_tag(:destination) %>
+    <p><label for="upload_file">Select File</label> :
+      <%= file_field_tag 'picture' %>
+    <%= button_to "Some Button", :method=> "simulate" %>
+<% end %>
+<%= yield %>
+
+</body>
+</html>

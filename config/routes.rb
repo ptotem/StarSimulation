@@ -4,7 +4,8 @@ StarMediaSim::Application.routes.draw do
   resources :simulation_data
 
   resources :simulations
-
+  match 'game', to: 'game#simulation', via: [:get, :post]
+  match 'simulate', to: 'game#simulate', via: [:get, :post]
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   mount RailsAdminImport::Engine => '/rails_admin_import', :as => 'rails_admin_import'
   devise_for :users

@@ -5,9 +5,9 @@ gem 'rails', '4.0.0'
 
 gem 'execjs'
 gem 'therubyracer'
-
+gem 'sqlite3'
 # Use mysql as the database for Active Record
-gem 'mysql2'
+# gem 'mysql2'
 
 gem 'devise'
 gem 'rails_admin'
@@ -39,9 +39,10 @@ gem 'jbuilder', '~> 1.2'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
-  gem 'sdoc', require: false
+  # gem 'sdoc', require: false
 end
-
+gem "gon"
+gem 'rubyzip'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 

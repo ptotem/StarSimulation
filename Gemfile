@@ -7,7 +7,8 @@ gem 'execjs'
 gem 'therubyracer'
 
 # Use mysql as the database for Active Record
-gem 'mysql2'
+# gem 'mysql2'
+gem 'sqlite3'
 
 gem 'devise'
 gem 'cancan'

@@ -1,16 +1,42 @@
-<style>
-    IFRAME:focus {
-        outline: none;
+
+<style type="text/css">
+    table.gridtable {
+        font-family: verdana, arial, sans-serif;
+        font-size: 11px;
+        color: black;
+        border-width: 1px;
+        border-color: white;
+        border-collapse: collapse;
     }
 
-    IFRAME[seamless] {
-        display: block;
+    table.gridtable th {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: white;
+        background-color: #dedede;
+    }
+
+    table.gridtable td {
+        border-width: 1px;
+        padding: 8px;
+        border-style: solid;
+        border-color: white;
+        background-color: #ffffff;
     }
 </style>
-<h2>Game List</h2>
-    <% @game_info.each do |game| %>
-    <a id="game_<%= game.id %>" href="#" ><%= game.name %></a>
-    <IFRAME src="<%= @game.description %>" width="1000px;" height="500px" />
-        <br/>
-    <% end %>
 
+</br>
+</br></br>
+<table class="gridtable">
+    <tr>
+        <th>Game Name</th>
+    </tr>
+    <% @game_info.each do |game| %>
+    <tr id="game_info<%= game.id %>">
+        <td><%= game.name %></td>
+        <td>
+            <%= link_to 'Play', game_show_path(game.id) %></td>
+    </tr>
+    <% end %>
+</table>

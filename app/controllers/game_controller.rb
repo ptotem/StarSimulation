@@ -39,4 +39,10 @@ class GameController < ApplicationController
     @iframe_url=@game.description;
 
   end
+
+  def gameframe
+    @game_info=Game.all
+    @game=Game.find(params[:id]);
+
+  end
 end

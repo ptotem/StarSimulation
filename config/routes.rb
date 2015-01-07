@@ -5,6 +5,8 @@ StarMediaSim::Application.routes.draw do
 
   resources :simulations
   match 'game', to: 'game#simulation', via: [:get, :post]
+  get 'game/:id' => 'game#gameframe', as: :game_show
+  # match 'gameframe', to: 'game#gameframe', via: [:get, :post]
   match 'simulate', to: 'game#simulate', via: [:get, :post]
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   mount RailsAdminImport::Engine => '/rails_admin_import', :as => 'rails_admin_import'

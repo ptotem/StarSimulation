@@ -1,10 +1,9 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   # get 'welcome/index'
-  # get 'simulation/simulation' => 'simulation#simulate'
-  get 'game/:id' => 'simulation#gamedata', as: :game_show
+  # get 'simulate' => 'simulation#simulate'
+  # get 'game/:id' => 'simulation#gamedata', as: :game_show
   match 'simulation', to: 'simulation#simulation', via: [:get, :post]
-  match 'simulate', to: 'simulation#simulate', via: [:get, :post]
   match 'simulate', to: 'simulation#simulate', via: [:get, :post]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

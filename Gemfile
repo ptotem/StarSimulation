@@ -43,4 +43,5 @@ gem "rails_admin"
 gem "gon"
 gem 'rubyzip'
 # gem 'rubyzip', :require => 'zip/zip'
-gem 'rubyzip', :require => 'zip/zip'
+# gem 'rubyzip', :require => 'zip/zip'
+# gem 'pg'

@@ -1,0 +1,1325 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+      <h2 class="white" style="font-weight: bold">You are playing <%= @simulation.name %></h2>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
+      <div class="budget_div">
+        <div class="row">
+          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+            <h3 id="user_budget_header" class="top-bottom-nil-margin">Budget</h3>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
+            <h4 class="top-bottom-nil-margin"> Rs. <span id="user_budget"><%= number_with_delimiter(@simulation_user_data.budget_available,:delimiter=>",") %></span>
+            </h4>
+          </div>
+        </div>
+      </div>
+      <div class="center" style="text-align: center">
+        <b id="budget_exceeded_text" style="color: red; display: none;font-size:14px;">You don't have sufficient funds.</b>
+        <br>
+        <b id="already_selected_text" style="color: red; display: none;font-size:14px;">You cannot add duplicate programmes!</b>
+        <br>
+        <b id="blank_slot_text" style="color: red; display: none;font-size:14px;">Enter no. of slots.</b>
+        <br>
+        <b id="exceeded_slots" style="color: red; display: none;font-size:14px;">Exceeded no of slots</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" style="padding-top: 5%">
+    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+      <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <h3 class="white" style="font-weight: bold">Instructions</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="height: 272px; overflow-y: auto;">
+          <p class="white" id="instruction_text">
+            Objective: Achieving Maximum GRPs with the least CPRPs possible <br>
+            Your budget is displayed on the top right <br><br>
+            How to play!
+              <ol class="white" style="margin-top: -37%; font-weight: bold;">
+                <li>Click on 'Download Excel' to download the excel sheet containing the TAM data.</li>
+                <li>Go through the data and analyze it.</li>
+                <li>Select the dates from the drop-down menu on your right.</li>
+                <li>Select the program.</li>
+                <li>Enter the number of slots you plan to buy.</li>
+                <li>
+                  <!--REMEMBER, You can buy only 1 slot for a 30-minute program.-->
+                  There is a limit on the number of slots you buy.
+                  <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                          <th>Duration in Minutes</th>
+                          <th> 	Max # of Spots</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <td>0-60</td>
+                          <td>1</td>
+                        </tr>
+                        <tr>
+                          <td>61-90</td>
+                          <td>2</td>
+                        </tr>
+                        <tr>
+                          <td>91-120</td>
+                          <td>3</td>
+                        </tr>
+                        <tr>
+                          <td>121-150</td>
+                          <td>4</td>
+                        </tr>
+                        <tr>
+                          <td>151-180</td>
+                          <td>5</td>
+                        </tr>
+                        <tr>
+                          <td>181-210</td>
+                          <td>6</td>
+                        </tr>
+                        <tr>
+                          <td>211-240</td>
+                          <td>7</td>
+                        </tr>
+                        <tr>
+                          <td>241-270</td>
+                          <td>8</td>
+                        </tr>
+                    </tbody>
+                  </table>
+                </li>
+                <li>Click 'Submit' once you finish entering the required slots.</li>
+                <li>Now review your media plan against the ideal one.</li>
+              </ol>
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <% if @simulation.excel_file.blank? %>
+              <%= link_to 'Download Excel',  "#", :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
+          <% else %>
+              <%= link_to 'Download Excel',  @simulation.excel_file.url, :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <h4 style="float: left; width: 22%;" class="text-center">Select Date</h4>
+          <h4 style="float: left; width: 45%;" class="text-center">Select Program</h4>
+          <h4>No. of Slots</h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
+          <%#= flash[:notice].blank? %>
+          <%# if flash[:notice].blank? %>
+            <!--not-->
+          <%# else %>
+              <%# if flash[:notice].include?("sign")!=false %>
+                <!--<div style="color: red; text-align: center;"><%#= flash[:notice] %></div>-->
+              <%# end %>
+          <%# end %>
+          <div class="program-wall">
+            <div class="row">
+              <%= nested_form_for @simulation do |f| %>
+                  <div id="sud">
+                    <%#= f.fields_for @simulation_user_data do |sim_user_data| %>
+                        <%#= sim_user_data.hidden_field :simulation_id, :value=>@simulation.id %>
+                        <%#= sim_user_data.hidden_field :user_id, :value=>current_user.id %>
+                    <%# end %>
+                  </div>
+                  <% if @simulation.errors.any? %>
+                      <div id="error_explanation">
+                        <h2><%= pluralize(@simulation.errors.count, "error") %> prohibited this article from being saved:</h2>
+
+                        <ul>
+                          <% @simulation.errors.full_messages.each do |msg| %>
+                              <li><%= msg %></li>
+                          <% end %>
+                        </ul>
+                      </div>
+                  <% end %>
+                  <%= hidden_field_tag 'sim_user_data_budget_available', @simulation_user_data.budget_available %>
+                  <div id="usd">
+                    <% @count = 0 %>
+
+                    <%= f.fields_for :user_sim_datums do |user_sim_data| %>
+                    <% count  = Random.rand(1000) %>
+
+                        <% if user_sim_data.object.id.nil? %>
+                            <div class="actual-fields fld-<%=@count%>">
+                                <% @count  = user_sim_data.options[:child_index]  %>
+
+                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                                <%#= select_tag 'programme_performance_date', options_for_select(@simulation_dates.collect{ |u| [u.performance_date, u.id] }), class: 'chosen-select' %>
+                                <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), {prompt: 'Select Date', class: 'chosen-select',  :onchange => 'get_this_date_slots($(this))' } %>
+                              </div>
+                              <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
+                              <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 6%">
+
+                                <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
+                                <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")} - #{u.end_time.strftime("%T") rescue ""}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
+                                <%#= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program' } %>
+                                <%= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program',:pariden=>"fld-#{@count}",:onchange=>"changeProgram($(this))" } %>
+
+                              </div>
+                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
+                                <%#= user_sim_data.text_field :no_of_slots, {:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off,:disabled => true} %>
+                                <%= user_sim_data.text_field :no_of_slots ,{:value=>0,:required => true,:pariden=>"fld-#{@count}", class: "form-control slot_number fld-#{@count}", :onkeyup=>"calculate_cost_of_program(event, $(this))", :autocomplete => :off,:disabled => true} %>
+
+                              </div>
+                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;display:none">
+                                <%= text_field_tag :cost_per_program, "0", class: "form-control cost_per_program cost_per_program_for-#{@count}" %>
+                              </div>
+                              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+
+                                <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"removeSlot($(this))" %>
+                              </div>
+                            </div>
+
+                        <% end %>
+                        <% #@count = @count+1 %>
+
+                    <% end %>
+                  </div>
+
+                  <%= f.link_to_add "Add", :user_sim_datums, :class=>"btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; left: 15px; font-size: 1.4em;" %>
+                  <%#= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;", :onclick=>"event.preventDefault(); return checkDropdowns();" %>
+                  <%= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"display:none; position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" %>
+                  <%#= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;", :onclick=>"return checkDropdowns();" %>
+                  <a href="javascript:void(0);" id="dummy_submit_btn" class="btn btn-lg button_style" style="position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" onclick="return checkDropdowns();">Submit</a>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!--Budget :- <span id="user_budget"> <%#= @simulation_user_data.budget %> </span>-->
+
+<%#= nested_form_for @simulation do |f| %>
+
+
+<%#= f.fields_for :user_sim_datums do |user_sim_data| %>
+
+<%#= user_sim_data.hidden_field :user_id, :value => current_user.id %>
+
+<!--<label>Select Programme</label>-->
+<%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select'} %>
+<%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select' , :onchange => 'get_cost($(this))' }%>
+
+<%#= f.label :no_of_slots %>
+<%#= user_sim_data.text_field :no_of_slots, {:onkeyup=>"calculate_budget($(this))", :onfocus=>"get_my_dropdown_val($(this))"} %>
+<%#= user_sim_data.text_field :no_of_slots, {:onfocus=>"get_my_dropdown_val($(this))"} %>
+
+<%#= @simulation_data.map { |u| "#{u.cost_per_slot}" }%>
+
+<%#= user_sim_data.link_to_remove "Remove this task" %>
+<%# end %>
+<!--<p><%#= f.link_to_add "Add a task", :user_sim_datums %></p>-->
+
+<%#= f.submit "Submit", :class => "btn" %>
+<%# end %>
+
+<script>
+    var user_budget_manipulated, user_budget_real, user_budget_manipulated_keep_for_dd_change;
+    var simulation_id = <%= @simulation.id %>
+    var cost_per_slot;
+    var tvr, cprp;
+    var total_thing = 0;
+    var this_dropdown_val=0;
+    var na = "";
+    var already_selected = false;
+    $(document).on('nested:fieldAdded', function(event){
+      // this field was just inserted into your form
+      var field = event.field;
+      console.log(field);
+      // it's a jQuery object already! Now you can find date input
+      })
+    $(function(){
+
+        //user_budget = $("#user_budget").text();
+        user_budget_manipulated = <%= @simulation_user_data.budget_available %>
+                user_budget_real = <%= @simulation_user_data.budget %>
+
+
+
+
+
+
+//      $(".chosen-select").chosen().change(function(event){
+//
+//          if(event.target == this){
+//
+//              var this_selected_val = $(this).val();
+//              //console.log("this_selected_val :- " + this_selected_val)
+//
+//              var data = {simulation_id:[], simulation_data_id: []};
+//              data["simulation_id"].push(simulation_id);
+//              data["simulation_data_id"].push(this_selected_val);
+//              $.ajax({
+//                  url: "/get_cost",
+//                  type: "post",
+//                  async: false,
+//                  data: JSON.stringify(data),
+//                  contentType: "application/json",
+//                  success: function (data) {
+//                      console.log(data[0].cost_per_slot);
+//                      cost_per_slot = data[0].cost_per_slot;
+//                      console.log("cost_per_slot :- " + cost_per_slot)
+//                  }
+//              })
+//          }
+//      });
+
+    });
+
+
+    // Rushabh and Rakesh' adventure in wonderland begins..
+    function getCostPerSlot(programText)
+    {
+      return programText.split("[")[1].split("]")[0];
+    }
+    function getProgramDuration(programText)
+    {
+      return programText.split("(")[1].split(")")[0];
+    }
+    function removeSlot(t){
+      $("#budget_exceeded_text").hide();
+      $(t).parents(".actual-fields").remove();
+      $('#already_selected_text').hide();
+      setTimeout(function(){
+        reCalibrateBudget();
+
+      },2000)
+    }
+    function getMaxAllowedSlots(this_program_duration){
+
+
+      if (this_program_duration <= 60)  {
+        max_no_of_slots = 1;
+
+      }
+      else if ( (this_program_duration >= 61) && (this_program_duration <= 90) )  {
+        max_no_of_slots = 2;
+      }
+      else if ( (this_program_duration >= 91) && (this_program_duration <= 120) )  {
+        max_no_of_slots = 3;
+      }
+      else if ( (this_program_duration >= 121) && (this_program_duration <= 150) )  {
+        max_no_of_slots = 4;
+      }
+      else if ( (this_program_duration >= 151) && (this_program_duration <= 180) )  {
+        max_no_of_slots = 5;
+      }
+      else if ( (this_program_duration >= 181) && (this_program_duration <= 210) )  {
+        max_no_of_slots = 6;
+      }
+      else if ( (this_program_duration >= 211) && (this_program_duration <= 240) )  {
+        max_no_of_slots = 7;
+      }
+      else if ( (this_program_duration >= 241) && (this_program_duration <= 270) )  {
+        max_no_of_slots = 8;
+      }
+      return max_no_of_slots;
+    }
+
+    function reCalibrateBudget(){
+      total_spent = 0;
+      total_budget = 10000000;
+      $(".cost_per_program").each(function(v,e){
+        if($(e).parents(".fields").is(":visible"))
+          {
+            if (($(e).val()) != 0 ){
+              console.log($(e))
+              $(e).parents('.actual-fields').removeClass("blank-slot-err");
+              $(e).parents('.actual-fields').removeClass("duplicate-prog-err");
+
+              $("#blank_slot_text").hide();
+            }
+
+        total_spent = total_spent + parseInt($(e).val());
+      }
+      });
+      total=total_budget-total_spent
+      if((!isNaN(total)) && (total >= 0)){
+        $("#user_budget").text(ReplaceNumberWithCommas(total));
+        $('#exceeded_slots').hide();
+        $('#budget_exceeded_text').hide();
+        $('#already_selected_text').hide();
+
+        return 0;
+      }
+      if(total < 0){
+
+        $("#budget_exceeded_text").show();
+        return -1;
+
+      }
+    }
+    function calculate_cost_of_program(e,t){
+
+      var no_of_slots = $(t).val();
+      ra  = $(t).attr("pariden");
+
+      console.log(no_of_slots);
+      if(!isNaN(no_of_slots))
+        {
+          if(no_of_slots<= getMaxAllowedSlots(getProgramDuration($("select[pariden='"+ra+"'] option:selected").text())))
+            {
+          program_cost_per_slot = getCostPerSlot($("select[pariden='"+ra+"'] option:selected").text());
+          console.log($("select[pariden='"+ra+"'] option:selected").text());
+          total_program_cost = parseInt(program_cost_per_slot)*parseInt(no_of_slots);
+          $(".cost_per_program_for-"+ra.split("-")[1]).val(total_program_cost);
+          if(reCalibrateBudget() == -1)
+            {
+            $(t).val("")
+
+            }
+        }
+        else
+          {
+            $('#exceeded_slots').show();
+            $(t).val("");
+
+          }
+
+        }
+      else
+        {
+          $(t).val("");
+        }
+    }
+
+    // $('#dSuggest').keypress(function() {
+    //   var dInput = this.value;
+    //   console.log(dInput);
+    //   $(".dDimension:contains('" + dInput + "')").css("display","block");
+    // });
+
+    function changeProgram(t){
+      console.log($(t).parents(".actual-fields").find(".slot_number"))
+      rc=$(t).attr("pariden")
+      $("."+rc).trigger("keyup")
+    }
+
+    // Toconvert number with commas
+    function ReplaceNumberWithCommas(yourNumber) {
+      //Seperates the components of the number
+      var n= yourNumber.toString().split(".");
+      //Comma-fies the first part
+      n[0] = n[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      //Combines the two sections
+      return n.join(".");
+    }
+
+
+    function get_this_date_slots(this_obj){
+
+        var this_date = $(this_obj).val();
+
+        var data = {simulation_id:[], this_date: []};
+        data["simulation_id"].push(simulation_id);
+        data["this_date"].push(this_date);
+
+        $.ajax({
+            url: "/get_this_date_slots",
+            type: "post",
+            async: false,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+                $('.slot_number').attr('disabled',false);
+                var this_field_channel_dropdown = $(this_obj).parent().parent().find('.dropdown_class');
+                //console.log($(this_field_channel_dropdown));
+                $(this_field_channel_dropdown).empty();
+                $(this_field_channel_dropdown).trigger("chosen:updated");
+                var channel_name_and_start_time;
+                $.each( data, function( key, value ) {
+                    //channel_name_and_start_time = value.programme_name + " " + value.start_time;
+                    channel_name_and_start_time = value[1] + " - " + value[2] + " - " + value[3]+"("+value[4]+")["+value[5]+"]";
+                    $(this_field_channel_dropdown).append("<option value='"+value[0]+"'>"+channel_name_and_start_time+"</option>");
+                });
+                $(this_field_channel_dropdown).trigger("chosen:updated");
+            }
+        })
+    }
+
+    function get_cost(this_obj){
+        //console.log($(this_obj));
+        var this_val = $(this_obj).val();
+        //var this_text_field = $(this_obj).parents(".fields").find('.form-control');
+        var this_text_field = $(this_obj).parents(".actual-fields:visible").find('.form-control');
+        console.log("---- in get_cost() ------");
+        console.log("this_val :- " + this_val);
+
+        var data = {simulation_id:[], simulation_data_id: []};
+        data["simulation_id"].push(simulation_id);
+        data["simulation_data_id"].push(this_val);
+        $.ajax({
+            url: "/get_cost",
+            type: "post",
+            async: false,
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data.cost_per_slot);
+                cost_per_slot = data.cost_per_slot;
+                tvr = data.tvr;
+                console.log("tvr :- " + tvr);
+                cprp = parseInt(cost_per_slot/tvr);
+                console.log("cprp :- " + cprp);
+                //get_this_select_text_and_update_budget($(this_obj), $(this_text_field));
+            }
+        })
+    }
+
+    function checkDropdownsOnRemove(){
+        console.log("in checkDropdownsOnRemove");
+        $("#already_selected_text").hide();
+
+        // The number of dropdowns you have (use the naming convention 'dropx' as an id attribute)
+        //var iDropdowns = 4;
+
+        //var actual_dropdown_len = $('#usd').find('.actual-fields:visible').find(".dropdown_class").length;
+        //console.log("actual_dropdown_len :- " + actual_dropdown_len);
+
+
+        var sValue;
+        var sValue2;
+        var dupResult = "";
+        var slot;
+        var blankSlotResult = "";
+        // Loop over dropdowns
+
+        $('#usd').find('.actual-fields:visible').each(function(outerIndex, outerEle) {
+            // Get selected value
+            //sValue = document.getElementById('drop' + i).value;
+            sValue = $(outerEle).find(".dropdown_class").val();
+            console.log("sValue :- " + sValue);
+
+            // Nested loop - loop over dropdowns again
+            $('#usd').find('.actual-fields:visible').each(function(innerIndex, innerEle) {
+                // Get selected value
+                //sValue2 = document.getElementById('drop' + j).value;
+                sValue2 = $(innerEle).find(".dropdown_class").val();
+                console.log("sValue2 :- " + sValue2);
+
+                // If we're not checking the same dropdown and the values are the same...
+                if ( outerIndex != innerIndex && sValue == sValue2 )
+                {
+                    // ...we have a duplicate!
+                    //alert('Duplicate!');
+                    //$(innerEle).find(".dropdown_class").parent().parent().addClass("duplicate-prog-err");
+                    $(outerEle).find(".dropdown_class").parent().parent().addClass("duplicate-prog-err");
+                    //$(innerEle).find(".dropdown_class").parent().css("border","2px solid red");
+                    $("#already_selected_text").show();
+                    dupResult = "found";
+                    //$("#submit_btn").css('pointer-events', 'none');
+
+                    return false;
+                }
+            });
+
+            slot = $(outerEle).find(".slot_number").val();
+            if (slot == "") {
+                blankSlotResult = "yes";
+                $(outerEle).find(".slot_number").parent().parent().addClass("blank-slot-err");
+                $("#blank_slot_text").show();
+                console.log("in if, slot is blank :- " + slot);
+            }
+            else{
+              $(outerEle).find(".slot_number").parent().parent().removeClass("blank-slot-err");
+              $("#blank_slot_text").hide();
+
+            }
+        });
+
+        // No duplicates
+        //$("#already_selected_text").hide();
+        console.log("dupResult :- " + dupResult);
+
+        return true;
+        //$('form').submit();
+
+        //return false;
+    }
+
+    function checkDropdowns(){
+        console.log("in checkDropdowns()");
+        $("#already_selected_text").hide();
+
+        // The number of dropdowns you have (use the naming convention 'dropx' as an id attribute)
+        //var iDropdowns = 4;
+
+        //var actual_dropdown_len = $('#usd').find('.actual-fields:visible').find(".dropdown_class").length;
+        //console.log("actual_dropdown_len :- " + actual_dropdown_len);
+
+
+        var sValue;
+        var sValue2;
+        var dupResult = "";
+        var slot;
+        var blankSlotResult = "";
+        // Loop over dropdowns
+
+        $('#usd').find('.actual-fields:visible').each(function(outerIndex, outerEle) {
+            // Get selected value
+            //sValue = document.getElementById('drop' + i).value;
+            console.log ($(outerEle));
+            sValue = $(outerEle).find(".dropdown_class").val();
+            console.log("sValue :- " + sValue);
+
+            // Nested loop - loop over dropdowns again
+            $('#usd').find('.actual-fields:visible').each(function(innerIndex, innerEle) {
+                // Get selected value
+                //sValue2 = document.getElementById('drop' + j).value;
+                sValue2 = $(innerEle).find(".dropdown_class").val();
+                console.log("sValue2 :- " + sValue2);
+
+                // If we're not checking the same dropdown and the values are the same...
+                if ( outerIndex != innerIndex && sValue == sValue2 )
+                {
+                    // ...we have a duplicate!
+                    //alert('Duplicate!');
+                    //$(innerEle).find(".dropdown_class").parent().parent().addClass("duplicate-prog-err");
+                    $(outerEle).find(".dropdown_class").parent().parent().addClass("duplicate-prog-err");
+                    //$(innerEle).find(".dropdown_class").parent().css("border","2px solid red");
+                    $("#already_selected_text").show();
+                    dupResult = "found";
+                    //$("#submit_btn").css('pointer-events', 'none');
+
+                    return false;
+                }
+            });
+
+            slot = $(outerEle).find(".slot_number").val();
+            // console.log(slot)
+            if ((slot==0) || (slot == '')) {
+                blankSlotResult = "yes";
+                $(outerEle).find(".slot_number").parent().parent().addClass("blank-slot-err");
+
+                $("#blank_slot_text").show();
+                console.log("in if, slot is blank :- " + slot);
+            }
+            else{
+                console.log("else slot :- " + slot);
+            }
+        });
+
+        // No duplicates
+        //$("#already_selected_text").hide();
+        console.log("dupResult :- " + dupResult);
+
+        // if ( (dupResult != "found") && (blankSlotResult != "yes") ) {
+        if ( (dupResult != "found") && (slot != 0) && (parseInt($('#user_budget').text()) >= 0 ) ) {
+            $("#submit_btn").trigger('click');
+        }
+        else{
+          // alert("true")
+        }
+        return true;
+        //$('form').submit();
+
+        //return false;
+    }
+
+    function get_cost_only_for_change(this_obj){
+
+
+        console.log("------ get_cost_only_for_change() -----");
+        //console.log("user_budget_manipulated :- " + user_budget_manipulated);
+        var this_dropdown, this_dropdown_val;
+        var this_text_field, this_text_field_val, this_dropdown_id;
+        var this_cost_per_slot, this_text_field_val;
+        this_dropdown = $(this_obj);
+        this_dropdown_text = $(".dropdown_class option:selected").text();
+        var pcost = this_dropdown_text.split("[")[1].split("]")[0]
+
+        this_dropdown.parent().parent().removeClass("duplicate-prog-err");
+        console.log("this_dropdown");
+        console.log(this_dropdown);
+        this_dropdown_val = this_dropdown.val();
+        this_dropdown_id = this_dropdown.attr("id");
+
+        //console.log(this_dropdown);
+        console.log("this_dropdown_val :- " + this_dropdown_val);
+        console.log("this_dropdown id :- " + this_dropdown_id);
+
+        console.log("STARTING");
+        $("#already_selected_text").hide();
+        //$("#submit_btn").css('pointer-events', 'auto');
+
+//        $('#usd').find('.actual-fields:visible').each(function(index, ele) {
+//            console.log($(ele).find(".dropdown_class").val());
+//            if (this_dropdown_id != $(ele).find(".dropdown_class").attr("id")) {
+//                if (this_dropdown_val == $(ele).find(".dropdown_class").val()) {
+//                    console.log("Already Selected");
+//                    already_selected = true;
+//                    $("#already_selected_text").show();
+//                    $("#submit_btn").css('pointer-events', 'none');
+//                }
+////                else{
+////                    console.log("Can Select");
+////                    $("#already_selected_text").hide();
+////                    $("#submit_btn").css('pointer-events', 'auto');
+////                }
+//            }
+////            else if (this_dropdown_id == $(ele).find(".dropdown_class").attr("id")) {
+////                console.log("here");
+////                //console.log("this_dropdown_id :- " + this_dropdown_id);
+////                //console.log("$(ele).find(.dropdown_class).attr(id) :- " + $(ele).find(".dropdown_class").attr("id"));
+//////                console.log("this_dropdown_val :- " + this_dropdown_val);
+//////                console.log("$(ele).find(.dropdown_class).val() :- " + $(ele).find(".dropdown_class").val());
+//////
+//////                if (this_dropdown_val == $(ele).find(".dropdown_class").val()) {
+//////                    console.log("Changed");
+//////                    $("#already_selected_text").hide();
+//////                    $("#submit_btn").css('pointer-events', 'auto');
+//////                }
+//////                else{
+//////                    console.log("Changed 2");
+//////                    $("#already_selected_text").hide();
+//////                    $("#submit_btn").css('pointer-events', 'auto');
+//////                }
+////            }
+//            else{
+//                console.log("Doesn't Matches");
+//                console.log("this_dropdown_val :- " + this_dropdown_val);
+//                console.log("$(ele).find(.dropdown_class).val() :- " + $(ele).find(".dropdown_class").val());
+//            }
+
+//
+//        });
+
+        //this_text_field = $(this_obj).parents(".fields").find('.form-control');
+        this_text_field = $(this_obj).parents(".actual-fields:visible").find('.form-control');
+        console.log("THIS_TEXT_FIELD");
+        this_text_field_val = this_text_field.val();
+        console.log("this_text_field_val :- " + this_text_field_val);
+        console.log("BEFORE KEYUP");
+        console.log("$(this_obj).parent().parent()");
+        console.log($(this_obj).parent().parent().is(':visible'));
+        if ($(this_obj).parent().parent().is(':visible')) {
+            $(this_obj).parent().next().find('input[type=text]').keyup()
+        }
+
+
+        if (na=="Not allowed"){
+            console.log("na :- " + na)
+
+            var this_slot, this_select;
+            var total_cost = 0, total_thing = 0;
+            var individual_cost_per_slot=0;
+            //$('#usd').find('.fields:visible').each(function(index, ele) {
+            $('#usd').find('.actual-fields:visible').each(function(index, ele) {
+                this_slot = $(ele).find("input.form-control[type=text]").val();
+                this_select = $(ele).find(".dropdown_class");
+                console.log($(this_select));
+
+
+                if (this_slot!="") {
+                    get_cost($(this_select));
+                    this_dropdown.parent().parent().removeClass("blank-slot-err");
+                    //console.log("cost_per_slot :- " + cost_per_slot);
+                    individual_cost_per_slot = cost_per_slot;
+                    //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
+                    total_thing = total_thing + (this_slot*individual_cost_per_slot);
+                    //total_cost = total_cost + cost_per_slot;
+                    //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+                    //console.log("this_slot :- " + this_slot);
+                    //total_slots = parseInt(total_slots) + parseInt(this_slot);
+                }
+                else{
+                    this_slot = 0;
+                    this_dropdown.parent().parent().addClass("blank-slot-err");
+                    console.log("this_dropdown.parent().parent()");
+                    console.log(this_dropdown.parent().parent());
+                    console.log("this slot blank");
+                }
+
+            });
+            console.log("total_thing :- " + total_thing);
+            user_budget_manipulated = user_budget_real - (total_thing);
+            $("#user_budget").text(user_budget_manipulated);
+
+        }
+        else{
+            console.log("proceed");
+
+
+            var data = {simulation_id:[], simulation_data_id: []};
+            data["simulation_id"].push(simulation_id);
+            data["simulation_data_id"].push(this_dropdown_val);
+            // $.ajax({
+            //     url: "/get_cost",
+            //     type: "post",
+            //     async: false,
+            //     data: JSON.stringify(data),
+            //     contentType: "application/json",
+            //     success: function (data) {
+            if(1===1){
+                    this_cost_per_slot = pcost;
+                    console.log("this_cost_per_slot :- " + this_cost_per_slot);
+                    console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                    console.log("cal :- " + this_text_field_val*this_cost_per_slot);
+
+                    var this_slot, this_select;
+                    var total_cost = 0, total_thing = 0;
+                    var individual_cost_per_slot=0;
+                    var field_child;
+                    //$('#usd').find('.fields:visible').each(function(index, ele) {
+                    $('#usd').find('.actual-fields:visible').each(function(index, ele) {
+                        field_child =  $(ele).children();
+                        if ( $(field_child).length > 0 ) {
+                            this_slot = $(ele).find("input.form-control[type=text]").val();
+                            this_select = $(ele).find(".dropdown_class");
+                            console.log($(this_select));
+
+
+                            if (this_slot!="") {
+                                get_cost($(this_select));
+                                //console.log("cost_per_slot :- " + cost_per_slot);
+                                individual_cost_per_slot = cost_per_slot;
+                                //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
+                                total_thing = total_thing + (this_slot*individual_cost_per_slot);
+                                //total_cost = total_cost + cost_per_slot;
+                                //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+                                //console.log("this_slot :- " + this_slot);
+                                //total_slots = parseInt(total_slots) + parseInt(this_slot);
+                            }
+                            else{
+                                this_slot = 0;
+                                console.log("this slot blank");
+                            }
+                        }
+
+
+                    });
+                    console.log("total_thing :- " + total_thing);
+                    user_budget_manipulated = user_budget_real - (total_thing);
+                    $("#user_budget").text(user_budget_manipulated);
+//                user_budget_manipulated_keep_for_dd_change = user_budget_manipulated;
+
+                }
+            // })
+        }
+
+
+    }
+
+    function get_this_select_text_and_update_budget(this_select, this_text){
+        var this_select_val, this_text_val, cal_b;
+        this_select_val = $(this_select).val();
+        this_text_val = $(this_text).val();
+
+        console.log("in get_this_select_text_and_update_budget");
+        console.log("this_select val :- " + this_select_val);
+        console.log("this_text val :- " + this_text_val);
+        console.log("cost_per_slot :- " + cost_per_slot);
+        if (this_text_val!="") {
+            console.log("check here");
+            console.log("this_dropdown_val :- " + this_dropdown_val);
+            console.log("user_budget_manipulated :- " + user_budget_manipulated);
+
+            console.log("--- this_select_val :- " + this_select_val);
+            console.log("--- this_dropdown_val :- " + this_dropdown_val);
+            if (this_select_val!=this_dropdown_val){
+                cal_b = this_text_val*cost_per_slot;
+                console.log("cal_b :- " + cal_b);
+                console.log("apply this budget :- " + (user_budget_manipulated-cal_b));
+                user_budget_manipulated = (user_budget_manipulated-cal_b);
+                $("#user_budget").text(user_budget_manipulated);
+            }
+            else{
+                if (user_budget_manipulated_keep_for_dd_change!=undefined){
+                    console.log("user_budget_manipulated_keep_for_dd_change :- " + user_budget_manipulated_keep_for_dd_change)
+                    user_budget_manipulated = user_budget_manipulated_keep_for_dd_change;
+                    console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                    $("#user_budget").text(user_budget_manipulated);
+                }
+
+            }
+
+
+
+//            var this_slot, this_select_e;
+//            $('#usd').find('.fields:visible').each(function(index, ele) {
+//                this_slot = $(ele).find("input.form-control[type=text]").val();
+//                this_select_e = $(ele).find(".chosen-select");
+//
+//            });
+
+        }
+        else{
+            console.log("please enter no_of_slots");
+        }
+    }
+
+
+
+    function calculate_budget(event, this_obj){
+
+        var this_val = $(this_obj).val();
+        $(this_obj).parent().parent().removeClass("blank-slot-err").removeClass("duplicate-prog-err");
+        //this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class').val();
+        this_dropdown_val = $(this_obj).parents(".actual-fields:visible").find('.dropdown_class').val();
+        this_dropdown_text = $(".dropdown_class option:selected").text();
+        var pduration = this_dropdown_text.split("(")[1].split(")")[0]
+        if(parseInt(this_val) < 0 || isNaN(this_val)) {
+            console.log("please enter valid values");
+            $(this_obj).val("");
+            // $(this_obj).focus();
+        }
+        else{ //main else starts
+            $("#blank_slot_text").hide();
+            var data = {simulation_id:[], simulation_data_id: []};
+            data["simulation_id"].push(simulation_id);
+            data["simulation_data_id"].push(this_dropdown_val);
+            // $.ajax({
+            //     url: "/get_duration",
+            //     type: "post",
+            //     async: false,
+            //     data: JSON.stringify(data),
+            //     contentType: "application/json",
+            //     success: function (data) {
+            if(1===1){
+                                  //console.log("data");
+                    var this_program_duration = pduration;
+                    console.log("this_program_duration :- " + this_program_duration);
+
+                    //console.log("this_program_duration/30 :- " + this_program_duration/30);
+                    //var min_no_of_slots_reqd = Math.ceil(this_program_duration/30);
+                    //console.log("Math.ceil(min_no_of_slots_reqd) :- " + Math.ceil(min_no_of_slots_reqd))
+                    //console.log(this_program_duration%60);
+
+                    var max_no_of_slots;
+                    if (this_program_duration <= 60)  {
+                        max_no_of_slots = 1;
+                        console.log("this_program_duration<=60");
+                        console.log("max_no_of_slots :- " + max_no_of_slots);
+                    }
+                    else if ( (this_program_duration >= 61) && (this_program_duration <= 90) )  {
+                        max_no_of_slots = 2;
+                        console.log("this_program_duration>=61 && <=90");
+                        console.log("max_no_of_slots :- " + max_no_of_slots);
+                    }
+                    else if ( (this_program_duration >= 91) && (this_program_duration <= 120) )  {
+                        max_no_of_slots = 3;
+                        console.log("this_program_duration>=91 && <=120");
+                        console.log("max_no_of_slots :- " + max_no_of_slots);
+                    }
+                    else if ( (this_program_duration >= 121) && (this_program_duration <= 150) )  {
+                        max_no_of_slots = 4;
+                        console.log("this_program_duration>=121 && <=150");
+                        console.log("max_no_of_slots :- " + max_no_of_slots);
+                    }
+                    else if ( (this_program_duration >= 151) && (this_program_duration <= 180) )  {
+                        max_no_of_slots = 5;
+                        console.log("this_program_duration>=151 && <=180");
+                        console.log("max_no_of_slots :- " + max_no_of_slots);
+                    }
+                    else if ( (this_program_duration >= 181) && (this_program_duration <= 210) )  {
+                        max_no_of_slots = 6;
+                        console.log("this_program_duration>=181 && <=210");
+                        console.log("max_no_of_slots :- " + max_no_of_slots);
+                    }
+                    else if ( (this_program_duration >= 211) && (this_program_duration <= 240) )  {
+                        max_no_of_slots = 7;
+                        console.log("this_program_duration>=211 && <=240");
+                        console.log("max_no_of_slots :- " + max_no_of_slots);
+                    }
+                    else if ( (this_program_duration >= 241) && (this_program_duration <= 270) )  {
+                        max_no_of_slots = 8;
+                        console.log("this_program_duration=>241 && <=270");
+                        console.log("max_no_of_slots :- " + max_no_of_slots);
+                    }
+
+
+                    console.log("+++++++++++");
+                    console.log("this_val :- " + this_val);
+
+                    if (this_val > max_no_of_slots) {
+                        console.log("Not allowed");
+                        $(this_obj).val("");
+                        $(this_obj).focus();
+                        na = "Not allowed";
+                        return false;
+                    }
+                    else{ //duration else starts
+                        console.log("allowed");
+
+                        //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                        //      console.log("cost_per_slot :- " + cost_per_slot);
+
+                        //console.log("event.keyCode :- " + event.keyCode);
+                        //console.clear();
+
+                        var total_slots = 0;
+                        var this_slot, this_select, total_cost = 0, total_thing = 0;
+                        var this_tvr = 0, total_tvr = 0;
+
+
+                        //allow only numbers
+                        console.log("event.keyCode :- " + event.keyCode);
+
+                        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105)) {
+                            console.log("allow");
+                            console.log("this_val :- " + this_val);
+
+                            console.log("check for -ve user_budget_manipulated in allow :- " + user_budget_manipulated);
+                            if (user_budget_manipulated < 0) {
+                                $("#user_budget").css({"color": "red"});
+                                $("#budget_exceeded_text").show();
+                                $('a.add_nested_fields').css('pointer-events', 'none');
+                                $("#dummy_submit_btn").css('pointer-events', 'none');
+                            }
+                            else {
+                                $("#user_budget").css({"color": "white"});
+                                $("#budget_exceeded_text").hide();
+                                $('a.add_nested_fields').css('pointer-events', 'auto');
+                                $("#dummy_submit_btn").css('pointer-events', 'auto');
+                            }
+
+                            //$('#usd').find('.fields:visible').each(function (index, ele) {
+                            $('#usd').find('.actual-fields:visible').each(function (index, ele) {
+                                this_slot = $(ele).find("input.form-control[type=text]").val();
+                                this_select = $(ele).find(".dropdown_class");
+                                //console.log($(this_select));
+
+
+                                if (this_slot != "") {
+                                    // console.log("CALLED FROM HERE");
+                                    get_cost($(this_select));
+                                    //console.log("(this_slot*cost_per_slot) :- " + (this_slot*cost_per_slot));
+                                    total_thing = total_thing + (this_slot * cost_per_slot);
+                                    //total_cost = total_cost + cost_per_slot;
+                                    //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+                                    //console.log("this_slot :- " + this_slot);
+                                    //total_slots = parseInt(total_slots) + parseInt(this_slot);
+                                }
+                                else {
+                                    this_slot = 0;
+                                    console.log("this slot blank");
+                                }
+
+                            });
+                            user_budget_manipulated = user_budget_real - (total_thing);
+                            user_budget_manipulated_keep_for_dd_change = user_budget_manipulated;
+                            console.log("check for -ve user_budget_manipulated after compute :- " + user_budget_manipulated);
+                            $("#user_budget").text(user_budget_manipulated);
+                            $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                            if (user_budget_manipulated < 0) {
+                                $("#user_budget").css({"color": "red"});
+                                $("#budget_exceeded_text").show();
+                                $('a.add_nested_fields').css('pointer-events', 'none');
+                                $("#dummy_submit_btn").css('pointer-events', 'none');
+                            }
+                            else {
+                                $("#user_budget").css({"color": "white"});
+                                $("#budget_exceeded_text").hide();
+                                $('a.add_nested_fields').css('pointer-events', 'auto');
+                                $("#dummy_submit_btn").css('pointer-events', 'auto');
+                            }
+                        }
+                        else {
+                            console.log("don't allow");
+                            this_slot = 0;
+                            console.log("total_thing :- " + total_thing);
+                            console.log("user_budget_manipulated :- " + user_budget_manipulated);
+
+
+                            //$('#usd').find('.fields').each(function (index, ele) {
+                            $('#usd').find('.actual-fields:visible').each(function (index, ele) {
+                                this_slot = $(ele).find("input.form-control[type=text]").val();
+                                if (this_slot == "") {
+                                    user_budget_manipulated = user_budget_real;
+                                    $("#user_budget").text(user_budget_manipulated);
+                                    $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                                }
+                            });
+                            if ((event.keyCode != 17) || (event.keyCode != 27)) {
+                                console.log("event.keyCode da :- " + event.keyCode)
+
+                                var keycode = (event.which) ? event.which : event.keyCode;
+                                console.log("keycode :- " + keycode)
+
+
+//                //comparing pressed keycodes
+                                if (!(keycode == 8 || keycode == 46) && (keycode < 48 || keycode > 57)) {
+                                    console.log("no");
+                                    //return false;
+                                }
+                                else {
+                                    console.log("yes");
+                                    //$('#usd').find('.fields:visible').each(function (index, ele) {
+                                    $('#usd').find('.actual-fields:visible').each(function (index, ele) {
+                                        this_slot = $(ele).find("input.form-control[type=text]").val();
+                                        this_select = $(ele).find(".dropdown_class");
+
+                                        if (this_slot != "") {
+                                            console.log("this_slot not blank");
+                                            get_cost($(this_select));
+                                            console.log("cost_per_slot in this_slot not blank :- " + cost_per_slot);
+                                            total_thing = total_thing + (this_slot * cost_per_slot);
+                                            console.log("total_thing in this_slot not blank :- " + total_thing);
+                                            console.log("user_budget_manipulated in this_slot not blank :- " + user_budget_manipulated);
+                                            user_budget_manipulated = user_budget_real - (total_thing);
+                                            console.log("user_budget_manipulated in this_slot not blank after cal :- " + user_budget_manipulated);
+                                            $("#user_budget").text(user_budget_manipulated);
+                                            $("#sim_user_data_budget_available").val(user_budget_manipulated);
+                                            if (user_budget_manipulated < 0) {
+                                                $("#user_budget").css({"color": "red"});
+                                            }
+                                            else {
+                                                $("#user_budget").css({"color": "white"});
+                                            }
+                                            //user_budget_manipulated = total_thing + cost_per_slot;
+                                            //console.log("user_budget_manipulated in this slot blank :- " + user_budget_manipulated);
+                                            //total_thing = total_thing + (this_slot*cost_per_slot);
+                                            //console.log("user_budget_manipulated in this_slot blank :- " + user_budget_manipulated)
+                                            //user_budget_manipulated = user_budget_manipulated + cost_per_slot;
+                                            //console.log("user_budget_manipulated in this_slot blank after adding :- " + user_budget_manipulated)
+                                            //$("#user_budget").text(user_budget_manipulated);
+                                        }
+                                    });
+                                }
+
+
+                            }
+
+
+                            //console.log("user_budget_manipulated :- " + user_budget_manipulated);
+
+                            //total_thing = total_thing + (this_slot*cost_per_slot);
+                            //console.log("total_thing :- " + total_thing);
+                            //user_budget_manipulated = user_budget_real - (total_thing);
+                            //console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                            //$("#user_budget").text(user_budget_manipulated);
+//            user_budget_manipulated = user_budget_real;
+                        }
+
+                        //console.log("total_thing :- " + total_thing);
+
+                        //user_budget_manipulated = user_budget_real - (total_thing);
+                        //$("#user_budget").text(user_budget_manipulated);
+                        //$("#sim_user_data_budget_available").val(user_budget_manipulated);
+
+                        //console.log("total_cost :- " + total_cost);
+                        //console.log("total_slots :- " + total_slots);
+
+
+                        //working code starts from here
+                        //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                        //
+                        //      if ( (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) ) {
+                        //          console.log("allow");
+                        //          user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+                        //      }
+                        //      else{
+                        //          console.log("don't allow");
+                        //          if (event.keyCode == 8 || event.keyCode == 46) {
+                        //              if (this_val==""){
+                        //              console.log("blank");
+                        //              user_budget_manipulated = user_budget_real;
+                        //          }
+                        //          else{
+                        //              console.log("backspace or delete :- " + this_val);
+                        //              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+                        //          }
+                        //          }
+                        //      }
+                        //      console.log("user_budget_manipulated :- " + user_budget_manipulated);
+                                                //$("#user_budget").text(user_budget_manipulated);
+                                                //working code ends here
+
+                                                //user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
+
+                        //      if (event.keyCode == 8 || event.keyCode == 46) {
+                        //          if (this_val==""){
+                        //              console.log("blank");
+                        //              user_budget_manipulated = user_budget_real;
+                        //          }
+                        //          else{
+                        //              console.log("backspace or delete :- " + this_val);
+                        //              user_budget_manipulated = user_budget_real - (this_val*cost_per_slot);
+                        //          }
+                        //      }
+                        //      else{
+                        //          user_budget_manipulated = user_budget_manipulated - (this_val*cost_per_slot);
+                        //      }
+
+
+                        //      $("#user_budget").text(user_budget_manipulated);
+                    }
+                }
+            // });
+
+
+        }
+
+    }
+
+    function calculate_budget_on_remove(event, this_obj){
+        console.log("on remove text val");
+
+        console.log("this_obj :- ");
+        var this_deleted_program_id = this_obj.parent().prev().prev().find(".dropdown_class").val();
+
+        var this_slot, this_select;
+        var this_slot_hidden, this_select_hidden, cost_per_slot_hidden, total_thing_hidden = 0;
+
+        //console.log($(this_obj).parents(".fields").find('.form-control').val());
+        //console.log($(this_obj).parents(".fields").find('.chosen-select'));
+
+        //this_slot_hidden = $(this_obj).parents(".fields").find('.form-control').val();
+        this_slot_hidden = $(this_obj).parents(".actual-fields:visible").find('.form-control').val();
+        //this_select_hidden = $(this_obj).parents(".fields").find('.chosen-select');
+        //this_select_hidden = $(this_obj).parents(".fields").find('.dropdown_class');
+        this_select_hidden = $(this_obj).parents(".actual-fields:visible").find('.dropdown_class');
+        get_cost($(this_select_hidden));
+        cost_per_slot_hidden = cost_per_slot;
+        total_thing_hidden = total_thing_hidden + (this_slot_hidden*cost_per_slot_hidden);
+        console.log("total_thing_hidden :- " + total_thing_hidden);
+
+        setTimeout(function() {
+            console.log("remaining fields len :- " + $('#usd').find('.fields:visible').length);
+
+//            $('#usd').find('.fields:hidden').each(function(index, ele) {
+//                this_slot_hidden = $(ele).find("input.form-control[type=text]").val();
+//                this_select_hidden = $(ele).find(".chosen-select");
+//                get_cost($(this_select_hidden));
+//                cost_per_slot_hidden = cost_per_slot;
+//                console.log("cost_per_slot :- " + cost_per_slot);
+//                total_thing_hidden = total_thing_hidden + (this_slot_hidden*cost_per_slot_hidden);
+//
+//            });
+//            console.log("total_thing_hidden :- " + total_thing_hidden);
+
+            //$('#usd').find('.fields:visible').each(function(index, ele) {
+            $('#usd').find('.actual-fields:visible').each(function(index, ele) {
+                this_slot = $(ele).find("input.form-control[type=text]").val();
+                this_select = $(ele).find(".dropdown_class");
+                console.log("THIS_SELECT VAL");
+                console.log(this_select.val());
+                //.chosen-select -> .dropdown_class
+
+                //console.log("this_slot :- ");
+                //console.log(this_slot);
+                //console.log("this_select :- ");
+                //console.log(this_select);
+
+                if (this_slot!="") {
+                    get_cost($(this_select));
+                    console.log("this_slot :- " + this_slot);
+                    console.log("cost_per_slot :- " + cost_per_slot);
+                    total_thing = total_thing + (this_slot*cost_per_slot);
+
+
+                    //user_budget_manipulated = user_budget_real - (total_thing);
+                    //total_cost = total_cost + cost_per_slot;
+                    //console.log("in calculate_budget cost per slot :- " + cost_per_slot);
+                    //console.log("this_slot :- " + this_slot);
+                    //total_slots = parseInt(total_slots) + parseInt(this_slot);
+                }
+
+                //user_budget_manipulated = user_budget_manipulated + (total_thing_hidden);
+                //console.log("user_budget_manipulated after compute :- " + user_budget_manipulated);
+//                console.log("check for -ve user_budget_manipulated after compute :- " + user_budget_manipulated);
+//                $("#user_budget").text(user_budget_manipulated);
+            });
+
+            var other_select, other_select_val;
+
+            $('#usd').find('.actual-fields:visible').each(function(index1, ele1) {
+                console.log("repeat");
+
+                other_select = $(ele1).find(".dropdown_class");
+                other_select_val = other_select.val();
+                console.log("other_select_val :- " + other_select_val);
+                console.log("this_deleted_program_id :- " + this_deleted_program_id);
+
+                if ( other_select_val == this_deleted_program_id ) {
+                    $(ele1).removeClass("duplicate-prog-err");
+                }
+                checkDropdownsOnRemove();
+            });
+
+            console.log("total_thing :- " + total_thing);
+            console.log("user_budget_manipulated here :- " + user_budget_manipulated);
+            user_budget_manipulated = user_budget_manipulated + total_thing_hidden;
+            console.log("user_budget_manipulated after compute :- " + user_budget_manipulated);
+            $("#user_budget").text(user_budget_manipulated);
+            $("#sim_user_data_budget_available").val(user_budget_manipulated);
+
+            if (user_budget_manipulated < 0) {
+                $("#user_budget").css({"color": "red"});
+                $("#budget_exceeded_text").show();
+                $('a.add_nested_fields').css('pointer-events', 'none');
+                $("#dummy_submit_btn").css('pointer-events', 'none');
+            }
+            else {
+                $("#user_budget").css({"color": "white"});
+                $("#budget_exceeded_text").hide();
+                $('a.add_nested_fields').css('pointer-events', 'auto');
+                $("#dummy_submit_btn").css('pointer-events', 'auto');
+            }
+
+        }, 100);
+
+
+
+//        $('#usd').find('.fields').each(function(index, ele) {
+//            this_slot = $(ele).find("input.form-control[type=text]").val();
+//            this_select = $(ele).find(".chosen-select");
+//        });
+
+//        get_cost($(this_obj).parents(".fields").find('.chosen-select'));
+//        console.log("cost_per_slot after remove :- " + cost_per_slot);
+//        console.log("total_thing after remove :- " + total_thing);
+//        console.log("user_budget_manipulated after remove :- " + user_budget_manipulated);
+//        user_budget_manipulated = user_budget_manipulated +  total_thing;
+//        console.log("user_budget_manipulated after remove cal :- " + user_budget_manipulated);
+//        $("#user_budget").text(user_budget_manipulated);
+
+    }
+
+    function get_my_dropdown_val(this_obj){
+        console.log("in get_my_dropdown_val()");
+        //console.log($(this_obj).parents(".fields").attr("class"));
+        //var this_dropdown_val = $(this_obj).parents(".fields").find('.dropdown_class option:selected').val();
+        var this_dropdown_val = $(this_obj).parents(".actual-fields:visible").find('.dropdown_class option:selected').val();
+        //console.log("this_dropdown_val :- " + this_dropdown_val);
+        //get_cost($(this_obj).parents(".fields").find('.dropdown_class'));
+        get_cost($(this_obj).parents(".actual-fields:visible").find('.dropdown_class'));
+    }
+
+    $('a.add_nested_fields').on('click', function(){
+        console.log("add clicked");
+        window.NestedFormEvents.prototype.insertFields = function(content, assoc, link) {
+            var target = $('#usd');
+            return $(content).appendTo(target);
+        }
+
+    });
+
+    $('form').on('nested:fieldAdded', function(event) {
+        $(event.target).find('.chosen-select').chosen();
+        $(event.target).find('.chosen-select option').eq(0).attr('selected', 'selected');
+        //get_cost($(event.target).find('.chosen-select'));
+        //$('#chosen-select option').eq(index).attr('selected', 'selected');
+    });
+
+</script>

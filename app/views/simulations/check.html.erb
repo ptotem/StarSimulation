@@ -1,0 +1,49 @@
+<h1 id="budget_available"><%= @budget %></h1>
+
+<div id="main_block">
+  <div class="individual-block">
+    Cost Per Slot <%= text_field_tag :cost_per_slot %>
+    No. of Slots <%= number_field_tag 'no_of_slots', nil, in: 0..10, :onkeyup => "calculate_budget($(this).val(), $(this).prev().val());" %>
+    <br>
+  </div>
+
+  <a href="javascript:void(0);" class="btn btn-lg btn-info" onclick="add_individual_block();">Add</a>
+</div>
+
+
+<script>
+    var budget = <%= @budget %>;
+    var budget_available = budget;
+
+  function calculate_budget(no_of_slots, cost_per_slot){
+
+    console.log("cost_per_slot :- " + cost_per_slot + ", no_of_slots :- " + no_of_slots);
+    if (budget_available == budget) {
+        console.log("1");
+        budget_available = parseInt(budget) - (cost_per_slot * no_of_slots);
+    }
+    else{
+        console.log("2");
+        budget_available = parseInt(budget_available) - (cost_per_slot * no_of_slots);
+    }
+    console.log("budget_available :- " + budget_available);
+    $("#budget_available").text(budget_available);
+    return budget_available;
+  }
+
+  function add_individual_block(){
+    var h = '<div class="individual-block">' +
+              "Cost Per Slot " +
+              '<input type="text" name="cost_per_slot" id="cost_per_slot"> ' +
+              "No. of Slots " +
+              "<input type='number' onkeyup='calculate_budget($(this).val(), $(this).prev().val());' name='no_of_slots' min='0' max='10' id='no_of_slots'>" +
+              '<br>' +
+            '</div>';
+
+    $("#main_block").append(h);
+  }
+
+  $(function(){
+
+  });
+</script>

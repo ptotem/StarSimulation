@@ -61,6 +61,31 @@ class SimulationDataController < ApplicationController
     end
   end
 
+  def get_cost
+    @simulation = Simulation.find(params[:simulation_id][0])
+    @simulation_data = @simulation.simulation_datums.where(:id=>params[:simulation_data_id][0]).first
+    render :json => @simulation_data
+    return
+  end
+
+  def get_duration
+    @simulation = Simulation.find(params[:simulation_id][0])
+    @simulation_data = @simulation.simulation_datums.where(:id=>params[:simulation_data_id][0]).first
+    render :json => @simulation_data
+    return
+  end
+
+  def get_this_date_slots
+    @simulation = Simulation.find(params[:simulation_id][0])
+    # @this_date = params[:this_date][0]
+    @this_date = params[:this_date][0].to_date.strftime('%Y-%m-%d')
+    # render :json => @this_date
+    # return
+    @this_date_slots = @simulation.simulation_datums.where(:performance_date=>@this_date).map{|tds| [tds.id, tds.programme_name, tds.start_time.strftime("%T"), (tds.end_time.strftime("%T") rescue ""),tds.duration,tds.cost_per_slot]}
+    render :json => @this_date_slots
+    return
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_simulation_datum

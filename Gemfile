@@ -5,11 +5,16 @@ gem 'rails', '4.0.0'
 
 gem 'execjs'
 gem 'therubyracer'
-gem 'sqlite3'
+
 # Use mysql as the database for Active Record
 # gem 'mysql2'
+gem 'sqlite3'
 
 gem 'devise'
+gem 'cancan'
+
+# gem 'protected_attributes'
+
 gem 'rails_admin'
 gem "rails_admin_import"
 
@@ -30,6 +35,12 @@ gem 'coffee-rails', '~> 4.0.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
+gem 'rails4-autocomplete'
+gem 'gon'
+gem 'chosen-rails'
+gem 'jquery-turbolinks'
+gem "nested_form"
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
@@ -39,9 +50,20 @@ gem 'jbuilder', '~> 1.2'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
-  # gem 'sdoc', require: false
+  gem 'sdoc', require: false
 end
-gem "gon"
+
+# Use ActiveModel has_secure_password
+# gem 'bcrypt-ruby', '~> 3.0.0'
+
+# Use unicorn as the app server
+# gem 'unicorn'
+
+# Use Capistrano for deployment
+# gem 'capistrano', group: :development
+
+# Use debugger
+# gem 'debugger', group: [:development, :test]
 gem 'rubyzip'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'

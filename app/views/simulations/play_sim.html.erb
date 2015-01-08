@@ -1,30 +1,9 @@
 <div class="container">
   <div class="row">
-    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
+    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 ">
       <h2 class="white" style="font-weight: bold">You are playing <%= @simulation.name %></h2>
     </div>
-    <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
-      <div class="budget_div">
-        <div class="row">
-          <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-            <h3 id="user_budget_header" class="top-bottom-nil-margin">Budget</h3>
-          </div>
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 col-xs-offset-3 col-sm-offset-3 col-md-offset-3 col-lg-offset-3">
-            <h4 class="top-bottom-nil-margin"> Rs. <span id="user_budget"><%= number_with_delimiter(@simulation_user_data.budget_available,:delimiter=>",") %></span>
-            </h4>
-          </div>
-        </div>
-      </div>
-      <div class="center" style="text-align: center">
-        <b id="budget_exceeded_text" style="color: red; display: none;font-size:14px;">You don't have sufficient funds.</b>
-        <br>
-        <b id="already_selected_text" style="color: red; display: none;font-size:14px;">You cannot add duplicate programmes!</b>
-        <br>
-        <b id="blank_slot_text" style="color: red; display: none;font-size:14px;">Enter no. of slots.</b>
-        <br>
-        <b id="exceeded_slots" style="color: red; display: none;font-size:14px;">Exceeded no of slots</b>
-      </div>
-    </div>
+
   </div>
 
   <div class="row" style="padding-top: 5%">
@@ -98,24 +77,10 @@
           </p>
         </div>
       </div>
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <% if @simulation.excel_file.blank? %>
-              <%= link_to 'Download Excel',  "#", :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
-          <% else %>
-              <%= link_to 'Download Excel',  @simulation.excel_file.url, :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
-          <% end %>
-        </div>
-      </div>
+
     </div>
     <div class="col-xs-6 col-sm-6 col-md-5 col-lg-5 col-md-offset-1 col-lg-offset-1">
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <h4 style="float: left; width: 22%;" class="text-center">Select Date</h4>
-          <h4 style="float: left; width: 45%;" class="text-center">Select Program</h4>
-          <h4>No. of Slots</h4>
-        </div>
-      </div>
+
       <div class="row">
         <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12">
           <%#= flash[:notice].blank? %>
@@ -127,79 +92,26 @@
               <%# end %>
           <%# end %>
           <div class="program-wall">
-            <div class="row">
-              <%= nested_form_for @simulation do |f| %>
-                  <div id="sud">
-                    <%#= f.fields_for @simulation_user_data do |sim_user_data| %>
-                        <%#= sim_user_data.hidden_field :simulation_id, :value=>@simulation.id %>
-                        <%#= sim_user_data.hidden_field :user_id, :value=>current_user.id %>
-                    <%# end %>
-                  </div>
-                  <% if @simulation.errors.any? %>
-                      <div id="error_explanation">
-                        <h2><%= pluralize(@simulation.errors.count, "error") %> prohibited this article from being saved:</h2>
-
-                        <ul>
-                          <% @simulation.errors.full_messages.each do |msg| %>
-                              <li><%= msg %></li>
-                          <% end %>
-                        </ul>
-                      </div>
-                  <% end %>
-                  <%= hidden_field_tag 'sim_user_data_budget_available', @simulation_user_data.budget_available %>
-                  <div id="usd">
-                    <% @count = 0 %>
-
-                    <%= f.fields_for :user_sim_datums do |user_sim_data| %>
-                    <% count  = Random.rand(1000) %>
-
-                        <% if user_sim_data.object.id.nil? %>
-                            <div class="actual-fields fld-<%=@count%>">
-                                <% @count  = user_sim_data.options[:child_index]  %>
-
-                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                                <%#= select_tag 'programme_performance_date', options_for_select(@simulation_dates.collect{ |u| [u.performance_date, u.id] }), class: 'chosen-select' %>
-                                <%= select_tag "programme_performance_date", options_for_select(@simulation_dates), {prompt: 'Select Date', class: 'chosen-select',  :onchange => 'get_this_date_slots($(this))' } %>
-                              </div>
-                              <%= user_sim_data.hidden_field :user_id, :value => current_user.id %>
-                              <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5" style="margin-left: 6%">
-
-                                <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost($(this))' }%>
-                                <%#= user_sim_data.select :simulation_datum_id, @simulation_data.map { |u| ["#{u.programme_name} - #{u.start_time.strftime("%T")} - #{u.end_time.strftime("%T") rescue ""}", u.id] }, { include_blank: false }, { class: 'chosen-select dropdown_class', :onchange => 'get_cost_only_for_change($(this))' } %>
-                                <%#= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program' } %>
-                                <%= user_sim_data.select :simulation_datum_id, {}, {prompt: 'Select Program', include_blank: false }, { class: 'chosen-select dropdown_class selected_program',:pariden=>"fld-#{@count}",:onchange=>"changeProgram($(this))" } %>
-
-                              </div>
-                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;">
-                                <%#= user_sim_data.text_field :no_of_slots, {:required => true, class: 'form-control slot_number', :onkeyup=>"calculate_budget(event, $(this))", :autocomplete => :off,:disabled => true} %>
-                                <%= user_sim_data.text_field :no_of_slots ,{:value=>0,:required => true,:pariden=>"fld-#{@count}", class: "form-control slot_number fld-#{@count}", :onkeyup=>"calculate_cost_of_program(event, $(this))", :autocomplete => :off,:disabled => true} %>
-
-                              </div>
-                              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="margin-left: 10%;display:none">
-                                <%= text_field_tag :cost_per_program, "0", class: "form-control cost_per_program cost_per_program_for-#{@count}" %>
-                              </div>
-                              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
-
-                                <%= user_sim_data.link_to_remove '<span class="glyphicon glyphicon-trash icon_style" style="font-size: 1.3em;padding: 10px 10px 10px 0;"></span>'.html_safe, :onclick=>"removeSlot($(this))" %>
-                              </div>
-                            </div>
-
-                        <% end %>
-                        <% #@count = @count+1 %>
-
-                    <% end %>
-                  </div>
-
-                  <%= f.link_to_add "Add", :user_sim_datums, :class=>"btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; left: 15px; font-size: 1.4em;" %>
-                  <%#= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;", :onclick=>"event.preventDefault(); return checkDropdowns();" %>
-                  <%= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"display:none; position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" %>
-                  <%#= f.submit "Submit", :id=>"submit_btn", :class => "btn btn-lg button_style", :style=>"position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;", :onclick=>"return checkDropdowns();" %>
-                  <a href="javascript:void(0);" id="dummy_submit_btn" class="btn btn-lg button_style" style="position: absolute; bottom: -18%; right: 15px; font-size: 1.4em;" onclick="return checkDropdowns();">Submit</a>
-              <% end %>
-            </div>
+           hi
           </div>
         </div>
       </div>
+
+        <div class="row">
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <% if @simulation.excel_file.blank? %>
+                <%= link_to 'Download Excel',  "#", :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
+            <% else %>
+                <%= link_to 'Download Excel',  @simulation.excel_file.url, :class=>"btn btn-lg button_style", :style => "font-size: 1.4em;" %>
+            <% end %>
+          </div>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+            <%= link_to 'Start',  "#", :class=>"btn btn-lg button_style pull-right", :style => "font-size: 1.4em;" %>
+
+          </div>
+        </div>
+
     </div>
   </div>
 </div>

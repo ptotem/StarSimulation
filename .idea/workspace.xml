@@ -2,18 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ce4ffa6c-15b3-4008-a685-a80a0009fa23" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/db/migrate/20150107133928_add_games_to_simulation.rb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/db/migrate/20150107134642_add_simulation_to_game.rb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/db/migrate/20150107135329_add_game_id_column_to_simulation.rb" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/migrate/20140730095329_create_simulation_data.rb" afterPath="$PROJECT_DIR$/db/migrate/20140730095329_create_simulation_data.rb" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/TimelineApp/.idea/runConfigurations/Development__TimelineNoir.xml" afterPath="$USER_HOME$/TimelineApp/.idea/runConfigurations/Development__TimelineNoir.xml" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/TimelineApp/.idea/runConfigurations/Production__TimelineNoir.xml" afterPath="$USER_HOME$/TimelineApp/.idea/runConfigurations/Production__TimelineNoir.xml" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/TimelineApp/.idea/TimelineNoir.iml" afterPath="$USER_HOME$/TimelineApp/.idea/TimelineNoir.iml" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/TimelineApp/app/views/welcome/mainpage.html.erb" afterPath="$USER_HOME$/TimelineApp/app/views/welcome/mainpage.html.erb" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/TimelineApp/config/routes.rb" afterPath="$USER_HOME$/TimelineApp/config/routes.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db/schema.rb" afterPath="$PROJECT_DIR$/db/schema.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/simulation.rb" afterPath="$PROJECT_DIR$/app/models/simulation.rb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/models/user.rb" afterPath="$PROJECT_DIR$/app/models/user.rb" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/TimelineApp/app/controllers/welcome_controller.rb" afterPath="$USER_HOME$/TimelineApp/app/controllers/welcome_controller.rb" />
       <change type="MODIFICATION" beforePath="$USER_HOME$/TimelineApp/.idea/workspace.xml" afterPath="$USER_HOME$/TimelineApp/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
@@ -755,7 +748,7 @@
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2659091" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2659091" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />

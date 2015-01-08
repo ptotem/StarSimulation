@@ -43,6 +43,7 @@ class GameController < ApplicationController
   def gameframe
     @game_info=Game.all
     @game=Game.find(params[:id]);
+    @url= "http://localhost:3000/#{@game.description}"
 
   end
 end

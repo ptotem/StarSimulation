@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150108013819) do
+ActiveRecord::Schema.define(version: 20150108070721) do
 
   create_table "b_user_sim_data", force: true do |t|
     t.integer  "user_id"
@@ -29,17 +29,21 @@ ActiveRecord::Schema.define(version: 20150108013819) do
   create_table "games", force: true do |t|
     t.string   "name"
     t.text     "description"
+    t.integer  "simulation_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "games", ["simulation_id"], name: "index_games_on_simulation_id"
 
   create_table "simulateresults", force: true do |t|
     t.string   "result"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "simulationId"
+    t.integer  "user_id"
+    t.integer  "simulate_id"
+    t.integer  "simulartion_id"
     t.integer  "simulation_id"
-    t.integer  "userId"
   end
 
   create_table "simulation_data", force: true do |t|
@@ -82,7 +86,6 @@ ActiveRecord::Schema.define(version: 20150108013819) do
     t.integer  "sim_spot"
     t.integer  "sim_grp"
     t.integer  "sim_cprp"
-    t.integer  "game"
     t.integer  "game_id"
   end
 

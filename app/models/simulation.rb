@@ -18,8 +18,8 @@ class Simulation < ActiveRecord::Base
   has_many :simulation_user_datas
   accepts_nested_attributes_for :simulation_user_datas, :allow_destroy => true
   has_many :users, :through => :simulation_user_datas
-  has_one :game
-
+  belongs_to :game
+  has_many :simulateresults
 
   #class Courses < ActiveRecord::Base
   #  has_many :courses_years

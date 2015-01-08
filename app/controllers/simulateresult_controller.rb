@@ -1,0 +1,2 @@
+class SimulateresultController < ApplicationController
+end

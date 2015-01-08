@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
 
   has_many :simulation_user_datas
   has_many :simulations, :through => :simulation_user_datas
-
+  has_many :simulateresult
 
   def set_budget
     sim_user_data = self.simulation_user_datas.build

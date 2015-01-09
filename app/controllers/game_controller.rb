@@ -41,19 +41,26 @@ class GameController < ApplicationController
   end
 
   def gameframe
+
     @game_info=Game.all
     @game=Game.find(params[:id]);
     @url= request.base_url+'/'+@game.description
-    # render :text=>@url
+    # render :text=>current_user.id
     # return
 
   end
 
     def save_result
-      @final_score =params[:final_score]
-      @user_res = Simulateresult.create!(:result => @final_score )
+      # @simulation =
+      # render :json => params
+      # return
+      @final_score = params[:final_score]
+      @simulation_id = params[:simulation_id]
+      @user_res = Simulateresult.create!(:result => @final_score,:user_id=>current_user.id,:simulate_id=>@simulation_id )
+      # @user_res = Simulateresult.create!(:result => @final_score, :user_id=>1 )
       @user_res.save!
-
+      # render :text=>params[:final_score]
+      # return
 
   end
 

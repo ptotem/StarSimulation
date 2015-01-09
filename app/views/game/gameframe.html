@@ -7,8 +7,24 @@
         display: block;
     }
 </style>
+        <a><%= @url %></a>
     <iframe src="<%= @url %>" scrollbars="auto" name="brands" width="1000px;" height="500px"></iframe>
     <!--<iframe id='iframe_img'src="http://localhost:3000/uploads/p3/game_ptotem/story.html" scrollbars="auto" name="brands" width="1000px;" height="500px"></iframe>-->
   <br/>
+
+<script>
+    $(function(){
+
+        setTimeout(function() {
+            var path = window.location.href;
+            var simuation_id = path.split("/")[5];
+            var iFrame = $("body").find("iframe");
+            $(iFrame).attr("gotoSim", simuation_id);
+            var divSwf = $(iFrame).contents().find("#divSwf");
+            $(divSwf).attr("gotoSim", simuation_id);
+        }, 5000);
+
+    })
+</script>
 
 

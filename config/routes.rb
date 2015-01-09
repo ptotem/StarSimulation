@@ -7,7 +7,7 @@ StarMediaSim::Application.routes.draw do
   match 'game', to: 'game#simulation', via: [:get, :post]
   match 'saveresult', to: 'game#save_result', via: [:get, :post]
   # match '/saveresult', to: 'game#save_result', via: [:post]
-  get 'game/:id' => 'game#gameframe', as: :game_show
+  get 'game/:id/:simulationid' => 'game#gameframe', as: :game_show
   match 'gameframe', to: 'game#gameframe', via: [:get, :post]
   match 'simulate', to: 'game#simulate', via: [:get, :post]
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'

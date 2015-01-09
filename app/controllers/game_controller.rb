@@ -53,7 +53,7 @@ class GameController < ApplicationController
     def save_result
       @final_score = params[:final_score]
       @simulation_id = params[:simulation_id]
-      @user_res = Simulateresult.create!(:result => @final_score,:user_id=>current_user.id,:simulate_id=>@simulation_id )
+      @user_res = Simulateresult.create!(:result => @final_score,:user_id=>current_user.id,:simulation_id=>@simulation_id )
       @user_res.save!
       # render :text=>params[:final_score]
       # return

@@ -40,10 +40,8 @@ ActiveRecord::Schema.define(version: 20150108070721) do
     t.string   "result"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "user_id"
-    t.integer  "simulate_id"
-    t.integer  "simulartion_id"
     t.integer  "simulation_id"
+    t.integer  "user_id"
   end
 
   create_table "simulation_data", force: true do |t|

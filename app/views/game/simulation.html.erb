@@ -7,17 +7,20 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<%= form_tag({action: :simulate}, multipart: true) do %>
-    <p><label for="post_title">Enter game NAme</label> :
-      <%= text_field_tag(:contact) %>
-    <br/>
-      <p><label for="destination">Enter game Location</label> :
-      <%= text_field_tag(:destination) %>
-    <p><label for="upload_file">Select File</label> :
-      <%= file_field_tag 'picture' %>
-    <%= button_to "Upload Game", :method=> "simulate" %>
-<% end %>
-<%= yield %>
-
+    <% if  current_user.admin  %>
+        <%= form_tag({action: :simulate}, multipart: true) do %>
+            <p><label for="post_title">Enter game NAme</label> :
+              <%= text_field_tag(:contact) %>
+              <br/>
+            <p><label for="destination">Enter game Location</label> :
+              <%= text_field_tag(:destination) %>
+            <p><label for="upload_file">Select File</label> :
+              <%= file_field_tag 'picture' %>
+              <%= button_to "Upload Game", :method=> "simulate" %>
+        <% end %>
+        <%= yield %>
+    <% else %>
+       <h1>You have not authorization to access this page</h1>
+    <% end %>
 </body>
 </html>

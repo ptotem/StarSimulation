@@ -6,7 +6,7 @@ html {
 body {
     margin: 0 auto;
     font-size: 12px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     /*color: #333;*/
     /*font-family: verdana, arial, helvetica, sans-serif;*/
     font-family: OpenSans;

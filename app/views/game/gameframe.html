@@ -7,7 +7,18 @@
         display: block;
     }
 </style>
-    <iframe src="<%= @url %>" scrollbars="auto" name="brands" width="100%" height="580px"></iframe>
+        <div class="row">
+            <div class="col-lg-9 col-lg-offset-1 col-md-9 col-md-offset-1">
+                <iframe src="<%= @url %>" scrollbars="auto" name="brands" width="100%" height="460px"></iframe>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-lg-1 col-lg-offset-9">
+                <%= link_to "Back", :back,:class=>"text-style btn btn-lg button_style pull-right"%>
+                <!--<a class="btn btn-lg button_style pull-right" href="/game/24/15" style="font-size: 1.4em;">Start</a>-->
+            </div>
+        </div>
     <!--<iframe id='iframe_img'src="http://localhost:3000/uploads/p3/game_ptotem/story.html" scrollbars="auto" name="brands" width="1000px;" height="500px"></iframe>-->
   <br/>
 
@@ -20,7 +31,11 @@
             var iFrame = $("body").find("iframe");
             $(iFrame).attr("gotoSim", simuation_id);
             var divSwf = $(iFrame).contents().find("#divSwf");
+            var player = $(iFrame).contents().find("#player");
             $(divSwf).attr("gotoSim", simuation_id);
+            $(player).css('z-index','-1000');
+//            $
+// ('#player').css('z-index','-1000')
         }, 5000);
 
     })

@@ -6,20 +6,20 @@
     IFRAME[seamless] {
         display: block;
     }
+
 </style>
         <div class="row">
-            <div class="col-lg-9 col-lg-offset-1 col-md-9 col-md-offset-1">
-                <iframe src="<%= @url %>" scrollbars="auto" name="brands" width="100%" height="460px" id="player_iframe"></iframe>
+            <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1">
+                <iframe src="<%= @url %>" name="brands" width="100%" height="580px" id="player_iframe"></iframe>
                 <!--<iframe src="localhost:3000/uploads/1/TheCorridorPitchoutput/story.html" scrollbars="auto" name="brands" width="100%" height="460px"></iframe>-->
+            </div>
+            <div class="col-lg-1">
+                <%= link_to "Back", :back,:class=>"text-style btn btn-lg button_style play_btn" %>
+                <!--<a class="btn btn-lg button_style pull-right" href="/game/24/15" style="font-size: 1.4em;">Start</a>-->
             </div>
 
         </div>
-        <div class="row">
-            <div class="col-lg-1 col-lg-offset-9">
-                <%= link_to "Back", :back,:class=>"text-style btn btn-lg button_style pull-right"%>
-                <!--<a class="btn btn-lg button_style pull-right" href="/game/24/15" style="font-size: 1.4em;">Start</a>-->
-            </div>
-        </div>
+
     <!--<iframe id='iframe_img'src="http://localhost:3000/uploads/p3/game_ptotem/story.html" scrollbars="auto" name="brands" width="1000px;" height="500px"></iframe>-->
   <br/>
 

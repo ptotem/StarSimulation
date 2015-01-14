@@ -64,3 +64,16 @@
 
     });
 </script>
+<script>
+   $(document).ready(function(){
+       var simulation = $(".listing_box");
+       var simheight = parseInt(simulation.height())
+               + parseInt(simulation.css("margin-top"))
+               + parseInt(simulation.css("margin-bottom"))
+               + parseInt(simulation.css("padding-top"));
+       var children = $(".listing-wall").children().length;
+       var mypadding = simheight*children/2;
+       mypadding+="px";
+       $(".listing-wall").css("padding-top",mypadding);
+   })
+</script>

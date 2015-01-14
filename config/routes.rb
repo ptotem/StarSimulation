@@ -2,6 +2,7 @@ StarMediaSim::Application.routes.draw do
   resources :user_sim_data
 
   resources :simulation_data
+  # resources :game, path: '/game/simulation'
 
   resources :simulations
   match 'game', to: 'game#simulation', via: [:get, :post]
@@ -10,6 +11,7 @@ StarMediaSim::Application.routes.draw do
   get 'game/:id/:simulationid' => 'game#gameframe', as: :game_show
   match 'gameframe', to: 'game#gameframe', via: [:get, :post]
   match 'simulate', to: 'game#simulate', via: [:get, :post]
+  match 'users', to: 'simulations#index', via: [:get, :post]
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   mount RailsAdminImport::Engine => '/rails_admin_import', :as => 'rails_admin_import'
   devise_for :users

@@ -276,11 +276,22 @@ a:hover {
     padding: 10px;
     background-color: #969696;
     border:1px solid #969696;
+
     border-radius:12px;
+    behavior:url('.')
+    behavior: url(ie-css3.htc);
     min-height: 330px;
     height: 330px;
     overflow-y: auto;
     overflow-x: hidden;
+    display: table;
+    width: 420px;
+}
+
+.simulation-content
+{
+    vertical-align: middle;
+    display: table-cell;
 }
 
 .listing_box

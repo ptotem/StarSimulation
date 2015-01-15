@@ -165,43 +165,41 @@
       console.log(field);
       // it's a jQuery object already! Now you can find date input
       })
-    $(function(){
-
-        //user_budget = $("#user_budget").text();
-        user_budget_manipulated = <%= @simulation_user_data.budget_available %>
-                user_budget_real = <%= @simulation_user_data.budget %>
-
-
-
-
-
-
-//      $(".chosen-select").chosen().change(function(event){
+//    $(function(){
 //
-//          if(event.target == this){
-//
-//              var this_selected_val = $(this).val();
-//              //console.log("this_selected_val :- " + this_selected_val)
-//
-//              var data = {simulation_id:[], simulation_data_id: []};
-//              data["simulation_id"].push(simulation_id);
-//              data["simulation_data_id"].push(this_selected_val);
-//              $.ajax({
-//                  url: "/get_cost",
-//                  type: "post",
-//                  async: false,
-//                  data: JSON.stringify(data),
-//                  contentType: "application/json",
-//                  success: function (data) {
-//                      console.log(data[0].cost_per_slot);
-//                      cost_per_slot = data[0].cost_per_slot;
-//                      console.log("cost_per_slot :- " + cost_per_slot)
-//                  }
-//              })
-//          }
-//      });
+//        //user_budget = $("#user_budget").text();
 
-    });
+
+
+
+
+
+////      $(".chosen-select").chosen().change(function(event){
+////
+////          if(event.target == this){
+////
+////              var this_selected_val = $(this).val();
+////              //console.log("this_selected_val :- " + this_selected_val)
+////
+////              var data = {simulation_id:[], simulation_data_id: []};
+////              data["simulation_id"].push(simulation_id);
+////              data["simulation_data_id"].push(this_selected_val);
+////              $.ajax({
+////                  url: "/get_cost",
+////                  type: "post",
+////                  async: false,
+////                  data: JSON.stringify(data),
+////                  contentType: "application/json",
+////                  success: function (data) {
+////                      console.log(data[0].cost_per_slot);
+////                      cost_per_slot = data[0].cost_per_slot;
+////                      console.log("cost_per_slot :- " + cost_per_slot)
+////                  }
+////              })
+////          }
+////      });
+//
+//    });
 
 
     // Rushabh and Rakesh' adventure in wonderland begins..

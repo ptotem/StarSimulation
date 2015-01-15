@@ -21,9 +21,11 @@
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="listing-wall">
+              <div class="simulation-content">
               <% @simulations.each do |simulation| %>
                   <div id="<%= simulation.id %>" class="listing_box listing_box_1 center-block"><%= simulation.name %></div>
               <% end %>
+                </div>
             </div>
           </div>
         </div>

@@ -44,8 +44,8 @@ class SimulationsController < ApplicationController
     # render :json => params
     # return
     # @usd = current_user.simulation_user_datas.where(:simulation_id=>params[:id]).first
-    @usd = current_user.simulation_user_datas.build(:simulation_id=>params[:id], :budget=>10000000, :budget_available=>10000000)
-    @new_a = Array.new()
+    # @usd = current_user.simulation_user_datas.build(:simulation_id=>params[:id], :budget=>10000000, :budget_available=>10000000)
+    # @new_a = Array.new()
     #params[:simulation][:user_sim_datums_attributes].each do |p|
     #  @new_a << "#{p.simulation_datum_id}-#{p.no_of_slots}"
     #end
@@ -188,14 +188,14 @@ class SimulationsController < ApplicationController
 
   def play_sim
     @simulation = Simulation.find(params[:simulation_id])
-    @simulation_data = @simulation.simulation_datums
-    @simulation_dates = @simulation_data.select("performance_date").map{ |i| i.performance_date.strftime('%d-%m-%Y')}.uniq
+    # @simulation_data = @simulation.simulation_datums
+    # @simulation_dates = @simulation_data.select("performance_date").map{ |i| i.performance_date.strftime('%d-%m-%Y')}.uniq
 
     # render :json => @simulation_data.select("performance_date").map{ |i| i.performance_date}.uniq
     # return
 
     # @simulation_user_data = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
-    @simulation_user_data = current_user.simulation_user_datas.new(:simulation_id=>@simulation.id, :budget=>10000000, :budget_available=>1000000)
+    # @simulation_user_data = current_user.simulation_user_datas.new(:simulation_id=>@simulation.id, :budget=>10000000, :budget_available=>1000000)
     # @simulation_user_data.save!
     # @usd = current_user.simulation_user_datas.where(:simulation_id=>@simulation.id).first
     # render :json => @simulation_user_data
@@ -204,9 +204,9 @@ class SimulationsController < ApplicationController
     #render :json => @simulation
     #return
     # @simulation.user_sim_datums.delete_all
-    @prev_data = current_user.user_sim_datums.where(:simulation_id=>@simulation.id)
+    # @prev_data = current_user.user_sim_datums.where(:simulation_id=>@simulation.id)
     # if !current_user.user_sim_datums.where(:simulation_id=>@simulation.id).first.nil?
-      current_user.user_sim_datums.where(:simulation_id=>@simulation.id).first.backup_prev_data(@prev_data, current_user.id, @simulation.id) rescue nil?
+    #   current_user.user_sim_datums.where(:simulation_id=>@simulation.id).first.backup_prev_data(@prev_data, current_user.id, @simulation.id) rescue nil?
     # end
 
     # render :json => @prev_data
@@ -224,11 +224,11 @@ class SimulationsController < ApplicationController
     #render :json => @all_user_array
     #return
 
-    current_user.user_sim_datums.where(:simulation_id=>@simulation.id).delete_all
+    # current_user.user_sim_datums.where(:simulation_id=>@simulation.id).delete_all
 
     # 1.times { current_user.user_sim_datums.where(:simulation_id=>@simulation.id).build }
     # //TODO: Check if more than 1 users are playing, other users can see others data....
-    1.times { @simulation.user_sim_datums.build }
+    # 1.times { @simulation.user_sim_datums.build }
     #@simulation.simulation_user_datas.build
   end
 
@@ -243,7 +243,7 @@ class SimulationsController < ApplicationController
     def simulation_params
       #params.require(:simulation).permit(:name)
       #params.require(:simulation).permit(:name, user_sim_datums_attributes: [:id, :user_id, :simulation_id, :simulation_datum_id, :no_of_slots, :_destroy], simulation_user_data: [:user_id, :simulation_id])
-      params.require(:simulation).permit(:name, user_sim_datums_attributes: [:id, :user_id, :simulation_id, :simulation_datum_id, :no_of_slots, :cprp, :grp, :_destroy])
+      # params.require(:simulation).permit(:name, user_sim_datums_attributes: [:id, :user_id, :simulation_id, :simulation_datum_id, :no_of_slots, :cprp, :grp, :_destroy])
     end
 
     #def simulation_user_datas_params

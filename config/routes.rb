@@ -9,12 +9,13 @@ StarMediaSim::Application.routes.draw do
   # match '/saveresult', to: 'game#save_result', via: [:post]
   get 'game/:id/:simulationid' => 'game#gameframe', as: :game_show
   match 'gameframe', to: 'game#gameframe', via: [:get, :post]
-  match 'users', to: 'simulations#index', via: [:get, :post]
 
   match 'simulate', to: 'game#simulate', via: [:get, :post]
   mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
   mount RailsAdminImport::Engine => '/rails_admin_import', :as => 'rails_admin_import'
   devise_for :users
+  match 'users', to: 'simulations#index', via: [:get, :post]
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

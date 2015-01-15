@@ -143,7 +143,7 @@ a:hover {
     padding: 10px;
     background-color: #969696;
     border:1px solid #969696;
-    border-radius:10px;
+    /*border-radius:10px;*/
 }
 
 .form_heading
@@ -211,7 +211,7 @@ a:hover {
 {
     margin-bottom: -1px;
     border:1px;
-    border-radius:7px;
+    /*border-radius:7px;*/
     background-color: #c7c5c5;
 }
 
@@ -222,7 +222,7 @@ a:hover {
     /*margin-bottom: 10px;*/
     margin-top:2%;
     border:1px;
-    border-radius:7px;
+    /*border-radius:7px;*/
     background-color: #c7c5c5;
 
 }
@@ -277,7 +277,7 @@ a:hover {
     background-color: #969696;
     border:1px solid #969696;
 
-    border-radius:12px;
+    /*border-radius:12px;*/
     behavior:url('.')
     behavior: url(ie-css3.htc);
     min-height: 330px;
@@ -318,7 +318,7 @@ a:hover {
     width: 70%;
     cursor: pointer;
     border:1px solid #969696;
-    border-radius:10px;
+    /*border-radius:10px;*/
     text-align: center;
 
 }
@@ -342,7 +342,7 @@ a:hover {
 .slot_number
 {
     border: 1px solid #ccc;
-    border-radius: 4px;
+    /*border-radius: 4px;*/
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     color: #555;
     display: block;
@@ -401,7 +401,7 @@ a:hover {
     /*margin-bottom: -1px;*/
 
     border:1px;
-    border-radius:7px;
+    /*border-radius:7px;*/
     background-color: #c7c5c5;
     width: 84%;
 }

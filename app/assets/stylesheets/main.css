@@ -281,6 +281,14 @@ a:hover {
     height: 330px;
     overflow-y: auto;
     overflow-x: hidden;
+    display: table;
+    width: 420px;
+}
+
+.simulation-content
+{
+    vertical-align: middle;
+    display: table-cell;
 }
 
 .listing_box

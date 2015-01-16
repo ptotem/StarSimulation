@@ -211,7 +211,7 @@ a:hover {
 {
     margin-bottom: -1px;
     border:1px;
-    /*border-radius:7px;*/
+    border-radius: 0px !important;
     background-color: #c7c5c5;
 }
 
@@ -222,7 +222,7 @@ a:hover {
     /*margin-bottom: 10px;*/
     margin-top:2%;
     border:1px;
-    /*border-radius:7px;*/
+    border-radius: 0px !important;
     background-color: #c7c5c5;
 
 }
@@ -402,7 +402,7 @@ a:hover {
     /*margin-bottom: -1px;*/
 
     border:1px;
-    /*border-radius:7px;*/
+    border-radius: 0px !important;
     background-color: #c7c5c5;
     width: 84%;
 }

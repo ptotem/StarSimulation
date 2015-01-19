@@ -1,0 +1,6 @@
+#player_iframe{
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-top: 20px;
+
+}

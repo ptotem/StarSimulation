@@ -13,12 +13,6 @@
 
           <%= f.password_field :password, autocomplete: "off", :placeholder => "Password", :class => "form-control", :required=>true ,:style=>"margin-top:5px"%>
 
-          <% if devise_mapping.rememberable? -%>
-              <div class="text-style" style="padding: 2% 0 2% 0;">
-                <%= f.check_box :remember_me,:class => "check_box_style" %>
-                <%= f.label :remember_me %>
-              </div>
-          <% end -%>
 
           <%= f.submit "Sign in", :class => "btn btn-lg  btn-block button_style", :style=>"margin-top:0;" %>
 

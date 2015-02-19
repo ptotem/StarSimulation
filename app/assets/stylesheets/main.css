@@ -508,6 +508,7 @@ a:hover {
     background-repeat: repeat-x !important;
     border: none !important;
     border-radius:0px !important;
+    margin-left: -5px;
 }
 /*listing_new page ends*/
 

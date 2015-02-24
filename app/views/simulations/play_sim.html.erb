@@ -40,6 +40,7 @@
               <%# end %>
           <%# end %>
           <div class="program-wall">
+            <% if @simulation.id==1%>
             <ol class="white" style="font-weight: bold;">
               <li>Click on 'Download Excel' to download the excel sheet containing the TAM data.</li>
               <li>Go through the data and analyze it.</li>
@@ -48,6 +49,18 @@
               <li>Enter the number of slots you plan to buy.</li>
 
             </ol>
+            <% end %>
+            <% if @simulation.id==2%>
+                <ol class="white" style="font-weight: bold;">
+                <li>Click on 'Download Excel' to download the excel sheet containing the TAM data.</li>
+                </ol>
+            <% end %>
+            <% if @simulation.id==3%>
+                <ol class="white" style="font-weight: bold;">
+                  <li>Click on 'Download Excel' to download the excel sheet containing the TAM data.</li>
+                  <li>Click on 'Download Excel' to download the excel sheet containing the TAM data.</li>
+                </ol>
+            <% end %>
           </div>
         </div>
       </div>
@@ -65,7 +78,6 @@
 
           </div>
         </div>
-
     </div>
   </div>
 </div>

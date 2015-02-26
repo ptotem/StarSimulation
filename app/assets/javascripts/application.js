@@ -15,6 +15,7 @@
 //= require jquery-ui
 //= require jquery.turbolinks
 //= require turbolinks
+//= require jquery.ui.all
 //= require autocomplete-rails
 //= require chosen-jquery
 //= require scaffold

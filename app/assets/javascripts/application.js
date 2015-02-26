@@ -11,11 +11,10 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery_ujs
 //= require jquery-ui
+//= require jquery_ujs
 //= require jquery.turbolinks
 //= require turbolinks
-//= require jquery.ui.all
 //= require autocomplete-rails
 //= require chosen-jquery
 //= require scaffold

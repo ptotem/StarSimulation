@@ -1,7 +1,7 @@
 <div class="container">
   <div class="row">
-    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 col-xs-offset-4 col-sm-offset-4 col-md-offset-4 col-lg-offset-4 ">
-      <h2 class="white" style="font-weight: bold">You are playing <%= @simulation.name %></h2>
+    <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 col-xs-offset-4 col-sm-offset-1 col-md-offset-4 col-lg-offset-1 ">
+      <h2 class="grey" style="font-weight: bold;margin-left: -12.5%;">You are playing <%= @simulation.name %></h2>
     </div>
 
   </div>
@@ -10,17 +10,17 @@
     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
       <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6 col-md-offset-1 col-lg-6">
-          <h3 class="white" style="font-weight: bold;margin-top: -11px;padding-left: 0px;">How to play</h3>
+          <h3 class="grey" style="font-weight: bold;margin-top: -11px;padding-left: 0px;">How to play</h3>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="height: 272px; overflow-y: none;">
           <p class="white" id="instruction_text">
-          <ol class="white" style="top: 1%; font-weight: bold;font-size: 15px;list-style: none;position:absolute;">
-                <li>- Read the story given on the right.</li>
-                <li>- Click on 'Download Excel' to download the channel related data.</li>
-                <li>- Analyze the data based on the given parameters.</li>
-                <li>- Click 'Start' to talk to the Client.</li>
+          <ol class="grey" style="top: 1%; font-weight: bold;font-size: 15px;list-style: none;position:absolute;">
+                <li>- Read the story given on the right</li>
+                <li>- Click on 'Download Excel' to download the channel related data</li>
+                <li>- Analyze the data based on the given parameters</li>
+                <li>- Click 'Start' to talk to the Client</li>
               </ol>
           </p>
         </div>
@@ -41,17 +41,17 @@
           <%# end %>
           <div class="program-wall">
             <% if @simulation.id==1%>
-                <p class="white" style="font-weight: bold;font-size: 14px;" >Kabir Khan, a Marketing Manager, is planning to run a sustenance campaign for his already established cooking oil brand - 'Wellfare'. His objective is to achieve medium reach and frequency with this campaign. In his current plan, he has included Zee Cinema.</p>
+                <p class="white" style="font-weight: bold;font-size: 14px;" >Kabir Khan is the Marketing Manager of the Brand 'Wellfare'. Wellfare is a cooking oil brand and is well established in the market. He is planning to run a sustenance campaign, which is going to be a medium reach and medium frequency campaign. In his current plan, he has included Zee Cinema.</p>
                 <p class="white" style="font-weight: bold;font-size: 14px;">You need to convince him to include Movies OK, instead of Zee Cinema.</p>
 
             <% end %>
             <% if @simulation.id==2%>
-                <p class="white" style="font-weight: bold;font-size: 14px;" >Fiona S, a Marketing Manager, is planning to come out with a new campaign for her luxury sedan brand - 'Swing'. She's planning to go with Sony PIX or HBO in the Niche Channels Genre.</p>
+                <p class="white" style="font-weight: bold;font-size: 14px;" >Fiona Silva is the Marketing Manager of the Brand 'Swing'. Swing is a luxury sedan brand targeting the premium male audience. She is coming out with a new campaign for this quarter and for the same, she is planning to go with Sony PIX or HBO in the Niche Channel Genre.</p>
                 <p class="white" style="font-weight: bold;font-size: 14px;">You need to convince her to go with Star Movies, and not either of these channels.</p>
 
           <% end %>
             <% if @simulation.id==3%>
-                <p class="white" style="font-weight: bold;font-size: 14px;" >Aliya B, a brand manager, is planning to launch a new soap brand - 'FreshUp', specifically targeted towards males. Since the category is already filled with a lot of players, she wants an impactful campaign. In her current media plan, to widen the reach, she has included Sony SAB.</p>
+                <p class="white" style="font-weight: bold;font-size: 14px;" >Aliya Bose is the Brand Manager of the Brand 'FreshUp'. FreshUp is a soap brand, specially targeted towards the male audience. It is a new player in the category and she wants to launch it with a bang. Therefore, in her current media plan, to widen the reach, she has included Sony SAB.</p>
                 <p class="white" style="font-weight: bold;font-size: 14px;">You need to convince her to include Life OK, instead of Sony SAB.</p>
 
                 <!--<ol class="white" style="font-weight: bold;">-->

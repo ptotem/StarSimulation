@@ -11,6 +11,5 @@
  *= require_self
  *= require jquery-ui
  *= require chosen
- *= require bootstrap.min
  *= require_tree .
  */

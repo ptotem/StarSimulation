@@ -12,6 +12,7 @@ gem 'sqlite3'
 
 gem 'devise'
 gem 'cancan'
+gem 'thin'
 
 # gem 'protected_attributes'
 
@@ -76,3 +77,5 @@ gem 'rubyzip'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+gem 'jquery-migrate-rails'

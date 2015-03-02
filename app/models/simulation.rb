@@ -5,12 +5,15 @@ class Simulation < ActiveRecord::Base
   # validates_attachment_content_type :excel_file, :content_type => ["application/xls","application/xlsx"]
   validates_attachment_content_type :excel_file,
   :content_type => ["application/pdf","application/vnd.ms-excel",
-                    "application/xls","application/xlsx",
+                    "application/xls","application/xlsx","application/zip",
                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                     "application/msword",
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                     "text/plain"]
-
+  #validates_attachment_content_type :excel_file, :content_type => %w(application/xml application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet),
+  #                                              :message => ', Only XML,EXCEL files are allowed. '
+  #validates_attachment_content_type :excel_file, :content_type => ["application/msword", "application/vnd.ms-office application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"], :message => ', Only XML,EXCEL files are allowed. '
+  #validates_attachment_content_type :excel_file, :content_type => %w(application/zip application/msword application/vnd.ms-office application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
   #accepts_nested_attributes_for :simulation_datums, :allow_destroy => true
   # belongs_to :game
   has_many :simulateresults

@@ -35,16 +35,16 @@
         setTimeout(function() {
             var path = window.location.href;
             var simuation_id = path.split("/")[5];
-            var temp=document.getElementById("player_iframe");
-            var iframecontent=temp.contentDocument || temp.contentWindow.document;
-            var temp1=  iframecontent.getElementById("divSwf");
+//            var temp=document.getElementById("player_iframe");
+//            var iframecontent=temp.contentDocument || temp.contentWindow.document;
+//            var temp1=  iframecontent.getElementById("divSwf");
             window.simulation_id=simuation_id;
             var iFrame = $("body").find("iframe");
             $(iFrame).attr("gotosim", simulation_id);
 //                console.log(temp1.id);
 //            $("#" + temp1.id).attr("gotoSim", simuation_id)
 //            console.log( $("#" + temp1.id).attr("gotoSim"))
-            temp1.setAttribute("gotosim",simuation_id);
+//            temp1.setAttribute("gotosim",simuation_id);
 //            console.log(temp1);
 //            var divSwf = $(iFrame).contents().find("#divSwf");
 //            var divSwf = $(iFrame).contents().find("#divSwf");

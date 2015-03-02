@@ -419,9 +419,10 @@ a:hover {
     background-color:#c7c5c5;
     border: none;
 }
-.nav > li > a:hover, .nav > li > a:focus .nav > li > a:active
+.nav > li > a:hover, .nav > li > a:focus , .nav > li > a:active ,.nav > li > a:visited
 {
     background-color: transparent;
+    color: red;
 }
 
 .chosen-container-single .chosen-single{

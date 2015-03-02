@@ -36,7 +36,7 @@ gem 'coffee-rails', '~> 4.0.0'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails','~>3.1.1'
-gem 'jquery-ui-rails'
+gem 'jquery-ui-rails','~>4.2.1'
 gem 'rails4-autocomplete'
 gem 'gon'
 gem 'chosen-rails'

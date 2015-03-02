@@ -419,7 +419,7 @@ a:hover {
     background-color:#c7c5c5;
     border: none;
 }
-.nav > li > a:hover, .nav > li > a:focus
+.nav > li > a:hover, .nav > li > a:focus .nav > li > a:active
 {
     background-color: transparent;
 }

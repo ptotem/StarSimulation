@@ -38,9 +38,9 @@
             var temp=document.getElementById("player_iframe");
             var iframecontent=temp.contentDocument || temp.contentWindow.document;
             var temp1=  iframecontent.getElementById("divSwf");
-
+            window.simulation_id=simuation_id;
             var iFrame = $("body").find("iframe");
-            $(iFrame).attr("gotosim", simuation_id);
+            $(iFrame).attr("gotosim", simulation_id);
 //                console.log(temp1.id);
 //            $("#" + temp1.id).attr("gotoSim", simuation_id)
 //            console.log( $("#" + temp1.id).attr("gotoSim"))

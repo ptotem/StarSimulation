@@ -14,6 +14,16 @@ class User < ActiveRecord::Base
 
   # has_many :simulations
   has_many :simulateresult
+  
+  rails_admin do
+    edit do
+      field :name
+      field :email
+      field :password
+      field :password_confirmation
+      field :admin
+    end
+  end
 
   def set_budget
     sim_user_data = self.simulation_user_datas.build
